@@ -1,10 +1,18 @@
 import React from 'react'
-import './index.css'
+import Navbar from './components/Navbar'
 
 function App() {
   return (
-    <div className="flex items-center justify-center h-screen bg-blue-500 text-white text-3xl font-bold">
-      Tailwind Berhasil Dipasang! 🚀
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        <h1 className="text-3xl font-bold text-gray-900">
+          Welcome to My Website
+        </h1>
+        <p className="mt-4 text-gray-600">
+          This is the main content area of your website. You can add more components and content here.
+        </p>
+      </main>
     </div>
   )
 }
