@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { getUser, logout } from "../utils/auth";
 
 const Navbar = () => {
+  const user = getUser();
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState('');
 
@@ -10,18 +13,22 @@ const Navbar = () => {
   };
 
   const navigation = [
-    { name: 'Home', href: '#' },
+    { name: 'Home', href: '/' },
     {
-      name: 'Products',
+      name: 'Projects',
       href: '#',
       children: [
-        { name: 'Analytics', href: '#' },
-        { name: 'Engagement', href: '#' },
-        { name: 'Solutions', href: '#' },
-      ],
+        { 
+          name: user?.role === 'admin' ? 'Dashboard Admin' : 'Dashboard', 
+          href: user?.role === 'admin' ? '/adminPanel' : '/dashboard' 
+        },
+        (!user || user?.role === 'user') && { 
+          name: 'Pesan Joki', 
+          href: '/order' 
+        }
+      ].filter(Boolean)
     },
-    { name: 'About', href: '#' },
-    { name: 'Contact', href: '#' },
+    { name: 'Tentang Kami', href: '#' }
   ];
 
   return (
@@ -31,12 +38,14 @@ const Navbar = () => {
           {/* Logo Section */}
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <span className="text-2xl font-bold text-blue-900">JokiDins 😉</span>
+              <Link to="/">
+                <span className="text-2xl font-bold text-blue-900">JokiDins 😉</span>
+              </Link>
             </div>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-4">
             {navigation.map((item) => (
               <div key={item.name} className="relative">
                 {item.children ? (
@@ -61,30 +70,49 @@ const Navbar = () => {
                     >
                       <div className="py-1">
                         {item.children.map((child) => (
-                          <a
+                          <Link
                             key={child.name}
-                            href={child.href}
+                            to={child.href}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors duration-200"
                           >
                             {child.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <a
-                    href={item.href}
+                  <Link
+                    to={item.href}
                     className="text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 )}
               </div>
             ))}
-            <button className="bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
-              Sign In
-            </button>
+
+            {user ? (
+              <button 
+                onClick={logout} 
+                className="bg-red-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition-colors duration-200"
+              >
+                Logout
+              </button>
+            ) : (
+              <>
+                <Link to="/login">
+                  <button className="bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
+                    Masuk
+                  </button>
+                </Link>
+                <Link to="/register">
+                  <button className='border border-blue-900 bg-white text-blue-900 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors duration-200'>
+                    Daftar
+                  </button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -135,29 +163,48 @@ const Navbar = () => {
                     }`}
                   >
                     {item.children.map((child) => (
-                      <a
+                      <Link
                         key={child.name}
-                        href={child.href}
+                        to={child.href}
                         className="block pl-6 py-2 text-base text-gray-600 hover:text-blue-900 transition-colors duration-200"
                       >
                         {child.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
               ) : (
-                <a
-                  href={item.href}
+                <Link
+                  to={item.href}
                   className="block text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
                 >
                   {item.name}
-                </a>
+                </Link>
               )}
             </div>
           ))}
-          <button className="w-full bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200 mt-4">
-            Sign In
-          </button>
+          
+          {user ? (
+            <button 
+              onClick={logout} 
+              className="w-full bg-red-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition-colors duration-200 mt-4"
+            >
+              Logout
+            </button>
+          ) : (
+            <div className="flex flex-row gap-5">
+              <Link to="/login" className='w-full'>
+                <button className="w-full bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200 mt-4">
+                  Masuk
+                </button>
+              </Link>
+              <Link to="/register" className='w-full'>
+                <button className="w-full border border-blue-900 bg-white text-blue-900 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors duration-200 mt-4">
+                  Daftar
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </nav>

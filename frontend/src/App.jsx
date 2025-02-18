@@ -1,20 +1,32 @@
-import React from 'react'
-import Navbar from './components/Navbar'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import DashboardUser from "./pages/DashboardUser";
+import OrderJoki from "./pages/OrderJoki";
+import AdminPanel from "./pages/AdminPanel";
 
-function App() {
+const App = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <main className="max-w-7xl mx-auto px-4 py-6">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Welcome to My Website
-        </h1>
-        <p className="mt-4 text-gray-600">
-          This is the main content area of your website. You can add more components and content here.
-        </p>
-      </main>
-    </div>
-  )
-}
+    <Router>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow mt-5">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<DashboardUser />} />
+            <Route path="/order" element={<OrderJoki />} />
+            <Route path="/adminPanel" element={<AdminPanel />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
+  );
+};
 
-export default App
+export default App;
