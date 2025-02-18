@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { getUser, logout } from "../utils/auth";
 import { useEffect } from "react";
+import { getUser, logout } from "../utils/auth";
 
 const DashboardUser = () => {
   const navigate = useNavigate();

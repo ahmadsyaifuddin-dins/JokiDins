@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUser, logout } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
 
 const OrderJoki = () => {
   const [task, setTask] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
+
+  const user = getUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || user.role !== "user") {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
