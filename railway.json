@@ -1,10 +1,9 @@
 {
-    "build": {
-      "base": "backend/",
-      "commands": {
-        "setup": "npm install",
-        "build": "npm run build",
-        "start": "npm start"
-      }
+  "build": {
+    "base": "backend/",
+    "commands": {
+      "setup": "npm install"
     }
-  }
+  },
+  "start": "node backend/index.js"
+}
