@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
 
+const cors = require("cors"); // Import cors
+
+app.use(cors()); // Aktifkan CORS
+app.use(express.json()); // Middleware buat handle JSON
+
 // Mock Data untuk tugas joki
 const tasks = [
   { id: 1, task_name: "Pembuatan Website", status: "Pending" },
@@ -8,14 +13,25 @@ const tasks = [
   { id: 3, task_name: "Bantu Tugas Kuliah", status: "Selesai" },
 ];
 
+// Get All Tasks/Tugas Joki
 app.get("/tasks", (req, res) => {
   res.json(tasks);
 });
 
-module.exports = app;
+
+// GET Task by ID
+app.get("/tasks/:id", (req, res) => {
+  const taskId = parseInt(req.params.id);
+  const task = tasks.find((t) => t.id === taskId);
+
+  if (!task) {
+    return res.status(404).json({ message: "Task not found" });
+  }
+
+  res.json(task);
+});
 
 
-app.use(express.json()); // Middleware untuk parse JSON
 app.post("/tasks", (req, res) => {
   const newTask = {
     id: tasks.length + 1, // Increment ID
@@ -51,3 +67,5 @@ app.delete("/tasks/:id", (req, res) => {
   tasks.splice(taskIndex, 1); // Menghapus tugas
   res.status(204).send(); // Mengirimkan response kosong (No Content)
 });
+
+module.exports = app;
