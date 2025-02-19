@@ -2,8 +2,7 @@
   "build": {
     "base": "backend/",
     "commands": {
-      "setup": "npm install",
-      "start": "npm start"
+      "setup": "npm install"
     }
   },
   "start": "node src/app.js"
