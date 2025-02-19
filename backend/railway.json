@@ -1,0 +1,10 @@
+{
+  "build": {
+    "base": "backend/",
+    "commands": {
+      "setup": "npm install",
+      "start": "npm start"
+    }
+  },
+  "start": "node src/app.js"
+}
