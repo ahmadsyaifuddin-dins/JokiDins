@@ -2,27 +2,28 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const connectDB = require("./config/db");
-const routes = require("./routes/index");
+
+// Import route autentikasi dan user
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('API Running...');
-  });
-  
 // Koneksi ke MongoDB
 connectDB();
 
-// Routing
-app.use("/api", routes);
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} 🚀`);
+// Contoh route lain (misalnya route utama)
+app.get("/", (req, res) => {
+  res.send("API JokiDins Running...");
 });
 
-
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT} 🚀`));
