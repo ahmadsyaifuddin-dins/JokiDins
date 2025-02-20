@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUser, logout } from "../utils/auth";
+import { logout } from "../utils/auth";
 import { useState } from "react";
 const AdminPanel = () => {
   const [orders, setOrders] = useState([

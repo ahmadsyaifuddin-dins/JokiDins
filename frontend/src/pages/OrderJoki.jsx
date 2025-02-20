@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUser, logout } from "../utils/auth";
+import { logout } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
 
 const OrderJoki = () => {

@@ -7,6 +7,9 @@ import Register from "./pages/Register";
 import DashboardUser from "./pages/DashboardUser";
 import OrderJoki from "./pages/OrderJoki";
 import AdminPanel from "./pages/AdminPanel";
+import Profile from "./pages/Profile";
+import UpdateProfile from "./pages/UpdateProfile";
+import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   return (
@@ -21,6 +24,22 @@ const App = () => {
             <Route path="/dashboard" element={<DashboardUser />} />
             <Route path="/order" element={<OrderJoki />} />
             <Route path="/adminPanel" element={<AdminPanel />} />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <Profile />
+                </PrivateRoute>
+              }
+            />
+            <Route 
+           path="/update-profile" 
+           element={
+             <PrivateRoute>
+               <UpdateProfile />
+             </PrivateRoute>
+           } 
+         />
           </Routes>
         </main>
         <Footer />

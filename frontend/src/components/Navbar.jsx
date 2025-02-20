@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { Link } from "react-router-dom";
-import { getUser, logout } from "../utils/auth";
+import { logout } from "../utils/auth";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 const Navbar = () => {
-  const user = getUser();
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState('');
+  const { user, setUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const toggleDropdown = (menu) => {
     setActiveDropdown(activeDropdown === menu ? '' : menu);
@@ -18,17 +27,12 @@ const Navbar = () => {
       name: 'Projects',
       href: '#',
       children: [
-        { 
-          name: user?.role === 'admin' ? 'Dashboard Admin' : 'Dashboard', 
-          href: user?.role === 'admin' ? '/adminPanel' : '/dashboard' 
-        },
-        (!user || user?.role === 'user') && { 
-          name: 'Pesan Joki', 
-          href: '/order' 
-        }
-      ].filter(Boolean)
+        { name: 'Dashboard Admin', href: '/adminPanel' },
+        { name: 'Pesan Joki', href: '/order' }
+      ]
     },
-    { name: 'Tentang Kami', href: '#' }
+    { name: 'Tentang Kami', href: '#' },
+    { name: 'Profile', href: '/profile' }
   ];
 
   return (
@@ -55,7 +59,7 @@ const Navbar = () => {
                       className="flex items-center text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                     >
                       {item.name}
-                      <ChevronDown 
+                      <ChevronDown
                         className={`ml-1 h-4 w-4 transform transition-transform duration-200 ${
                           activeDropdown === item.name ? 'rotate-180' : ''
                         }`}

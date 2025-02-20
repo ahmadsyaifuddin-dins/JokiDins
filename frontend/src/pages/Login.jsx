@@ -1,43 +1,38 @@
-import { useState } from "react";
+import React, { useState, useContext } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
 
-  const handleLogin = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Dummy akun (bisa diganti dengan API backend nanti)
-    const users = [
-      { email: "admin@jokidins.com", password: "admin123", role: "admin" },
-      { email: "user@jokidins.com", password: "user123", role: "user" },
-    ];
-
-    const foundUser = users.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (foundUser) {
-      localStorage.setItem("user", JSON.stringify(foundUser));
-      alert("Login Berhasil!");
-      
-      // Redirect berdasarkan peran
-      if (foundUser.role === "admin") {
-        navigate("/adminPanel");
-      } else {
-        navigate("/dashboard");
-      }
-    } else {
-      alert("Email atau Password salah!");
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
+      const { token, user } = res.data;
+      // Simpan token dan data user di localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user); // Update context
+      alert("Login berhasil!");
+      navigate("/profile");
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Login gagal. Cek kembali email dan password.");
     }
   };
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
       <h2 className="text-2xl font-bold mb-4">Login</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit}>
         <input
           type="email"
           placeholder="Email"
