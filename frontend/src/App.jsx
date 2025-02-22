@@ -9,6 +9,9 @@ import OrderJoki from "./pages/OrderJoki";
 import AdminPanel from "./pages/AdminPanel";
 import Profile from "./pages/Profile";
 import UpdateProfile from "./pages/UpdateProfile";
+import OrderList from './pages/OrderList';
+import OrderCreate from './pages/OrderCreate';
+import OrderDetail from './pages/OrderDetail';
 import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
@@ -40,6 +43,29 @@ const App = () => {
              </PrivateRoute>
            } 
          />
+         <Route 
+          path="/orders" 
+          element={
+            <PrivateRoute>
+              <OrderList />
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/create-order" 
+          element={
+            <PrivateRoute>
+              <OrderCreate />
+            </PrivateRoute>
+          } 
+        />
+        <Route path="/orders/:id" 
+        element={
+          <PrivateRoute>
+            <OrderDetail />
+          </PrivateRoute>
+          }
+          />
           </Routes>
         </main>
         <Footer />

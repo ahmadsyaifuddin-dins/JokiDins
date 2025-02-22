@@ -31,7 +31,7 @@ const Profile = () => {
 
   return (
     <div className="max-w-md mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Profile User</h2>
+      <h2 className="text-2xl font-bold mb-4">Profile Customer</h2>
       {user ? (
         <div>
           <p className="mb-2">
@@ -39,6 +39,12 @@ const Profile = () => {
           </p>
           <p className="mb-2">
             <strong>Email:</strong> {user.email}
+          </p>
+          <p className="mb-2 capitalize">
+            <strong>Role:</strong> {user.role === "user" ? "Customer" : user.role}
+          </p>
+          <p className="mb-2">
+            <strong>Bergabung sejak:</strong> {new Date(user.createdAt).toLocaleDateString()}
           </p>
           <div className="flex gap-2 mt-4">
             <button
@@ -63,51 +69,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-
-// const Profile = () => {
-//   const [user, setUser] = useState(null);
-
-//   useEffect(() => {
-//     const fetchProfile = async () => {
-//       try {
-//         const token = localStorage.getItem("token");
-//         const res = await axios.get("http://localhost:5000/api/user/profile", {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         });
-//         setUser(res.data);
-//       } catch (error) {
-//         console.error("Gagal ambil data profile:", error);
-//       }
-//     };
-
-//     fetchProfile();
-//   }, []);
-
-//   return (
-//     <div className="max-w-md mx-auto p-6">
-//       <h2 className="text-2xl font-bold mb-4">Profile Kamu</h2>
-//       {user ? (
-//         <div>
-//           <p className="mb-2">
-//             <strong>Nama:</strong> {user.name}
-//           </p>
-//           <p className="mb-2">
-//             <strong>Email:</strong> {user.email}
-//           </p>
-//         </div>
-//       ) : (
-//         <p>Loading...</p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Profile;
-
-
-

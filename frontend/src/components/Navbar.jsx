@@ -21,19 +21,50 @@ const Navbar = () => {
     setActiveDropdown(activeDropdown === menu ? '' : menu);
   };
 
-  const navigation = [
-    { name: 'Home', href: '/' },
-    {
-      name: 'Projects',
-      href: '#',
-      children: [
-        { name: 'Dashboard Admin', href: '/adminPanel' },
-        { name: 'Pesan Joki', href: '/order' }
-      ]
-    },
-    { name: 'Tentang Kami', href: '#' },
-    { name: 'Profile', href: '/profile' }
-  ];
+  // Define navigation items based on user role
+  const getNavigation = () => {
+    if (!user) {
+      return [
+        { name: 'Home', href: '/' },
+        { name: 'Tentang Kami', href: '/about' }
+      ];
+    }
+
+    if (user.role === 'admin') {
+      return [
+        { name: 'Home', href: '/' },
+        {
+          name: 'Manajemen Order',
+          href: '#',
+          children: [
+            { name: 'Daftar Order', href: '/admin/orders' },
+            { name: 'Order Masuk', href: '/admin/orders/pending' },
+            { name: 'Order Diproses', href: '/admin/orders/processing' },
+            { name: 'Order Selesai', href: '/admin/orders/completed' }
+          ]
+        },
+        { name: 'Dashboard', href: '/admin/dashboard' },
+        { name: 'Profile', href: '/admin/profile' }
+      ];
+    }
+
+    // Regular user navigation
+    return [
+      { name: 'Home', href: '/' },
+      {
+        name: 'Layanan Joki',
+        href: '#',
+        children: [
+          { name: 'Pesan Joki', href: '/create-order' },
+          { name: 'Pesanan Saya', href: '/orders' }
+        ]
+      },
+      { name: 'Tentang Kami', href: '/about' },
+      { name: 'Profile', href: '/profile' }
+    ];
+  };
+
+  const navigation = getNavigation();
 
   return (
     <nav className="bg-white shadow-lg">
@@ -111,7 +142,7 @@ const Navbar = () => {
                   </button>
                 </Link>
                 <Link to="/register">
-                  <button className='border border-blue-900 bg-white text-blue-900 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors duration-200'>
+                  <button className="border border-blue-900 bg-white text-blue-900 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors duration-200">
                     Daftar
                   </button>
                 </Link>
@@ -126,9 +157,9 @@ const Navbar = () => {
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition-colors duration-200"
             >
               {isOpen ? (
-                <X className="h-6 w-6 transform rotate-0 transition-transform duration-200" />
+                <X className="h-6 w-6" />
               ) : (
-                <Menu className="h-6 w-6 transform rotate-0 transition-transform duration-200" />
+                <Menu className="h-6 w-6" />
               )}
             </button>
           </div>
@@ -196,14 +227,14 @@ const Navbar = () => {
               Logout
             </button>
           ) : (
-            <div className="flex flex-row gap-5">
-              <Link to="/login" className='w-full'>
-                <button className="w-full bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200 mt-4">
+            <div className="flex flex-col space-y-2">
+              <Link to="/login" className="w-full">
+                <button className="w-full bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
                   Masuk
                 </button>
               </Link>
-              <Link to="/register" className='w-full'>
-                <button className="w-full border border-blue-900 bg-white text-blue-900 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors duration-200 mt-4">
+              <Link to="/register" className="w-full">
+                <button className="w-full border border-blue-900 bg-white text-blue-900 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors duration-200">
                   Daftar
                 </button>
               </Link>

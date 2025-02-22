@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 // Import route autentikasi dan user
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const orderRoutes = require("./routes/order");
 
 const app = express();
 
@@ -19,6 +20,8 @@ connectDB();
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/orders", orderRoutes);
+app.use('/uploads', express.static('uploads'));
 
 // Contoh route lain (misalnya route utama)
 app.get("/", (req, res) => {
