@@ -8,9 +8,6 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("user"); // Default role is user
-  const [adminCode, setAdminCode] = useState(""); // For admin verification
-  const [showAdminCode, setShowAdminCode] = useState(false);
   
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
@@ -26,19 +23,17 @@ const Register = () => {
         name,
         email,
         password,
-        role,
-        adminCode: role === "admin" ? adminCode : undefined
+        role: "user" // Role selalu dianggap sebagai "user"
       });
       
       const { token, user } = res.data;
-      // Simpan token dan user ke localStorage dan context
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
       
       alert("Registrasi berhasil!");
-      // Redirect berdasarkan role
-      navigate(user.role === "admin" ? "/admin/dashboard" : "/profile");
+      // Redirect ke halaman profile
+      navigate("/profile");
     } catch (error) {
       console.error("Register error:", error);
       if (error.response?.data?.message) {
@@ -47,12 +42,6 @@ const Register = () => {
         alert("Registrasi gagal. Cek data yang dimasukkan.");
       }
     }
-  };
-
-  const handleRoleChange = (e) => {
-    const selectedRole = e.target.value;
-    setRole(selectedRole);
-    setShowAdminCode(selectedRole === "admin");
   };
 
   return (
@@ -91,30 +80,10 @@ const Register = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-        
-        <div className="mb-2">
-          <select
-            value={role}
-            onChange={handleRoleChange}
-            className="w-full p-2 border rounded-md"
-          >
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-
-        {showAdminCode && (
-          <input
-            type="password"
-            placeholder="Kode Admin"
-            className="w-full p-2 border rounded-md mb-2"
-            value={adminCode}
-            onChange={(e) => setAdminCode(e.target.value)}
-            required
-          />
-        )}
-
-        <button type="submit" className="w-full bg-blue-900 text-white py-2 rounded-md hover:bg-blue-800 transition-colors duration-200">
+        <button 
+          type="submit" 
+          className="w-full bg-blue-900 text-white py-2 rounded-md hover:bg-blue-800 transition-colors duration-200"
+        >
           Daftar
         </button>
       </form>

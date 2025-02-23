@@ -6,9 +6,9 @@ export default defineConfig({
 
   server: {
     allowedHosts: "all",
-    cors: true,
+    cors: true
     // host: "0.0.0.0",
-    // port: 3000,
     // strictPort: true,
+    // port: 3000
   }
 })

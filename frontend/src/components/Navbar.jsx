@@ -227,7 +227,7 @@ const Navbar = () => {
               Logout
             </button>
           ) : (
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-row gap-5">
               <Link to="/login" className="w-full">
                 <button className="w-full bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
                   Masuk

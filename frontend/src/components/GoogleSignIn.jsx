@@ -9,18 +9,18 @@ const GoogleSignIn = () => {
   const navigate = useNavigate();
 
   const handleSuccess = async (credentialResponse) => {
-    // credentialResponse.credential berisi token Google ID
     try {
+      // Kirim ID token ke backend
       const res = await axios.post("http://localhost:5000/api/auth/google", {
         token: credentialResponse.credential,
+        // birthday: null, // commented out
+        // gender: null,   // commented out
       });
       const { token, user } = res.data;
-      // Simpan token dan data user ke localStorage dan context
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
       alert("Login dengan Google berhasil!");
-      // Redirect berdasarkan role (misal)
       navigate(user.role === "admin" ? "/admin/dashboard" : "/profile");
     } catch (error) {
       console.error("Google login error:", error);

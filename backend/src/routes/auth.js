@@ -93,43 +93,57 @@ router.post("/login", async (req, res) => {
 router.post("/google", async (req, res) => {
   const { token: googleToken } = req.body;
   try {
-    // Verifikasi token Google
+    // Verifikasi ID token (untuk dapat email, name, dsb.)
     const ticket = await client.verifyIdToken({
       idToken: googleToken,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
     const payload = ticket.getPayload();
-    const { email, name } = payload;
+
+    // Destruktur data yang dibutuhkan dari payload
+    const { email, name, picture } = payload;
 
     // Cari user berdasarkan email
     let user = await User.findOne({ email });
     if (!user) {
-      // Jika belum ada, buat user baru dengan role default "user"
-      // Gunakan password default yang sudah di-hash (tidak akan dipakai untuk login via Google)
+      // Buat user baru
       const hashedPassword = await bcrypt.hash("defaultPassword123", 10);
       user = new User({
+        // Simpan avatar dari picture
+        avatar: picture, 
         name,
         email,
         password: hashedPassword,
         role: "user",
+        // birthday: null, // kalau mau diset default
+        // gender: null,   // kalau mau diset default
       });
       await user.save();
+    } else {
+      // Kalau user sudah ada, update avatar saja
+      user.avatar = picture;
+      // user.birthday = birthday; // commented out
+      // user.gender = gender;     // commented out
+      await user.save();
     }
-    
+
     // Generate JWT
     const jwtToken = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
-    
+
     res.status(200).json({
       token: jwtToken,
       user: {
         id: user._id,
+        avatar: user.avatar,
         name: user.name,
         email: user.email,
         role: user.role,
+        // birthday: user.birthday, // commented out
+        // gender: user.gender,     // commented out
       },
     });
   } catch (error) {
