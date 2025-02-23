@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../utils/auth";
 import { User, LogOut, Mail, Users, Cake, Clock } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
+import ProfileSkeleton from '../loader/ProfileSkeleton'; // Add this import
 
 const Profile = () => {
   // Ambil user dari context
@@ -43,13 +44,8 @@ const Profile = () => {
 
   // Jika masih nunggu fetch data dari server
   if (!profile) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
-      </div>
-    );
-  }
-
+  return <ProfileSkeleton />;
+}
   // Setelah profile didapat, tampilkan
   return (
     <div className=" bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -84,7 +80,7 @@ const Profile = () => {
               <Mail className="w-5 h-5 text-blue-900" />
               <div>
                 <p className="text-sm text-gray-500">Email</p>
-                <p className="text-gray-700 font-medium">{profile.email}</p>
+                <p className="text-gray-700 font-medium md:truncate max-w-[250px]">{profile.email}</p>
               </div>
             </div>
 

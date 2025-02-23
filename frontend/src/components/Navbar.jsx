@@ -26,7 +26,9 @@ const Navbar = () => {
     if (!user) {
       return [
         { name: 'Home', href: '/' },
-        { name: 'Tentang Kami', href: '/about' }
+        { name: 'Tentang Kami', href: '/about' },
+        { name: 'Syaifuddin Progress Project'}
+
       ];
     }
 
@@ -56,7 +58,8 @@ const Navbar = () => {
         href: '#',
         children: [
           { name: 'Pesan Joki', href: '/create-order' },
-          { name: 'Pesanan Saya', href: '/orders' }
+          { name: 'Pesanan Saya', href: '/orders' },
+          { name: 'Syaifuddin Progress'} 
         ]
       },
       { name: 'Tentang Kami', href: '/about' },
