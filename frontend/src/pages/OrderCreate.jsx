@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const OrderCreate = () => {
   const [service, setService] = useState('');
   const [description, setDescription] = useState('');
+  // Ubah state deadline untuk menyimpan value datetime-local
   const [deadline, setDeadline] = useState('');
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState('');
@@ -19,7 +20,7 @@ const OrderCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    
+
     const formData = new FormData();
     formData.append('service', service);
     formData.append('description', description);
@@ -92,11 +93,11 @@ const OrderCreate = () => {
               htmlFor="deadline" 
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Deadline
+              Deadline (Tanggal & Waktu)
             </label>
             <input
               id="deadline"
-              type="date"
+              type="datetime-local"
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
               required

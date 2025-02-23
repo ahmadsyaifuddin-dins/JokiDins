@@ -14,17 +14,6 @@ const OrderDetail = () => {
   const [error, setError] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("");
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "-";
-    try {
-      const date = parseISO(dateString);
-      return format(date, "dd MMMM yyyy", { locale: localeID });
-    } catch (err) {
-      console.error("Error formatting date:", err);
-      return dateString;
-    }
-  };
-
   const formatDateTime = (dateString) => {
     if (!dateString) return "-";
     try {
@@ -234,7 +223,7 @@ const OrderDetail = () => {
               <h2 className="text-sm font-medium text-gray-700 mb-2">Tenggat Waktu</h2>
               <div className="flex items-center text-gray-600">
                 <Calendar className="h-5 w-5 mr-2 text-gray-400" />
-                {formatDate(order.deadline)}
+                {formatDateTime(order.deadline)}
               </div>
             </div>
 

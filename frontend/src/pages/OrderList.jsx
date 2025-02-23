@@ -140,7 +140,7 @@ const OrderList = () => {
                   <div className="flex items-center text-sm text-gray-500">
                     <span className="mr-2">Deadline:</span>
                     <span className="font-medium">
-                      {format(new Date(order.deadline), 'dd MMMM yyyy', { locale: id })}
+                      {format(new Date(order.deadline), 'dd MMMM yyyy HH:mm', { locale: id })}
                     </span>
                   </div>
                 </div>
