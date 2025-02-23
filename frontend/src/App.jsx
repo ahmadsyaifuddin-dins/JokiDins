@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import About from "./pages/About";
 import DashboardUser from "./pages/DashboardUser";
 import OrderJoki from "./pages/OrderJoki";
 import AdminPanel from "./pages/AdminPanel";
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/dashboard" element={<DashboardUser />} />
             <Route path="/order" element={<OrderJoki />} />
             <Route path="/adminPanel" element={<AdminPanel />} />
+            <Route path="/about" element={<About />} />
             <Route
               path="/profile"
               element={
