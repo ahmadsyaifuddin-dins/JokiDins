@@ -26,8 +26,9 @@ const Navbar = () => {
     if (!user) {
       return [
         { name: 'Home', href: '/' },
+        { name: 'Kontak', href: '/contact' },
         { name: 'Tentang Kami', href: '/about' },
-        { name: 'Syaifuddin Progress Project'}
+        { name: `Syaifuddin's Project Progress`}
 
       ];
     }
@@ -62,6 +63,7 @@ const Navbar = () => {
           { name: 'Syaifuddin Progress'} 
         ]
       },
+      { name: 'Kontak', href: '/contact' },
       { name: 'Tentang Kami', href: '/about' },
       { name: 'Profile', href: '/profile' }
     ];
@@ -70,7 +72,7 @@ const Navbar = () => {
   const navigation = getNavigation();
 
   return (
-    <nav className="bg-white shadow-lg">
+    <nav className="bg-white shadow-lg sticky top-0 z-10">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
           {/* Logo Section */}

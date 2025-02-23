@@ -10,7 +10,7 @@ const About = () => {
           Tentang JokiDins
         </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Platform jasa layanan joki tugas dan skripsi terpercaya dengan tim ahli yang siap membantu 
+          Platform jasa layanan joki tugas terpercaya dengan tim ahli yang siap membantu 
           menyelesaikan tugas akademik Anda dengan kualitas terbaik.
         </p>
       </div>

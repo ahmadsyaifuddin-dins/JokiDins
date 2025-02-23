@@ -14,6 +14,7 @@ import UpdateProfile from "./pages/UpdateProfile";
 import OrderList from './pages/OrderList';
 import OrderCreate from './pages/OrderCreate';
 import OrderDetail from './pages/OrderDetail';
+import Contact from './pages/Contact';
 import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
@@ -24,10 +25,11 @@ const App = () => {
         <main className="flex-grow mt-5">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/order" element={<OrderJoki />} />
+            <Route path="/contact" element={<Contact/>} />
             <Route path="/about" element={<About />} />
             <Route
               path="/profile"
