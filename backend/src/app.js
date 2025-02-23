@@ -21,7 +21,8 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/orders", orderRoutes);
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads/order', express.static('uploads/order'));
+app.use('/uploads/avatar', express.static('uploads/avatar'));
 
 // Contoh route lain (misalnya route utama)
 app.get("/", (req, res) => {

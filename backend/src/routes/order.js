@@ -3,14 +3,14 @@ const router = express.Router();
 const Order = require('../models/Order');
 const { protect } = require('../middleware/authMiddleware');
 const multer = require('multer');
-const path = require('path');
 const fs = require('fs');
-const uploadDir = 'uploads';
 
-// Configure multer for file upload
+const uploadDir = 'uploads/order';
+
+// Konfigurasi Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Make sure this directory exists
+    cb(null, 'uploads/order/');
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
@@ -24,15 +24,17 @@ if (!fs.existsSync(uploadDir)) {
 const upload = multer({ 
   storage: storage,
   limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit
+    fileSize: 10 * 1024 * 1024 // 10MB
   }
 });
 
-// Buat order baru (POST /api/orders)
+// ============================================================
+// CREATE ORDER (POST /api/orders)
+// ============================================================
 router.post('/', protect, upload.single('file'), async (req, res) => {
   try {
     const { service, description, deadline } = req.body;
-    
+
     const orderData = {
       user: req.user._id,
       service,
@@ -40,7 +42,6 @@ router.post('/', protect, upload.single('file'), async (req, res) => {
       deadline,
     };
 
-    // Add file information if a file was uploaded
     if (req.file) {
       orderData.file = {
         filename: req.file.filename,
@@ -57,40 +58,56 @@ router.post('/', protect, upload.single('file'), async (req, res) => {
   }
 });
 
-// Ambil order untuk user yang sedang login (GET /api/orders)
-router.get('/', protect, async (req, res) => {
+// ============================================================
+// GET ALL ORDERS (ADMIN) or ORDERS BY USER (GET /api/orders)
+// ============================================================
+router.get("/", protect, async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user._id });
-    res.json(orders);
+    // Jika admin, ambil semua order + populate user email
+    if (req.user.role === "admin") {
+      const orders = await Order.find({}).populate('user', 'email');
+      return res.json(orders);
+    } else {
+      // Kalau user biasa, hanya order miliknya
+      const orders = await Order.find({ user: req.user._id });
+      return res.json(orders);
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// Ambil order berdasarkan id (GET /api/orders/:id)
+// ============================================================
+// GET SINGLE ORDER (GET /api/orders/:id)
+// ============================================================
 router.get('/:id', protect, async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    // Populate user agar admin bisa melihat info user, misal email
+    const order = await Order.findById(req.params.id).populate('user', 'email');
     if (!order) return res.status(404).json({ message: 'Order tidak ditemukan' });
-    // Pastikan order milik user yang sedang login
-    if (order.user.toString() !== req.user._id.toString()) {
+
+    // Jika bukan admin dan bukan pemilik order, tolak
+    if (req.user.role !== 'admin' && order.user._id.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: 'Tidak diizinkan' });
     }
+
     res.json(order);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// Download file (GET /api/orders/:id/file)
+// ============================================================
+// DOWNLOAD FILE (GET /api/orders/:id/file)
+// ============================================================
 router.get('/:id/file', protect, async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ message: 'Order tidak ditemukan' });
     if (!order.file) return res.status(404).json({ message: 'File tidak ditemukan' });
-    
-    // Verify user authorization
-    if (order.user.toString() !== req.user._id.toString()) {
+
+    // Jika bukan admin dan bukan pemilik order, tolak
+    if (req.user.role !== 'admin' && order.user.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: 'Tidak diizinkan' });
     }
 
@@ -100,21 +117,24 @@ router.get('/:id/file', protect, async (req, res) => {
   }
 });
 
-// Update order (PUT /api/orders/:id)
+// ============================================================
+// UPDATE ORDER (PUT /api/orders/:id)
+// ============================================================
 router.put('/:id', protect, upload.single('file'), async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ message: 'Order tidak ditemukan' });
-    if (order.user.toString() !== req.user._id.toString()) {
+
+    // Jika bukan admin dan bukan pemilik order, tolak
+    if (req.user.role !== 'admin' && order.user.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: 'Tidak diizinkan' });
     }
 
-    order.service = req.body.service || order.service;
-    order.description = req.body.description || order.description;
-    order.deadline = req.body.deadline || order.deadline;
-    order.status = req.body.status || order.status;
+    order.service = req.body.service ?? order.service;
+    order.description = req.body.description ?? order.description;
+    order.deadline = req.body.deadline ?? order.deadline;
+    order.status = req.body.status ?? order.status;
 
-    // Update file if new one is uploaded
     if (req.file) {
       order.file = {
         filename: req.file.filename,
@@ -130,15 +150,20 @@ router.put('/:id', protect, upload.single('file'), async (req, res) => {
   }
 });
 
-// Delete order (DELETE /api/orders/:id)
+// ============================================================
+// DELETE ORDER (DELETE /api/orders/:id)
+// ============================================================
 router.delete('/:id', protect, async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ message: 'Order tidak ditemukan' });
-    if (order.user.toString() !== req.user._id.toString()) {
+
+    // Jika bukan admin dan bukan pemilik order, tolak
+    if (req.user.role !== 'admin' && order.user.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: 'Tidak diizinkan' });
     }
-    await order.deleteOne(); // Using deleteOne() instead of remove()
+
+    await order.deleteOne();
     res.json({ message: 'Order berhasil dihapus' });
   } catch (error) {
     res.status(500).json({ message: error.message });

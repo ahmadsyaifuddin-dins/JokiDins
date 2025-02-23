@@ -5,9 +5,10 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import About from "./pages/About";
-import DashboardUser from "./pages/DashboardUser";
+import Dashboard from "./admin/Dashboard";
+import AdminProfile from "./admin/Profile";
+import AdminOrderDetail from "./admin/OrderDetail"
 import OrderJoki from "./pages/OrderJoki";
-import AdminPanel from "./pages/AdminPanel";
 import Profile from "./pages/Profile";
 import UpdateProfile from "./pages/UpdateProfile";
 import OrderList from './pages/OrderList';
@@ -25,15 +26,22 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<DashboardUser />} />
+            <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/order" element={<OrderJoki />} />
-            <Route path="/adminPanel" element={<AdminPanel />} />
             <Route path="/about" element={<About />} />
             <Route
               path="/profile"
               element={
                 <PrivateRoute>
                   <Profile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/profile"
+              element={
+                <PrivateRoute>
+                  <AdminProfile />
                 </PrivateRoute>
               }
             />
@@ -65,6 +73,13 @@ const App = () => {
         element={
           <PrivateRoute>
             <OrderDetail />
+          </PrivateRoute>
+          }
+          />
+        <Route path="/admin/OrderDetail/:id" 
+        element={
+          <PrivateRoute>
+            <AdminOrderDetail />
           </PrivateRoute>
           }
           />
