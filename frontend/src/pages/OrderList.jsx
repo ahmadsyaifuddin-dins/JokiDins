@@ -18,7 +18,7 @@ const OrderList = () => {
     const token = localStorage.getItem('token');
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/orders', {
+      const res = await axios.get('https://jokidins-production.up.railway.app/api/orders', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setOrders(res.data);
@@ -54,7 +54,7 @@ const OrderList = () => {
   const handleDownloadFile = async (orderId) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get(`http://localhost:5000/api/orders/${orderId}/file`, {
+      const response = await axios.get(`https://jokidins-production.up.railway.app/api/orders/${orderId}/file`, {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob'
       });

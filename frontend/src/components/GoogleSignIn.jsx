@@ -11,7 +11,7 @@ const GoogleSignIn = () => {
   const handleSuccess = async (credentialResponse) => {
     try {
       // Kirim ID token ke backend
-      const res = await axios.post("http://localhost:5000/api/auth/google", {
+      const res = await axios.post("https://jokidins-production.up.railway.app/api/auth/google", {
         token: credentialResponse.credential,
         // birthday: null, // commented out
         // gender: null,   // commented out

@@ -30,7 +30,7 @@ const OrderCreate = () => {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/orders', formData, {
+      await axios.post('https://jokidins-production.up.railway.app/api/orders', formData, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
