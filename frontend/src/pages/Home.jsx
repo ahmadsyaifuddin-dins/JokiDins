@@ -133,10 +133,7 @@ const Home = () => {
                   Makalah
                 </span>
                 <span className="text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full">
-                  Merapikan Word
-                </span>
-                <span className="text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full">
-                  Merapikan Excel
+                  Perapian Word, Excel
                 </span>
               </div>
             </div>
