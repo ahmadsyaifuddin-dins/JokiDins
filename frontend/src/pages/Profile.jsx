@@ -20,7 +20,7 @@ const Profile = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
+        const res = await axios.get("http://localhost:5000/api/user/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -112,9 +112,9 @@ const Profile = () => {
                 <div className="bg-blue-100 p-3 rounded-lg">
                   <Mail className="w-6 h-6 text-blue-700" />
                 </div>
-                <div>
+                <div className="truncate">
                   <p className="text-sm font-medium text-blue-700">Email</p>
-                  <p className="text-gray-700 font-medium md:truncate max-w-[250px]">
+                  <p className="text-gray-700 font-medium truncate max-w-[250px]">
                     {profile.email}
                   </p>
                 </div>
