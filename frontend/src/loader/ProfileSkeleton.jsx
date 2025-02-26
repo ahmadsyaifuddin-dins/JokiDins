@@ -24,7 +24,7 @@ const ProfileSkeleton = () => {
             <div className="absolute mt-8 left-1/2 transform -translate-x-1/2">
               <div className="relative w-32 h-32 rounded-full bg-gray-400 border-4 border-white shadow-lg flex items-center justify-center">
                 {/* Inisial placeholder */}
-                <div className="text-4xl font-bold text-white">A</div>
+                <div className="text-4xl font-bold text-white">&nbsp;</div>
               </div>
               {/* Tombol kamera placeholder */}
               <div className="absolute bottom-0 right-0 w-8 h-8 bg-gray-400 rounded-full shadow-md"></div>
