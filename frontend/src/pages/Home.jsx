@@ -8,7 +8,6 @@ import {
   Clock,
   Star,
   Shield,
-  Database, Atom, Zap
 } from "lucide-react";
 
 const Home = () => {
@@ -89,18 +88,27 @@ const Home = () => {
                 Website atau Web Application profesional dengan teknologi
                 terkini untuk kebutuhan bisnis atau akademik Anda.
               </p>
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex flex-wrap gap-2 md:gap-4">
                 <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1">
-                  <Database className="w-3 h-3" />
                   Laravel
                 </span>
                 <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1">
-                  <Atom className="w-3 h-3" />
-                  React JS
+                  ReactJS
                 </span>
                 <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1">
-                  <Zap className="w-3 h-3" />
-                  Next.js
+                  NextJS
+                </span>
+                <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1">
+                  NestJS
+                </span>
+                <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1">
+                  Svelte
+                </span>
+                <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1">
+                 Solid JS
+                </span>
+                <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1">
+                 Astro
                 </span>
               </div>
             </div>
@@ -124,6 +132,9 @@ const Home = () => {
                 <span className="text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full">
                   Makalah
                 </span>
+                <span className="text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                  Perapian Word, Excel
+                </span>
               </div>
             </div>
 
@@ -145,6 +156,12 @@ const Home = () => {
                 </span>
                 <span className="text-sm bg-purple-100 text-purple-800 px-3 py-1 rounded-full">
                   Banner
+                </span>
+                <span className="text-sm bg-purple-100 text-purple-800 px-3 py-1 rounded-full">
+                  Logo
+                </span>
+                <span className="text-sm bg-purple-100 text-purple-800 px-3 py-1 rounded-full">
+                  Kalender
                 </span>
               </div>
             </div>
@@ -195,21 +212,28 @@ const Home = () => {
             <div className="bg-white rounded-xl overflow-hidden shadow-lg group hover:shadow-xl transition-all duration-300">
               <div className="relative">
                 <img
-                  src="/images/udins-progress.png"
+                  src="/images/platform/dinsSphere.png"
                   alt="Progress"
-                  className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-blue-900 mb-2">
                   Project Progress
-                </h3>
+                </h3> 
                 <p className="text-gray-600 mb-4">
                   Lihat perkembangan project secara real-time dan terperinci.
                 </p>
                 <Link
-                  to="/progres"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open(
+                      "https://dins-sphere.vercel.app",
+                      "_blank",
+                      "noopener noreferrer"
+                    );
+                  }}
                   className="inline-flex items-center text-blue-900 hover:text-blue-700 transition-colors"
                 >
                   Lihat Progress
@@ -222,9 +246,9 @@ const Home = () => {
             <div className="bg-white rounded-xl overflow-hidden shadow-lg group hover:shadow-xl transition-all duration-300">
               <div className="relative">
                 <img
-                  src="/images/chat-preview.png"
+                  src="/images/platform/whatsapp_chat_dark.png"
                   alt="Chat"
-                  className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>

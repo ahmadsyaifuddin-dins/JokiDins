@@ -28,7 +28,7 @@ const Navbar = () => {
         { name: 'Home', href: '/' },
         { name: 'Kontak', href: '/contact' },
         { name: 'Tentang Kami', href: '/about' },
-        { name: `Syaifuddin's Project Progress`}
+        { name: `Syaifuddin's Project Progress` , href: 'https://dins-sphere.vercel.app' }
 
       ];
     }
