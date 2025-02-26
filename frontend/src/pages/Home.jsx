@@ -180,29 +180,29 @@ const Home = () => {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Dashboard Preview */}
+            {/* Pesanan Preview */}
             <div className="bg-white rounded-xl overflow-hidden shadow-lg group hover:shadow-xl transition-all duration-300">
               <div className="relative">
                 <img
-                  src="/images/dashboard-preview.png"
+                  src="/images/platform/pesanan-preview.png"
                   alt="Dashboard"
-                  className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-48 object-contain transform group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-blue-900 mb-2">
-                  Dashboard
+                  Review Pesanan Kamu
                 </h3>
                 <p className="text-gray-600 mb-4">
                   Pantau progress dan kelola pesanan Anda dengan mudah melalui
                   dashboard intuitif kami.
                 </p>
                 <Link
-                  to="/dashboard"
+                  to="/OrderList"
                   className="inline-flex items-center text-blue-900 hover:text-blue-700 transition-colors"
                 >
-                  Lihat Dashboard
+                  Lihat Pesanan
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </div>

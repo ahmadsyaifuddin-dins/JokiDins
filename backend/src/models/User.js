@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user'
   },
+  phones: { 
+    type: [String], 
+    default: [] },  // Daftar nomor HP yang tersimpan
+
   // Field tambahan (untuk masa depan)
   // birthday: { type: Date },
   // gender: { type: String },

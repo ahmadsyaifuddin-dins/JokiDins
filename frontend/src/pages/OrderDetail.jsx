@@ -3,13 +3,14 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { id as localeID } from 'date-fns/locale';
-import { ArrowLeft, Calendar, Clock, FileText, Package, Download } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, FileText, Package, Download, CheckCircle, AlertCircle, Loader, RefreshCw } from 'lucide-react';
 
 const OrderDetail = () => {
   const { id: orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isDownloading, setIsDownloading] = useState(false);
   const navigate = useNavigate();
 
   const formatDateTime = (dateString) => {
@@ -46,6 +47,7 @@ const OrderDetail = () => {
 
   const handleDownloadFile = async () => {
     const token = localStorage.getItem('token');
+    setIsDownloading(true);
     try {
       const response = await axios.get(
         `https://jokidins-production.up.railway.app/api/orders/${orderId}/file`,
@@ -65,6 +67,8 @@ const OrderDetail = () => {
     } catch (error) {
       console.error('Error downloading file:', error);
       alert('Gagal mengunduh berkas');
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -72,35 +76,48 @@ const OrderDetail = () => {
     const configs = {
       pending: {
         color: 'bg-amber-100 text-amber-800 border-amber-200',
+        lightColor: 'bg-amber-50',
+        icon: <Clock className="h-5 w-5" />,
         label: 'Menunggu'
       },
       processing: {
         color: 'bg-blue-100 text-blue-800 border-blue-200',
+        lightColor: 'bg-blue-50',
+        icon: <RefreshCw className="h-5 w-5 animate-spin" />,
         label: 'Sedang Diproses'
       },
       completed: {
         color: 'bg-green-100 text-green-800 border-green-200',
+        lightColor: 'bg-green-50',
+        icon: <CheckCircle className="h-5 w-5" />,
         label: 'Selesai'
       },
       cancelled: {
         color: 'bg-red-100 text-red-800 border-red-200',
+        lightColor: 'bg-red-50',
+        icon: <AlertCircle className="h-5 w-5" />,
         label: 'Dibatalkan'
       }
     };
-    return configs[status] || { color: 'bg-gray-100 text-gray-800 border-gray-200', label: status };
+    return configs[status] || { 
+      color: 'bg-gray-100 text-gray-800 border-gray-200', 
+      lightColor: 'bg-gray-50',
+      icon: <AlertCircle className="h-5 w-5" />,
+      label: status 
+    };
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4 md:p-6">
         <div className="max-w-4xl mx-auto">
           <div className="animate-pulse space-y-6">
             <div className="h-4 bg-gray-200 w-32 rounded" />
-            <div className="bg-white rounded-xl p-6 space-y-4">
+            <div className="bg-white rounded-xl shadow-md p-4 md:p-6 space-y-4">
               <div className="h-8 bg-gray-200 w-2/3 rounded" />
               <div className="h-4 bg-gray-200 w-24 rounded" />
               <div className="h-32 bg-gray-200 rounded" />
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="h-16 bg-gray-200 rounded" />
                 <div className="h-16 bg-gray-200 rounded" />
               </div>
@@ -113,13 +130,28 @@ const OrderDetail = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4 md:p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 flex items-center">
-            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" />
-            </svg>
-            {error}
+          <button
+            onClick={() => navigate('/OrderList')}
+            className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Kembali ke Daftar Pesanan
+          </button>
+          
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 flex flex-col md:flex-row items-center justify-center md:justify-between shadow-sm">
+            <div className="flex items-center mb-4 md:mb-0">
+              <AlertCircle className="w-6 h-6 mr-2 flex-shrink-0" />
+              <p className="font-medium">{error}</p>
+            </div>
+            <button 
+              onClick={fetchOrder}
+              className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-lg transition-colors flex items-center"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Coba Lagi
+            </button>
           </div>
         </div>
       </div>
@@ -130,91 +162,198 @@ const OrderDetail = () => {
 
   const statusConfig = getStatusConfig(order.status);
 
+  const renderTimelineItem = (date, icon, title, description) => (
+    <div className="flex">
+      <div className="flex flex-col items-center mr-4">
+        <div className="rounded-full bg-blue-500 p-2 text-white">
+          {icon}
+        </div>
+        <div className="h-full w-px bg-blue-200 my-1"></div>
+      </div>
+      <div className="pb-6">
+        <p className="text-sm text-gray-500">{date}</p>
+        <p className="font-medium text-gray-900">{title}</p>
+        {description && <p className="text-gray-600 text-sm mt-1">{description}</p>}
+      </div>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto p-6">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      <div className="max-w-4xl mx-auto p-4 md:p-6">
         <button
-          onClick={() => navigate('/orders')}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+          onClick={() => navigate('/OrderList')}
+          className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Kembali ke Daftar Pesanan
+          <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+          <span className="font-medium">Kembali ke Daftar Pesanan</span>
         </button>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all hover:shadow-lg">
           {/* Header Section */}
-          <div className="border-b border-gray-200 p-6">
-            <div className="flex items-start justify-between">
+          <div className={`${statusConfig.lightColor} border-b border-gray-200 p-4 md:p-6`}>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-center space-x-3">
-                <Package className="h-6 w-6 text-gray-500" />
-                <h1 className="text-2xl font-bold text-gray-900">
+                <div className="p-2 rounded-lg bg-white shadow-sm">
+                  <Package className="h-6 w-6 text-gray-700" />
+                </div>
+                <h1 className="text-xl md:text-2xl font-bold text-gray-900 break-words">
                   {order.service || 'Detail Pesanan'}
                 </h1>
               </div>
-              <div className={`px-4 py-2 rounded-lg border ${statusConfig.color}`}>
-                {statusConfig.label}
+              <div className={`px-4 py-2 rounded-lg border flex items-center space-x-2 ${statusConfig.color} self-start md:self-auto`}>
+                <span className="flex-shrink-0">{statusConfig.icon}</span>
+                <span className="font-medium">{statusConfig.label}</span>
               </div>
+            </div>
+
+            <div className="mt-4 text-sm text-gray-500">
+              ID Pesanan: <span className="font-mono font-medium text-gray-700">{orderId}</span>
             </div>
           </div>
 
           {/* Content Section */}
-          <div className="p-6 space-y-6">
+          <div className="p-4 md:p-6 space-y-6">
             {/* Description */}
-            <div>
-              <h2 className="text-sm font-medium text-gray-700 mb-2">Deskripsi Pesanan</h2>
-              <p className="text-gray-600 bg-gray-50 rounded-lg p-4">
-                {order.description || 'Tidak ada deskripsi'}
-              </p>
+            <div className="transition-all hover:shadow-md rounded-xl">
+              <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <span className="inline-block w-1 h-4 bg-blue-500 mr-2 rounded"></span>
+                Deskripsi Pesanan
+              </h2>
+              <div className="text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
+                {order.description ? (
+                  <p className="whitespace-pre-line">{order.description}</p>
+                ) : (
+                  <p className="italic text-gray-400">Tidak ada deskripsi</p>
+                )}
+              </div>
             </div>
 
             {/* Deadline */}
-            <div>
-              <h2 className="text-sm font-medium text-gray-700 mb-2">Tenggat Waktu</h2>
-              <div className="flex items-center text-gray-600 bg-gray-50 rounded-lg p-4">
-                <Calendar className="h-5 w-5 mr-2 text-gray-400" />
-                {formatDateTime(order.deadline)}
+            <div className="transition-all hover:shadow-md rounded-xl">
+              <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <span className="inline-block w-1 h-4 bg-amber-500 mr-2 rounded"></span>
+                Tenggat Waktu
+              </h2>
+              <div className="flex items-center text-gray-600 bg-amber-50 rounded-xl p-4 border border-amber-100">
+                <Calendar className="h-5 w-5 mr-3 text-amber-500" />
+                <span className="font-medium">{formatDateTime(order.deadline)}</span>
               </div>
             </div>
 
             {/* File */}
-            <div>
-              <h2 className="text-sm font-medium text-gray-700 mb-2">Berkas Lampiran</h2>
+            <div className="transition-all hover:shadow-md rounded-xl">
+              <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <span className="inline-block w-1 h-4 bg-purple-500 mr-2 rounded"></span>
+                Berkas Lampiran
+              </h2>
               {order.file ? (
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <FileText className="h-5 w-5 text-gray-400 mr-2" />
-                    <span className="text-gray-600">{order.file.originalName}</span>
+                <div className="bg-purple-50 rounded-xl p-4 border border-purple-100">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex items-center">
+                      <div className="p-2 bg-white rounded-lg shadow-sm mr-3">
+                        <FileText className="h-5 w-5 text-purple-500" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-800 break-words">{order.file.originalName}</p>
+                        {order.file.size && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            {Math.round(order.file.size / 1024)} KB
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleDownloadFile}
+                      disabled={isDownloading}
+                      className={`inline-flex items-center px-4 py-2 border border-purple-300 shadow-sm text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors ${isDownloading ? 'opacity-75 cursor-not-allowed' : ''}`}
+                    >
+                      {isDownloading ? (
+                        <>
+                          <Loader className="h-4 w-4 mr-2 animate-spin" />
+                          Mengunduh...
+                        </>
+                      ) : (
+                        <>
+                          <Download className="h-4 w-4 mr-2" />
+                          Unduh Berkas
+                        </>
+                      )}
+                    </button>
                   </div>
-                  <button
-                    onClick={handleDownloadFile}
-                    className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                    <Download className="h-4 w-4 mr-1" />
-                    Unduh
-                  </button>
                 </div>
               ) : (
-                <p className="text-gray-500 bg-gray-50 rounded-lg p-4">
-                  Tidak ada berkas yang dilampirkan
-                </p>
+                <div className="text-gray-500 bg-gray-50 rounded-xl p-4 border border-gray-100 flex items-center">
+                  <AlertCircle className="h-5 w-5 mr-2 text-gray-400" />
+                  <p className="italic text-gray-400">Tidak ada berkas yang dilampirkan</p>
+                </div>
               )}
             </div>
 
+            {/* Order Timeline */}
+            <div className="transition-all hover:shadow-md rounded-xl">
+              <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <span className="inline-block w-1 h-4 bg-blue-500 mr-2 rounded"></span>
+                Riwayat Pesanan
+              </h2>
+              <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                <div className="space-y-0">
+                  {renderTimelineItem(
+                    formatDateTime(order.createdAt),
+                    <Package className="h-4 w-4" />,
+                    "Pesanan Dibuat",
+                    "Pesanan telah berhasil dibuat dan menunggu untuk diproses"
+                  )}
+                  
+                  {order.status === 'processing' && renderTimelineItem(
+                    formatDateTime(order.updatedAt),
+                    <RefreshCw className="h-4 w-4" />,
+                    "Sedang Diproses", 
+                    "Pesanan Anda sedang dikerjakan oleh tim kami"
+                  )}
+                  
+                  {order.status === 'completed' && (
+                    <>
+                      {renderTimelineItem(
+                        "Dalam Proses",
+                        <RefreshCw className="h-4 w-4" />,
+                        "Sedang Diproses", 
+                        "Pesanan Anda sedang dikerjakan oleh tim kami"
+                      )}
+                      {renderTimelineItem(
+                        formatDateTime(order.updatedAt),
+                        <CheckCircle className="h-4 w-4" />,
+                        "Pesanan Selesai", 
+                        "Pesanan Anda telah berhasil diselesaikan"
+                      )}
+                    </>
+                  )}
+                  
+                  {order.status === 'cancelled' && renderTimelineItem(
+                    formatDateTime(order.updatedAt),
+                    <AlertCircle className="h-4 w-4" />,
+                    "Pesanan Dibatalkan", 
+                    "Pesanan ini telah dibatalkan"
+                  )}
+                </div>
+              </div>
+            </div>
+
             {/* Timestamps */}
-            <div className="grid grid-cols-2 gap-4 bg-gray-50 rounded-lg p-4">
-              <div>
-                <div className="flex items-center text-sm text-gray-500 mb-1">
-                  <Clock className="h-4 w-4 mr-1" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 transition-all hover:shadow-md">
+                <div className="flex items-center text-sm text-gray-500 mb-2">
+                  <Clock className="h-4 w-4 mr-2 text-gray-400" />
                   Dibuat pada
                 </div>
-                <p className="font-medium">{formatDateTime(order.createdAt)}</p>
+                <p className="font-medium text-gray-800">{formatDateTime(order.createdAt)}</p>
               </div>
-              <div>
-                <div className="flex items-center text-sm text-gray-500 mb-1">
-                  <Clock className="h-4 w-4 mr-1" />
+              <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 transition-all hover:shadow-md">
+                <div className="flex items-center text-sm text-gray-500 mb-2">
+                  <Clock className="h-4 w-4 mr-2 text-gray-400" />
                   Terakhir diperbarui
                 </div>
-                <p className="font-medium">{formatDateTime(order.updatedAt)}</p>
+                <p className="font-medium text-gray-800">{formatDateTime(order.updatedAt)}</p>
               </div>
             </div>
           </div>

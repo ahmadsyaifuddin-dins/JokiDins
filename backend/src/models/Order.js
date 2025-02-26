@@ -18,6 +18,14 @@ const orderSchema = mongoose.Schema({
     type: Date,
     required: true
   },
+  phone: { 
+    type: [String], 
+    default: [] ,
+    required: true
+  },
+  provider: {
+    type: String,
+  },
   status: {
     type: String,
     required: true,

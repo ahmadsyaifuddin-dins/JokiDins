@@ -37,13 +37,11 @@ const Navbar = () => {
       return [
         { name: 'Home', href: '/' },
         {
-          name: 'Manajemen Order',
+          name: 'Manajemen Data',
           href: '#',
           children: [
             { name: 'Daftar Order', href: '/admin/orders' },
-            { name: 'Order Masuk', href: '/admin/orders/pending' },
-            { name: 'Order Diproses', href: '/admin/orders/processing' },
-            { name: 'Order Selesai', href: '/admin/orders/completed' }
+            { name: 'Data Kostumer', href: '/admin/user' },
           ]
         },
         { name: 'Dashboard', href: '/admin/dashboard' },
@@ -59,8 +57,8 @@ const Navbar = () => {
         href: '#',
         children: [
           { name: 'Pesan Joki', href: '/create-order' },
-          { name: 'Pesanan Saya', href: '/orders' },
-          { name: 'Syaifuddin Progress'} 
+          { name: 'Pesanan Saya', href: '/OrderList' },
+          { name: 'Syaifuddin Progress', href: 'https://dins-sphere.vercel.app' } 
         ]
       },
       { name: 'Kontak', href: '/contact' },
@@ -79,7 +77,10 @@ const Navbar = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Link to="/">
-                <span className="text-2xl font-bold text-blue-900">JokiDins 😉</span>
+                <div className="flex items-center">
+                  <img src="/logo.svg" alt="JokiDins Logo" className="h-8 w-8 mr-2" />
+                  <span className="text-2xl font-bold text-blue-900">JokiDins </span>
+                </div>
               </Link>
             </div>
           </div>

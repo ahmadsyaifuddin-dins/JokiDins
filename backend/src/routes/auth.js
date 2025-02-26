@@ -43,6 +43,7 @@ router.post("/register", async (req, res) => {
         id: newUser._id,
         name: newUser.name,
         email: newUser.email,
+        phones: newUser.phones, // tambahkan field ini
         role: newUser.role, // sertakan role di sini
       },
     });
@@ -81,7 +82,8 @@ router.post("/login", async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        phones: user.phones,
+        role: user.role
       },
     });
   } catch (error) {
@@ -142,6 +144,7 @@ router.post("/google", async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        phones: user.phones  // pastikan field ini dikembalikan
         // birthday: user.birthday, // commented out
         // gender: user.gender,     // commented out
       },
