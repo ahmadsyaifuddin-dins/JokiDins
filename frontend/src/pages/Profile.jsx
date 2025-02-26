@@ -134,13 +134,6 @@ const Profile = () => {
               <User className="w-4 h-4" />
               <span>Update Profile</span>
             </button>
-            <button
-              onClick={logout}
-              className="flex-1 bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition-colors duration-200 flex items-center justify-center space-x-2"
-            >
-              <LogOut className="w-4 h-4" />
-              <span>Logout</span>
-            </button>
           </div>
         </div>
       </div>
