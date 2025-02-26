@@ -16,6 +16,8 @@ import OrderCreate from './pages/OrderCreate';
 import OrderEdit from './pages/OrderEdit';
 import OrderDetail from './pages/OrderDetail';
 import Contact from './pages/Contact';
+import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
 
@@ -47,6 +49,8 @@ const App = () => {
             <Route path="/order" element={<OrderJoki />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route
               path="/profile"
               element={
