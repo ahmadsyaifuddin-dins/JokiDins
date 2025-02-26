@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const OrderEdit = () => {
   const { id } = useParams();
@@ -82,6 +83,13 @@ const OrderEdit = () => {
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-8">
+      <button
+          onClick={() => navigate('/OrderList')}
+          className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+          <span className="font-medium">Kembali ke Daftar Pesanan</span>
+        </button>
         <h1 className="text-2xl font-bold text-blue-900 mb-4">Edit Order</h1>
         <form onSubmit={handleUpdate} className="space-y-6">
           {/* Service Input */}

@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 const UpdateProfile = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -73,6 +74,13 @@ const UpdateProfile = () => {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md space-y-4">
+      <button
+          onClick={() => navigate('/profile')}
+          className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+          <span className="font-medium">Kembali ke Profile</span>
+        </button>
       <h2 className="text-2xl font-bold mb-4">Update Profile</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
@@ -113,7 +121,7 @@ const UpdateProfile = () => {
           className="w-full p-2 border rounded-md"
           value={phoneInput}
           onChange={(e) => setPhoneInput(e.target.value)}
-          required
+          
         />
         <input
           type="password"

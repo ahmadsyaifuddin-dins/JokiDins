@@ -40,8 +40,8 @@ const Navbar = () => {
           name: 'Manajemen Data',
           href: '#',
           children: [
+            { name: 'Data Kostumer', href: '/admin/Users' },
             { name: 'Daftar Order', href: '/admin/orders' },
-            { name: 'Data Kostumer', href: '/admin/user' },
           ]
         },
         { name: 'Dashboard', href: '/admin/dashboard' },

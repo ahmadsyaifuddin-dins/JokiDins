@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 // Fungsi untuk deteksi provider, termasuk Smartfren dan Axis
 function detectProvider(phone) {
@@ -150,6 +151,13 @@ const OrderCreate = () => {
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-8">
+      <button
+          onClick={() => navigate('/OrderList')}
+          className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+          <span className="font-medium">Kembali ke Daftar Pesanan</span>
+        </button>
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-blue-900 mb-2">Buat Order Baru</h1>
           <p className="text-gray-600">Silakan isi detail order anda di bawah ini</p>

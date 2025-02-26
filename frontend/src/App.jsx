@@ -8,14 +8,16 @@ import About from "./pages/About";
 import Dashboard from "./admin/Dashboard";
 import AdminProfile from "./admin/Profile";
 import AdminOrderDetail from "./admin/OrderDetail";
+import AdminUserList from "./admin/AdminUserList";
+import AdminUserDetail from "./admin/AdminUserDetail";
 import OrderJoki from "./pages/OrderJoki";
 import Profile from "./pages/Profile";
 import UpdateProfile from "./pages/UpdateProfile";
-import OrderList from './pages/OrderList';
-import OrderCreate from './pages/OrderCreate';
-import OrderEdit from './pages/OrderEdit';
-import OrderDetail from './pages/OrderDetail';
-import Contact from './pages/Contact';
+import OrderList from "./pages/OrderList";
+import OrderCreate from "./pages/OrderCreate";
+import OrderEdit from "./pages/OrderEdit";
+import OrderDetail from "./pages/OrderDetail";
+import Contact from "./pages/Contact";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PrivateRoute from "./components/PrivateRoute";
@@ -29,7 +31,45 @@ const App = () => {
         <main className="flex-grow mt-5">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/order" element={<OrderJoki />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route
+              path="/admin/profile"
+              element={
+                <PrivateRoute>
+                  <AdminProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/OrderDetail/:id"
+              element={
+                <PrivateRoute>
+                  <AdminOrderDetail />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <PrivateRoute>
+                  <AdminUserList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/userDetail/:id"
+              element={
+                <PrivateRoute>
+                  <AdminUserDetail />
+                </PrivateRoute>
+              }
+            />
+
             <Route
               path="/login"
               element={
@@ -46,24 +86,11 @@ const App = () => {
                 </PublicRoute>
               }
             />
-            <Route path="/order" element={<OrderJoki />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route
               path="/profile"
               element={
                 <PrivateRoute>
                   <Profile />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/admin/profile"
-              element={
-                <PrivateRoute>
-                  <AdminProfile />
                 </PrivateRoute>
               }
             />
@@ -107,14 +134,7 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-            <Route
-              path="/admin/OrderDetail/:id"
-              element={
-                <PrivateRoute>
-                  <AdminOrderDetail />
-                </PrivateRoute>
-              }
-            />
+            
           </Routes>
         </main>
         <Footer />

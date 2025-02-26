@@ -13,7 +13,7 @@ import {
   CheckCircle,
   XCircleIcon,
   Trash2,
-  RefreshCcw
+  RefreshCcw,
 } from "lucide-react";
 
 const Dashboard = () => {
@@ -24,9 +24,8 @@ const Dashboard = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const navigate = useNavigate();
 
-  // Definisikan fungsi handler
-const handleViewDetail = (orderId) => {
-    navigate(`/admin/OrderDetail/${orderId}`);  // atau `/admin/orders/${orderId}` sesuai struktur route Anda
+  const handleViewDetail = (orderId) => {
+    navigate(`/admin/OrderDetail/${orderId}`);
   };
 
   useEffect(() => {
@@ -59,7 +58,6 @@ const handleViewDetail = (orderId) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Toast notification instead of alert
       const notification = document.getElementById("notification");
       notification.textContent = `Order berhasil diupdate menjadi: ${newStatus}`;
       notification.className =
@@ -85,7 +83,6 @@ const handleViewDetail = (orderId) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Toast notification
       const notification = document.getElementById("notification");
       notification.textContent = "Order berhasil dihapus";
       notification.className =
@@ -274,7 +271,7 @@ const handleViewDetail = (orderId) => {
                       Layanan
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Email User
+                      Nomor HP
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
@@ -294,8 +291,11 @@ const handleViewDetail = (orderId) => {
                         {order.service}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        {order.user?.email || "Tidak ada email"}
+                        {Array.isArray(order.phone) && order.phone.length > 0
+                          ? order.phone.join(", ")
+                          : "Tidak ada nomor"}
                       </td>
+
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${getStatusBadgeColor(
@@ -308,7 +308,6 @@ const handleViewDetail = (orderId) => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <div className="flex items-center gap-2">
-                          {/* View Detail Button */}
                           <button
                             onClick={() => handleViewDetail(order._id)}
                             className="inline-flex items-center gap-1 px-3 py-1.5 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
@@ -316,8 +315,6 @@ const handleViewDetail = (orderId) => {
                             <Eye className="w-4 h-4" />
                             Detail
                           </button>
-
-                          {/* Status Action Buttons */}
                           <div className="flex items-center gap-1">
                             {order.status !== "processing" && (
                               <button
@@ -330,7 +327,6 @@ const handleViewDetail = (orderId) => {
                                 <PlayCircle className="w-5 h-5" />
                               </button>
                             )}
-
                             {order.status !== "completed" && (
                               <button
                                 onClick={() =>
@@ -342,7 +338,6 @@ const handleViewDetail = (orderId) => {
                                 <CheckCircle className="w-5 h-5" />
                               </button>
                             )}
-
                             {order.status !== "cancelled" && (
                               <button
                                 onClick={() =>
@@ -354,8 +349,6 @@ const handleViewDetail = (orderId) => {
                                 <XCircleIcon className="w-5 h-5" />
                               </button>
                             )}
-
-                            {/* Delete Button */}
                             <button
                               onClick={() => handleDelete(order._id)}
                               title="Hapus Order"

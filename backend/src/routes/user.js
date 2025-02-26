@@ -4,6 +4,62 @@ const bcrypt = require("bcryptjs");
 const { protect } = require("../middleware/authMiddleware");
 const User = require("../models/User");
 
+router.get('/users', protect, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Akses terlarang' });
+    }
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// GET detail user (Protected, hanya admin yang dapat mengakses)
+router.get('/users/:id', protect, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Akses terlarang' });
+    }
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User tidak ditemukan' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.delete('/users/:id', protect, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Akses terlarang' });
+    }
+    
+    // Cari user yang akan dihapus
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User tidak ditemukan' });
+    }
+    
+    // Cegah admin menghapus akun sendiri (opsional)
+    if (req.user._id.toString() === user._id.toString()) {
+      return res.status(400).json({ message: "Admin tidak dapat menghapus akun sendiri" });
+    }
+    
+    // Gunakan deleteOne() atau findByIdAndDelete() daripada remove()
+    await user.deleteOne(); // atau: await User.findByIdAndDelete(req.params.id);
+    
+    res.json({ message: 'User berhasil dihapus' });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
 // GET Profile (Protected)
 router.get("/profile", protect, async (req, res) => {
   res.json(req.user);
