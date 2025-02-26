@@ -125,7 +125,7 @@ const Home = () => {
                 Bantuan profesional untuk tugas pemrograman, makalah, dan
                 presentasi dengan kualitas terjamin.
               </p>
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex flex-wrap gap-2 md:gap-4">
                 <span className="text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full">
                   PPT
                 </span>
@@ -133,7 +133,10 @@ const Home = () => {
                   Makalah
                 </span>
                 <span className="text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full">
-                  Perapian Word, Excel
+                  Merapikan Word
+                </span>
+                <span className="text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                  Merapikan Excel
                 </span>
               </div>
             </div>
