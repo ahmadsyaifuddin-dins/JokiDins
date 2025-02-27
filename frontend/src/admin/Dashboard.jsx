@@ -129,7 +129,8 @@ const Dashboard = () => {
     const matchesSearch =
       order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.user?.email.toLowerCase().includes(searchTerm.toLowerCase());
+      order.user?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.user?.name.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus =
       filterStatus === "all" || order.status === filterStatus;
@@ -268,6 +269,9 @@ const Dashboard = () => {
                       ID Order
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Nama Kostumer
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Layanan
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -286,6 +290,12 @@ const Dashboard = () => {
                     <tr key={order._id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         #{order._id.slice(-5).toUpperCase()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <div className="flex flex-col">
+                          <span className="text-gray-600">{order.user?.name || "Tidak ada nama"}</span>
+                          <span className="text-xs text-gray-500">{order.user?.email || ""}</span>
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {order.service}

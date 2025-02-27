@@ -189,17 +189,17 @@ const OrderDetail = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      <div className="max-w-5xl mx-auto p-6">
-        <div className="flex justify-between items-center mb-6">
+      <div className="mx-auto p-6">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 space-y-4 md:space-y-0">
           <button
             onClick={() => navigate("/admin/dashboard")}
-            className="flex items-center text-gray-600 hover:text-gray-900 transition-colors bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-200 hover:border-gray-300"
+            className="flex items-center w-fit text-gray-600 hover:text-gray-900 transition-colors bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-200 hover:border-gray-300"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Kembali ke Dashboard
           </button>
           
-          <div className={`px-4 py-2 rounded-lg shadow-sm border ${statusConfig.color} flex items-center`}>
+          <div className={`px-4 py-2 w-fit rounded-lg shadow-sm border ${statusConfig.color} flex items-center`}>
             {statusConfig.icon}
             {statusConfig.label}
           </div>

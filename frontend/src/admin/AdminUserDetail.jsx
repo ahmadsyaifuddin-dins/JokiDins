@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Mail, Phone, User, Calendar, Trash } from "lucide-react";
+import { Mail, Phone, User, Calendar, Trash, ArrowLeft } from "lucide-react";
 
 const AdminUserDetail = () => {
   const { id } = useParams();
@@ -64,8 +64,9 @@ const AdminUserDetail = () => {
     <div className="max-w-4xl mx-auto p-6">
       <button
         onClick={() => navigate("/admin/users")}
-        className="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        className="mb-4 bg-blue-600 text-white px-4 py-2 rounded flex items-center space-x-2 hover:bg-blue-700 transition"
       >
+        <ArrowLeft className="w-5 h-5" />
         Kembali ke Daftar Pengguna
       </button>
       <div className="bg-white rounded-xl shadow-lg p-8">
@@ -87,12 +88,24 @@ const AdminUserDetail = () => {
           </p>
         </div>
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* User ID */}
+          <div className="flex items-center space-x-3">
+            <User className="w-5 h-5 text-green-700" />
+            <div className="truncate">
+              <p className="text-sm font-medium text-green-700">ID Pengguna</p>
+              <p className="text-gray-700 truncate" title={userDetail._id}>
+                {userDetail._id}
+              </p>
+            </div>
+          </div>
           {/* Email */}
           <div className="flex items-center space-x-3">
             <Mail className="w-5 h-5 text-blue-700" />
-            <div>
+            <div className="truncate">
               <p className="text-sm font-medium text-blue-700">Email</p>
-              <p className="text-gray-700">{userDetail.email}</p>
+              <p className="text-gray-700 truncate" title={userDetail.email}>
+                {userDetail.email}
+              </p>
             </div>
           </div>
           {/* Nomor HP */}
@@ -107,15 +120,7 @@ const AdminUserDetail = () => {
               </p>
             </div>
           </div>
-          {/* User ID */}
-          <div className="flex items-center space-x-3">
-            <User className="w-5 h-5 text-green-700" />
-            <div>
-              <p className="text-sm font-medium text-green-700">ID Pengguna</p>
-              <p className="text-gray-700">{userDetail._id}</p>
-            </div>
-          </div>
-          {/* Join Date */}
+          {/* Bergabung Sejak */}
           <div className="flex items-center space-x-3">
             <Calendar className="w-5 h-5 text-indigo-700" />
             <div>

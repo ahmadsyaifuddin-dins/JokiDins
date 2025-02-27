@@ -82,11 +82,14 @@ router.get("/", protect, async (req, res) => {
   try {
     // Jika admin, ambil semua order + populate user email
     if (req.user.role === "admin") {
-      const orders = await Order.find({}).populate("user", "email");
+      const orders = await Order.find({}).populate("user", "name email");
       return res.json(orders);
     } else {
       // Kalau user biasa, hanya order miliknya
-      const orders = await Order.find({ user: req.user._id });
+      const orders = await Order.find({ user: req.user._id }).populate(
+        "user",
+        "email",
+      );
       return res.json(orders);
     }
   } catch (error) {
@@ -100,7 +103,7 @@ router.get("/", protect, async (req, res) => {
 router.get("/:id", protect, async (req, res) => {
   try {
     // Populate user agar admin bisa melihat info user, misal email
-    const order = await Order.findById(req.params.id).populate("user", "email");
+    const order = await Order.findById(req.params.id).populate("user", "name email");
     if (!order)
       return res.status(404).json({ message: "Order tidak ditemukan" });
 
