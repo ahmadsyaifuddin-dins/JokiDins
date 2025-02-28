@@ -41,7 +41,7 @@ const Navbar = () => {
           href: '#',
           children: [
             { name: 'Data Kostumer', href: '/admin/Users' },
-            { name: 'Daftar Order', href: '/admin/orders' },
+            { name: 'Daftar Order', href: '/OrderList' },
           ]
         },
         { name: 'Dashboard', href: '/admin/dashboard' },
