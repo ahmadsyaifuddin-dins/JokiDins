@@ -273,7 +273,7 @@ const OrderCreate = () => {
           </div>
 
           {/* File Upload */}
-          <div>
+          {/* <div>
             <label 
               htmlFor="file" 
               className="block text-sm font-medium text-gray-700 mb-2"
@@ -302,7 +302,7 @@ const OrderCreate = () => {
                 </span>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* Submit */}
           <div className="pt-4">

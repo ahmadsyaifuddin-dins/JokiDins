@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { Mail, Phone, User, Calendar, Trash, ArrowLeft } from "lucide-react";
 
+
 const AdminUserDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
