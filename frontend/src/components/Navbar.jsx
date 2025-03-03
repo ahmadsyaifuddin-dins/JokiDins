@@ -70,7 +70,7 @@ const Navbar = () => {
   const navigation = getNavigation();
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-10">
+    <nav className="bg-white shadow-lg sticky top-0 z-20">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
           {/* Logo Section */}
