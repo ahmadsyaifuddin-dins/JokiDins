@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import { Toaster, toast } from 'react-hot-toast';
+import { ArrowLeft, Check } from 'lucide-react';
+import { ErrorIcon, Toaster, toast,  } from 'react-hot-toast';
 
 const OrderEdit = () => {
   const { id } = useParams();
@@ -56,7 +56,6 @@ const OrderEdit = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Order berhasil diperbarui!", {
-        icon: <ArrowLeft className="h-5 w-5 text-green-500" />
       });
       setTimeout(() => {
         navigate('/OrderList');
@@ -64,7 +63,6 @@ const OrderEdit = () => {
     } catch (err) {
       console.error("Error updating order:", err);
       toast.error("Gagal memperbarui order.", {
-        icon: <ArrowLeft className="h-5 w-5 text-red-500" />
       });
     }
   };
