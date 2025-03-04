@@ -131,7 +131,7 @@ const Login = () => {
               
               <div className="text-sm opacity-50">
                 <span className="font-medium text-blue-900 cursor-not-allowed">
-                  Lupa password? (belum aktif)
+                  Lupa password?
                 </span>
               </div>
             </div>
