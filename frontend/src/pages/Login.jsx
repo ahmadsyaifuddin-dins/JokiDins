@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import GoogleSignIn from "../components/GoogleSignIn";
 import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa";
@@ -166,9 +167,9 @@ const Login = () => {
           
           <p className="mt-8 text-center text-sm text-gray-600">
             Belum punya akun?{" "}
-            <a href="/register" className="font-medium text-blue-900 hover:text-blue-950">
+            <Link to="/register" className="font-medium text-blue-900 hover:text-blue-950">
               Daftar disini
-            </a>
+            </Link>
           </p>
         </div>
       </div>
