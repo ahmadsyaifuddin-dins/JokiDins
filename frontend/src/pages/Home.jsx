@@ -29,7 +29,7 @@ const Home = () => {
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="bg-white/95 rounded-2xl shadow-2xl p-8 lg:p-12 max-w-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-300">
             <img
-              src="/images/dinsy.jpg"
+              src="/JokiDins-transparent.svg"
               alt="JokiDins Mascot"
               className="w-32 h-32 mx-auto rounded-full shadow-lg border-4 border-blue-100 mb-6"
             />
