@@ -5,9 +5,9 @@ const Services = ({ isVisible }) => {
   const serviceCards = [
         {
           icon: <Code className="w-7 h-7 text-blue-400" />,
-          title: "Pembuatan Website/WebApp",
+          title: "Layanan Pengembangan Website & Aplikasi Web Profesional",
           description:
-            "Website atau Web Application profesional dengan teknologi terkini untuk kebutuhan bisnis atau akademik Anda.",
+            "Solusi digital berbasis teknologi terkini yang disesuaikan dengan kebutuhan bisnis, institusi pendidikan, maupun organisasi Anda",
           tags: ["Laravel", "ReactJS", "NextJS", "NestJS", "Svelte"],
           color: "blue",
           bgFrom: "from-blue-900/20",
