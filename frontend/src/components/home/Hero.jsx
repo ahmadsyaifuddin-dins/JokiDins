@@ -1,6 +1,7 @@
 import { ArrowRight, MessageSquare } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
@@ -35,16 +36,51 @@ const Hero = () => {
           </p>
           <div className="flex gap-1.5 justify-center">
             <Link to="/create-order">
-              <button className="group w-fit bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-4 py-4 rounded-lg font-medium shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 hover:from-blue-700 hover:to-indigo-800 transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
-                Order Joki
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+              <motion.button
+                className="w-fit bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-4 py-4 rounded-lg font-medium flex items-center justify-center gap-2"
+                whileHover={{
+                  y: -4,
+                  boxShadow: "0 0 15px 5px rgba(59, 130, 246, 0.5)",
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 10,
+                }}
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  Order Joki
+                  <motion.span
+                    whileHover={{ x: 4 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                  >
+                    <ArrowRight className="w-5 h-5" />
+                  </motion.span>
+                </span>
+              </motion.button>
             </Link>
             <Link to="/contact">
-              <button className="group w-full bg-gray-900 text-white border border-gray-700 px-5 py-4 rounded-lg font-medium hover:bg-gray-800 transform hover:-translate-y-1 transition-all duration-300 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-900/10 flex items-center justify-center gap-2">
+              <motion.button
+                className="w-full bg-gray-900 text-white border border-gray-700 px-5 py-4 rounded-lg font-medium flex items-center justify-center gap-2"
+                whileHover={{
+                  y: -4,
+                  borderColor: "rgba(59, 130, 246, 0.5)",
+                  boxShadow: "0 10px 15px -3px rgba(30, 64, 175, 0.1)",
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 10,
+                }}
+              >
                 Kontak
-                <MessageSquare className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+                <motion.span
+                  whileHover={{ x: 4 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <MessageSquare className="w-5 h-5" />
+                </motion.span>
+              </motion.button>
             </Link>
           </div>
         </div>
