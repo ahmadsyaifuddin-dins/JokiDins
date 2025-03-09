@@ -26,7 +26,7 @@ import PublicRoute from "./components/PublicRoute";
 const App = () => {
   return (
     <Router>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-slate-950">
         <Navbar />
         <main className="flex-grow mt-5">
           <Routes>

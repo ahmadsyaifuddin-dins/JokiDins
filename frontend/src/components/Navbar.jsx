@@ -124,7 +124,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-20">
+    <nav className="bg-slate-950 shadow-lg sticky top-0 z-20">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
           {/* Logo Section */}
@@ -164,14 +164,14 @@ const Navbar = () => {
                           animate="visible"
                           exit="hidden"
                           variants={dropdownVariants}
-                          className="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                          className="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-slate-950 ring-1 ring-black ring-opacity-5"
                         >
                           <div className="py-1">
                             {item.children.map((child) => (
                               <Link
                                 key={child.name}
                                 to={child.href}
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors duration-200"
+                                className="block px-4 py-2 text-sm text-gray-500 hover:bg-slate-950 hover:text-blue-900 transition-colors duration-200"
                               >
                                 {child.name}
                               </Link>
@@ -219,7 +219,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition-colors duration-200"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-slate-950 transition-colors duration-200"
             >
               <AnimatePresence mode="wait">
                 {isOpen ? (

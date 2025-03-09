@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MessageSquare } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -33,16 +33,17 @@ const Hero = () => {
             Solusi cerdas untuk tugas dan proyekmu. Kami hadir untuk membantu
             mewujudkan hasil terbaik!
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex gap-1.5 justify-center">
             <Link to="/create-order">
-              <button className="group w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-8 py-4 rounded-lg font-medium shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 hover:from-blue-700 hover:to-indigo-800 transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
+              <button className="group w-fit bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-4 py-4 rounded-lg font-medium shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 hover:from-blue-700 hover:to-indigo-800 transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
                 Order Joki
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>
             <Link to="/contact">
-              <button className="w-full sm:w-auto bg-gray-900 text-white border border-gray-700 px-8 py-4 rounded-lg font-medium hover:bg-gray-800 transform hover:-translate-y-1 transition-all duration-300 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-900/10">
-                Kontak Kami
+              <button className="group w-full bg-gray-900 text-white border border-gray-700 px-5 py-4 rounded-lg font-medium hover:bg-gray-800 transform hover:-translate-y-1 transition-all duration-300 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-900/10 flex items-center justify-center gap-2">
+                Kontak
+                <MessageSquare className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>
           </div>
