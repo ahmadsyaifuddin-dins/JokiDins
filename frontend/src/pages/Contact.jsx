@@ -16,7 +16,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-100 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         {showCopied && (
           <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in-down">
@@ -25,7 +25,7 @@ const Contact = () => {
         )}
 
         <div className="text-center mb-12 animate-fade-in">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Hubungi Kami</h1>
+          <h1 className="text-4xl font-bold text-blue-950 mb-4">Hubungi Kami</h1>
           <p className="text-lg text-gray-600">Siap membantu menyelesaikan tugas-tugas Anda</p>
         </div>
 

@@ -27,11 +27,82 @@ const Hero = () => {
       {/* Content Container with improved animations */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="flex flex-col items-center mb-8 animate-fade-in">
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-600 tracking-tight mb-6">
-            JokiDins
-          </h1>
+          <div className="relative">
+            {/* Base text dengan gradasi normal */}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-blue-700 to-indigo-800 tracking-tight mb-6">
+              JokiDins
+            </h1>
+
+            {/* Text dengan efek kilau yang lebih halus dan realistis */}
+            <motion.h1
+              className="absolute top-0 left-0 text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent tracking-tight mb-6 pointer-events-none"
+              style={{
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                backgroundSize: "200% 100%",
+              }}
+              initial={{
+                backgroundPosition: "-100% 0",
+                backgroundImage: `linear-gradient(90deg, 
+        transparent 0%, 
+        transparent 10%, 
+        rgba(255,255,255,0.1) 15%,
+        rgba(255,255,255,0.7) 25%, 
+        rgba(255,255,255,0.8) 30%, 
+        rgba(255,255,255,0.7) 35%, 
+        rgba(255,255,255,0.1) 45%, 
+        transparent 50%, 
+        transparent 100%)`,
+              }}
+              animate={{
+                backgroundPosition: ["-100% 0", "200% 0"],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 2.5,
+                repeatDelay: 1,
+                ease: "easeInOut",
+              }}
+            >
+              JokiDins
+            </motion.h1>
+
+            {/* Layer kilau kedua dengan timing berbeda untuk efek lebih natural */}
+            <motion.h1
+              className="absolute top-0 left-0 text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent tracking-tight mb-6 pointer-events-none"
+              style={{
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                backgroundSize: "200% 100%",
+              }}
+              initial={{
+                backgroundPosition: "-100% 0",
+                backgroundImage: `linear-gradient(90deg, 
+        transparent 0%, 
+        transparent 10%, 
+        rgba(255,255,255,0.05) 20%,
+        rgba(255,255,255,0.2) 30%, 
+        rgba(255,255,255,0.2) 35%, 
+        rgba(255,255,255,0.05) 45%, 
+        transparent 50%, 
+        transparent 100%)`,
+              }}
+              animate={{
+                backgroundPosition: ["-150% 0", "300% 0"],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 2.5,
+                repeatDelay: 1,
+                ease: "easeInOut",
+              }}
+            >
+              JokiDins
+            </motion.h1>
+          </div>
           <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-8">
-            Tugas & proyek? Santai, serahin aja ke kita. Hasil maksimal tanpa ribet 😸
+            Tugas & proyek? Santai, serahin aja ke kita. Hasil maksimal tanpa
+            ribet 😸
           </p>
           <div className="flex gap-1.5 justify-center">
             <Link to="/create-order">
