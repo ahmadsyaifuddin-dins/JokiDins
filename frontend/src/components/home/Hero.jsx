@@ -37,24 +37,78 @@ const Hero = () => {
           <div className="flex gap-1.5 justify-center">
             <Link to="/create-order">
               <motion.button
-                className="w-fit bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-4 py-4 rounded-lg font-medium flex items-center justify-center gap-2"
-                whileHover={{
-                  y: -4,
-                  boxShadow: "0 0 15px 5px rgba(59, 130, 246, 0.5)",
+                className="w-fit bg-gradient-to-r from-blue-500 via-pink-600 to-blue-600 text-white px-1 py-3 rounded-lg font-bold flex items-center justify-center gap-2 border border-white/10 relative overflow-hidden shadow-lg"
+                initial={{ y: 0 }}
+                animate={{
+                  y: [0, -3, 0],
+                  boxShadow: [
+                    "0 5px 15px rgba(59, 130, 246, 0.3)",
+                    "0 8px 20px rgba(219, 39, 119, 0.5)",
+                    "0 5px 15px rgba(59, 130, 246, 0.3)",
+                  ],
                 }}
                 transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 10,
+                  duration: 3,
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  ease: "easeInOut",
                 }}
               >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  Order Joki
+                {/* Background animations */}
+                <motion.span
+                  className="absolute inset-0 bg-gradient-to-r from-blue-500 via-pink-600 to-blue-600 opacity-80"
+                  animate={{
+                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  style={{ backgroundSize: "200% 200%" }}
+                />
+
+                {/* Glow effect */}
+                <motion.span
+                  className="absolute -inset-1 bg-gradient-to-r from-blue-500/30 via-pink-600/30 to-blue-500/30 blur-md rounded-lg"
+                  animate={{
+                    opacity: [0.4, 0.7, 0.4],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                  }}
+                />
+
+                {/* Shimmer effect */}
+                <motion.span
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                  initial={{ x: "-100%" }}
+                  animate={{ x: "100%" }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    repeatDelay: 2,
+                    ease: "easeInOut",
+                  }}
+                  style={{
+                    width: "50%",
+                    skewX: "-20deg",
+                  }}
+                />
+
+                <span className="relative z-10 flex items-center justify-center gap-2 px-3">
+                  <span className="text-white text-lg">Order Joki</span>
                   <motion.span
-                    whileHover={{ x: 4 }}
-                    transition={{ type: "spring", stiffness: 400 }}
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                    }}
                   >
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className="w-5 h-5 text-white" />
                   </motion.span>
                 </span>
               </motion.button>
