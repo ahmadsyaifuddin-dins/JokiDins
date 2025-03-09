@@ -79,7 +79,6 @@ const OrderEdit = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Order telah dibatalkan.", {
-        icon: <ArrowLeft className="h-5 w-5 text-green-500" />
       });
       setTimeout(() => {
         navigate('/OrderList');
@@ -87,7 +86,6 @@ const OrderEdit = () => {
     } catch (err) {
       console.error("Error cancelling order:", err);
       toast.error("Gagal membatalkan order.", {
-        icon: <ArrowLeft className="h-5 w-5 text-red-500" />
       });
     }
   };
