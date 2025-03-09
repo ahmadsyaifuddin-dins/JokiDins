@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Check } from 'lucide-react';
 import { ErrorIcon, Toaster, toast,  } from 'react-hot-toast';
+import OrderEditSkeleton from '../loader/OrderEditSkeleton';
 
 const OrderEdit = () => {
   const { id } = useParams();
@@ -92,7 +93,7 @@ const OrderEdit = () => {
   };
 
   // Render component
-  if (loading) return <div className="text-center p-4 text-white">Loading...</div>;
+  if (loading) return <OrderEditSkeleton />;
   if (error) return <div className="text-center p-4 text-red-600">{error}</div>;
 
   return (
