@@ -86,7 +86,16 @@ const Login = () => {
           <h2 className="text-2xl font-bold text-white text-center">Selamat Datang</h2>
           <p className="text-blue-100 text-center mt-1">Silakan login untuk melanjutkan</p>
         </div>
+      
+          <div className="mt-6">
+            <GoogleSignIn />
+          </div>
         
+          <div className="relative flex items-center justify-center mt-6">
+            <div className="border-t border-gray-300 absolute w-full"></div>
+            <div className="bg-white px-4 relative text-sm text-gray-500">atau</div>
+          </div>
+
         <div className="p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="relative">
@@ -155,15 +164,6 @@ const Login = () => {
               )}
             </button>
           </form>
-          
-          <div className="relative flex items-center justify-center mt-6">
-            <div className="border-t border-gray-300 absolute w-full"></div>
-            <div className="bg-white px-4 relative text-sm text-gray-500">atau</div>
-          </div>
-          
-          <div className="mt-6">
-            <GoogleSignIn />
-          </div>
           
           <p className="mt-8 text-center text-sm text-gray-600">
             Belum punya akun?{" "}

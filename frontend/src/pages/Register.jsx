@@ -95,6 +95,15 @@ const Register = () => {
           <h2 className="text-2xl font-bold text-white text-center">Buat Akun Baru</h2>
           <p className="text-indigo-100 text-center mt-1">Silakan isi data diri Anda</p>
         </div>
+
+          <div className="mt-6">
+            <GoogleSignIn />
+          </div>
+          
+        <div className="relative flex items-center justify-center mt-6">
+            <div className="border-t border-gray-300 absolute w-full"></div>
+            <div className="bg-white px-4 relative text-sm text-gray-500">atau daftar secara manual</div>
+          </div>
         
         <div className="p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -174,16 +183,7 @@ const Register = () => {
               </button>
             </div>
           </form>
-          
-          <div className="relative flex items-center justify-center mt-6">
-            <div className="border-t border-gray-300 absolute w-full"></div>
-            <div className="bg-white px-4 relative text-sm text-gray-500">atau daftar dengan</div>
-          </div>
-          
-          <div className="mt-6">
-            <GoogleSignIn />
-          </div>
-          
+                    
           <p className="mt-8 text-center text-sm text-gray-600">
             Sudah punya akun?{" "}
             <Link to="/login" className="font-medium text-blue-900 hover:text-blue-950">
