@@ -124,7 +124,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-slate-950 shadow-lg sticky top-0 z-20">
+    <nav className="bg-slate-950 shadow-xl sticky top-0 z-20 border-b border-slate-950">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
           {/* Logo Section */}
@@ -132,22 +132,22 @@ const Navbar = () => {
             <div className="flex-shrink-0">
               <Link to="/">
                 <div className="flex items-center">
-                  <img src="/logo.svg" alt="JokiDins Logo" className="h-8 w-8 mr-2" />
-                  <span className="text-2xl font-bold text-blue-900">JokiDins </span>
+                  <img src="/logo.svg" alt="JokiDins Logo" className="h-9 w-9 mr-2" />
+                  <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">JokiDins</span>
                 </div>
               </Link>
             </div>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-6">
             {navigation.map((item) => (
               <div key={item.name} className="relative">
                 {item.children ? (
                   <div>
                     <button
                       onClick={() => toggleDropdown(item.name)}
-                      className="flex items-center text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      className="flex items-center text-gray-300 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                     >
                       {item.name}
                       <motion.div
@@ -164,14 +164,14 @@ const Navbar = () => {
                           animate="visible"
                           exit="hidden"
                           variants={dropdownVariants}
-                          className="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-slate-950 ring-1 ring-black ring-opacity-5"
+                          className="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-slate-950 ring-1 ring-slate-950 ring-opacity-50 backdrop-blur-sm overflow-hidden"
                         >
                           <div className="py-1">
                             {item.children.map((child) => (
                               <Link
                                 key={child.name}
                                 to={child.href}
-                                className="block px-4 py-2 text-sm text-gray-500 hover:bg-slate-950 hover:text-blue-900 transition-colors duration-200"
+                                className="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-950 hover:text-blue-400 transition-colors duration-200"
                               >
                                 {child.name}
                               </Link>
@@ -184,7 +184,7 @@ const Navbar = () => {
                 ) : (
                   <Link
                     to={item.href}
-                    className="text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                    className="text-gray-300 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                   >
                     {item.name}
                   </Link>
@@ -195,23 +195,23 @@ const Navbar = () => {
             {user ? (
               <button 
                 onClick={logout} 
-                className="bg-red-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition-colors duration-200"
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-md"
               >
                 Logout
               </button>
             ) : (
-              <>
+              <div className="flex space-x-3">
                 <Link to="/login">
-                  <button className="bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-md">
                     Masuk
                   </button>
                 </Link>
                 <Link to="/register">
-                  <button className="border border-blue-900 bg-white text-blue-900 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors duration-200">
+                  <button className="border border-blue-500 bg-transparent text-blue-400 hover:bg-blue-900/30 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-md">
                     Daftar
                   </button>
                 </Link>
-              </>
+              </div>
             )}
           </div>
 
@@ -219,7 +219,8 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-slate-950 transition-colors duration-200"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-blue-400 hover:bg-slate-950 transition-colors duration-200"
+              aria-expanded="false"
             >
               <AnimatePresence mode="wait">
                 {isOpen ? (
@@ -257,16 +258,16 @@ const Navbar = () => {
             animate="visible"
             exit="hidden"
             variants={mobileMenuVariants}
-            className="md:hidden"
+            className="md:hidden bg-slate-950"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1">
+            <div className="px-3 pt-3 pb-4 space-y-2 border-t border-slate-950">
               {navigation.map((item) => (
-                <div key={item.name}>
+                <div key={item.name} className="rounded-md overflow-hidden">
                   {item.children ? (
-                    <div>
+                    <div className="bg-slate-950/60">
                       <button
                         onClick={() => toggleDropdown(item.name)}
-                        className="w-full flex items-center justify-between text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                        className="w-full flex items-center justify-between text-gray-300 hover:text-blue-400 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
                       >
                         {item.name}
                         <motion.div
@@ -283,12 +284,13 @@ const Navbar = () => {
                             animate="visible"
                             exit="hidden"
                             variants={mobileDropdownVariants}
+                            className="bg-slate-950/50"
                           >
                             {item.children.map((child) => (
                               <Link
                                 key={child.name}
                                 to={child.href}
-                                className="block pl-6 py-2 text-base text-gray-600 hover:text-blue-900 transition-colors duration-200"
+                                className="block pl-6 py-2 text-base text-gray-300 hover:text-blue-400 transition-colors duration-200"
                               >
                                 {child.name}
                               </Link>
@@ -300,7 +302,7 @@ const Navbar = () => {
                   ) : (
                     <Link
                       to={item.href}
-                      className="block text-gray-600 hover:text-blue-900 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                      className="block text-gray-300 hover:text-blue-400 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
                     >
                       {item.name}
                     </Link>
@@ -311,19 +313,19 @@ const Navbar = () => {
               {user ? (
                 <button 
                   onClick={logout} 
-                  className="w-full bg-red-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition-colors duration-200 mt-4"
+                  className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 mt-4 shadow-md"
                 >
                   Logout
                 </button>
               ) : (
-                <div className="flex flex-row gap-5">
+                <div className="flex flex-row gap-4 mt-4">
                   <Link to="/login" className="w-full">
-                    <button className="w-full bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
+                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-md">
                       Masuk
                     </button>
                   </Link>
                   <Link to="/register" className="w-full">
-                    <button className="w-full border border-blue-900 bg-white text-blue-900 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors duration-200">
+                    <button className="w-full border border-blue-500 bg-transparent text-blue-400 hover:bg-blue-900/30 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-md">
                       Daftar
                     </button>
                   </Link>
