@@ -71,7 +71,7 @@ const Platform = ({isVisible}) => {
                 <img
                   src={card.image}
                   alt={card.title}
-                  className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-contain scale-105 group-hover:scale-110 transition-transform duration-700"
                 />
                 {/* Overlay glow effect on hover */}
                 <div
