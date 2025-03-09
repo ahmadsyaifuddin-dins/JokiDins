@@ -90,7 +90,7 @@ const Hero = () => {
       </div>
 
       {/* Improved scroll indicator with subtle animation */}
-      <div className="absolute inset-x-0 bottom-8 flex items-center justify-center animate-bounce-subtle">
+      <div className="absolute inset-x-0 bottom-8 flex items-center justify-center animate-bounce">
         <div className="flex flex-col items-center">
           <span className="text-sm text-gray-400 mb-2">Scroll to explore</span>
           <div className="h-10 w-6 border-2 border-gray-400 rounded-full relative">
