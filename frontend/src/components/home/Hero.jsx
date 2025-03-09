@@ -31,7 +31,7 @@ const Hero = () => {
             JokiDins
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-8">
-            Tugas numpuk? Proyek bikin pusing? Santai, serahin aja ke kita! Kita joki semua tugas dan proyekmu dengan hasil yang maksimal, kamu tinggal duduk manis, nikmati hasil kerennya😸
+            Tugas & proyek? Santai, serahin aja ke kita. Hasil maksimal tanpa ribet 😸
           </p>
           <div className="flex gap-1.5 justify-center">
             <Link to="/create-order">
