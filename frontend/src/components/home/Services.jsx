@@ -21,7 +21,7 @@ const Services = ({ isVisible }) => {
           title: "Tugas Akademik",
           description:
             "Bantuan profesional untuk tugas pemrograman, makalah, dan presentasi dengan kualitas terjamin.",
-          tags: ["PPT", "Makalah", "Merapikan Word", "Merapikan Excel"],
+          tags: ["PPT", "Makalah", "Rapikan Word", "Rapikan Excel"],
           color: "green",
           bgFrom: "from-green-900/20",
           bgTo: "to-teal-900/20",
