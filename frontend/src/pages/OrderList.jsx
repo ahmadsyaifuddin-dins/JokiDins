@@ -189,6 +189,7 @@ const OrderList = () => {
 
   if (loading) {
     return (
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50">
       <div className="max-w-6xl mx-auto p-4 md:p-6">
         <div className="flex justify-between items-center mb-6">
           <div className="h-8 bg-gray-200 rounded w-40 animate-pulse"></div>
@@ -207,11 +208,13 @@ const OrderList = () => {
           ))}
         </div>
       </div>
+      </div>
     );
   }
 
   if (error) {
     return (
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50">
       <div className="max-w-6xl mx-auto p-4 md:p-6">
         <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700 shadow-sm">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -229,10 +232,12 @@ const OrderList = () => {
           </div>
         </div>
       </div>
+      </div>
     );
   }
 
   return (
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-50">
     <div className="max-w-6xl mx-auto p-4 md:p-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
@@ -422,6 +427,7 @@ const OrderList = () => {
           </div>
         </>
       )}
+    </div>
     </div>
   );
 };
