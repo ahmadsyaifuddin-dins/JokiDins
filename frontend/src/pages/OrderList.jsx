@@ -19,6 +19,8 @@ import {
   Filter,
   ArrowUpDown
 } from 'lucide-react';
+import OrderListSkeleton from '../loader/OrderListSkeleton';
+import OrderListError from '../error/OrderListError';
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -188,52 +190,11 @@ const OrderList = () => {
   };
 
   if (loading) {
-    return (
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50">
-      <div className="max-w-6xl mx-auto p-4 md:p-6">
-        <div className="flex justify-between items-center mb-6">
-          <div className="h-8 bg-gray-200 rounded w-40 animate-pulse"></div>
-          <div className="h-10 bg-gray-200 rounded w-32 animate-pulse"></div>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3, 4, 5, 6].map(n => (
-            <div key={n} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm animate-pulse">
-              <div className="h-32 p-4">
-                <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-2/3 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2 mt-4"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      </div>
-    );
+    return <OrderListSkeleton />;
   }
 
   if (error) {
-    return (
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50">
-      <div className="max-w-6xl mx-auto p-4 md:p-6">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700 shadow-sm">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center">
-              <AlertCircle className="h-6 w-6 mr-3 text-red-500" />
-              <p className="font-medium">{error}</p>
-            </div>
-            <button 
-              onClick={fetchOrders} 
-              className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors flex items-center justify-center"
-            >
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Coba Lagi
-            </button>
-          </div>
-        </div>
-      </div>
-      </div>
-    );
+    return <OrderListError error={error} fetchOrders={fetchOrders} />;
   }
 
   return (
