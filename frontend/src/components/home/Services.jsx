@@ -7,7 +7,7 @@ const Services = ({ isVisible }) => {
           icon: <Code className="w-7 h-7 text-blue-400" />,
           title: "Web & Aplikasi Web Profesional",
           description:
-            Website dan aplikasi web yang responsif dan kekinian, dirancang khusus buat mendongkrak bisnismu. Gak ribet, tapi tetap profesional—sesuai banget buat bisnis, kampus, atau organisasi kamu",
+            "Website dan aplikasi web yang responsif dan kekinian, dirancang khusus buat mendongkrak bisnismu. Gak ribet, tapi tetap profesional—sesuai banget buat bisnis, kampus, atau organisasi kamu",
           tags: ["Laravel", "ReactJS", "NextJS", "NestJS", "Svelte"],
           color: "blue",
           bgFrom: "from-blue-900/20",
