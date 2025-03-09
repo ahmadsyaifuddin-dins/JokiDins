@@ -5,9 +5,9 @@ const Services = ({ isVisible }) => {
   const serviceCards = [
         {
           icon: <Code className="w-7 h-7 text-blue-400" />,
-          title: "Bikinin Website & Aplikasi Web Profesional",
+          title: "Web & Aplikasi Web Profesional",
           description:
-            "Solusi digital berbasis teknologi terkini yang disesuaikan dengan kebutuhan bisnis, institusi pendidikan, maupun organisasi Anda",
+            Website dan aplikasi web yang responsif dan kekinian, dirancang khusus buat mendongkrak bisnismu. Gak ribet, tapi tetap profesional—sesuai banget buat bisnis, kampus, atau organisasi kamu",
           tags: ["Laravel", "ReactJS", "NextJS", "NestJS", "Svelte"],
           color: "blue",
           bgFrom: "from-blue-900/20",
@@ -20,7 +20,7 @@ const Services = ({ isVisible }) => {
           icon: <Book className="w-7 h-7 text-green-400" />,
           title: "Tugas Akademik",
           description:
-            "Bantuan profesional untuk tugas pemrograman, makalah, dan presentasi dengan kualitas terjamin.",
+            "Dari coding, makalah, sampai presentasi, kami siap bantu dengan solusi yang tepat dan berkualitas. Fokus pada hasil, tanpa basa-basi—biar tugas kamu kelar dengan hasil maksimal",
           tags: ["PPT", "Makalah", "Rapikan Word", "Rapikan Excel"],
           color: "green",
           bgFrom: "from-green-900/20",
@@ -33,7 +33,7 @@ const Services = ({ isVisible }) => {
           icon: <Palette className="w-7 h-7 text-purple-400" />,
           title: "Desain Grafis",
           description:
-            "Desain kreatif untuk kebutuhan branding dan marketing material Anda.",
+            "Ciptain identitas visual yang nendang buat brand kamu! Mulai dari logo sampai marketing material, desain kami menggabungkan kreativitas dan sentuhan modern yang bikin kamu beda dari yang lain",
           tags: ["Poster", "Banner", "Logo", "Kalender"],
           color: "purple",
           bgFrom: "from-purple-900/20",
