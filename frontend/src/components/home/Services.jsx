@@ -7,7 +7,7 @@ const Services = ({ isVisible }) => {
           icon: <Code className="w-7 h-7 text-blue-400" />,
           title: "Web & Aplikasi Web Profesional",
           description:
-            "Website dan aplikasi web yang responsif dan kekinian, dirancang khusus buat mendongkrak bisnismu. Gak ribet, tapi tetap profesional—sesuai banget buat bisnis, kampus, atau organisasi kamu",
+            "Website dan aplikasi web yang responsif dan kekinian, dirancang khusus buat mendongkrak bisnismu. Gak ribet, tapi tetap profesional sesuai banget buat bisnis, kampus, atau organisasi kamu",
           tags: ["Laravel", "ReactJS", "NextJS", "NestJS", "Svelte"],
           color: "blue",
           bgFrom: "from-blue-900/20",
@@ -20,7 +20,7 @@ const Services = ({ isVisible }) => {
           icon: <Book className="w-7 h-7 text-green-400" />,
           title: "Tugas Akademik",
           description:
-            "Dari coding, makalah, sampai presentasi, kami siap bantu dengan solusi yang tepat dan berkualitas. Fokus pada hasil, tanpa basa-basi—biar tugas kamu kelar dengan hasil maksimal",
+            "Dari coding, makalah, sampai presentasi, kami siap bantu dengan solusi yang tepat dan berkualitas. Fokus pada hasil, tanpa basa-basi biar tugas kamu kelar dengan hasil maksimal",
           tags: ["PPT", "Makalah", "Rapikan Word", "Rapikan Excel"],
           color: "green",
           bgFrom: "from-green-900/20",
