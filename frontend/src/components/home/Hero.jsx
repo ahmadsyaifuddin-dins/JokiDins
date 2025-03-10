@@ -14,21 +14,24 @@ const Hero = () => {
             backgroundImage:
               "radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px), radial-gradient(circle, rgba(59, 130, 246, 0.1) 2px, transparent 2px)",
             backgroundSize: "50px 50px, 100px 100px",
-            transform: `translateY(${scrollY * 0.1}px)`,
           }}
         />
       </div>
 
-      {/* Enhanced glowing orbs with better blur effect */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-500 rounded-full filter blur-[150px] opacity-20 animate-pulse-slow"></div>
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-indigo-500 rounded-full filter blur-[150px] opacity-20 animate-pulse-slower"></div>
-      <div className="absolute top-2/3 left-1/3 w-64 h-64 bg-purple-500 rounded-full filter blur-[120px] opacity-10 animate-pulse"></div>
+      {/* Enhanced glowing orbs with consistent blur effects */}
+      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-900 rounded-full filter blur-xl opacity-20 animate-pulse duration-4000"></div>
+      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-blue-950 rounded-full filter blur-xl opacity-20 animate-pulse duration-5000"></div>
+      <div className="absolute top-2/3 left-1/3 w-64 h-64 bg-slate-950 rounded-full filter blur-xl opacity-10 animate-pulse duration-3000"></div>
 
-      {/* Content Container with improved animations */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="flex flex-col items-center mb-8 animate-fade-in">
+      {/* Content Container with animations - Fixed by using motion.div instead of opacity-0 */}
+      <motion.div
+        className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="flex flex-col items-center mb-8">
           <div className="relative">
-            {/* Base text dengan gradasi normal */}
             {/* Base gradient text */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-blue-700 to-indigo-800 tracking-tight mb-6">
               JokiDins
@@ -117,14 +120,14 @@ const Hero = () => {
               JokiDins
             </motion.h1>
           </div>
-          <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-8">
+          <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-8 overflow-hidden text-ellipsis">
             Tugas & proyek? Santai, serahin aja ke kita. Hasil maksimal tanpa
             ribet 😸
           </p>
-          <div className="flex gap-1.5 justify-center">
-            <Link to="/create-order">
+          <div className="flex gap-2 md:gap-4 justify-center">
+            <Link to="/create-order" className="w-auto sm:w-auto">
               <motion.button
-                className="w-fit bg-gradient-to-r from-blue-500 via-pink-600 to-blue-600 text-white px-1 py-3 rounded-lg font-bold flex items-center justify-center gap-2 border border-white/10 relative overflow-hidden shadow-lg"
+                className="bg-gradient-to-r from-blue-500 via-pink-600 to-blue-600 text-white px-4 py-4 rounded-lg font-bold flex items-center justify-center gap-2 border border-white/10 relative overflow-hidden shadow-lg"
                 initial={{ y: 0 }}
                 animate={{
                   y: [0, -3, 0],
@@ -185,8 +188,8 @@ const Hero = () => {
                   }}
                 />
 
-                <span className="relative z-10 flex items-center justify-center gap-2 px-3">
-                  <span className="text-white text-lg">Order Joki</span>
+                <span className="relative z-10 flex items-center justify-center gap-1 md:gap-2">
+                  <span className="text-white text-base">Order Joki</span>
                   <motion.span
                     animate={{ x: [0, 3, 0] }}
                     transition={{
@@ -200,9 +203,9 @@ const Hero = () => {
                 </span>
               </motion.button>
             </Link>
-            <Link to="/contact">
+            <Link to="/contact" className="w-auto sm:w-auto">
               <motion.button
-                className="w-full bg-gray-900 text-white border border-gray-700 px-5 py-4 rounded-lg font-medium flex items-center justify-center gap-2"
+                className="bg-gray-900 text-white border border-gray-700 px-4 py-4 rounded-lg font-medium flex items-center justify-center gap-2"
                 whileHover={{
                   y: -4,
                   borderColor: "rgba(59, 130, 246, 0.5)",
@@ -226,8 +229,13 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Enhanced code snippet preview with better 3D effect and syntax highlighting */}
-        <div className="mt-5 mb-8 block animate-fade-in-delayed">
+        {/* Enhanced code snippet preview with better 3D effect and syntax highlighting - Fixed by using motion.div */}
+        <motion.div
+          className="mt-5 mb-8 block"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+        >
           <div className="relative bg-gray-900/80 backdrop-blur-sm p-4 md:p-6 rounded-lg border border-gray-800/80 shadow-2xl transform hover:scale-105 transition-all duration-500 max-w-3xl mx-auto code-snippet">
             <div className="flex items-center gap-2 mb-2 md:mb-4">
               <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-red-500"></div>
@@ -264,17 +272,25 @@ const Hero = () => {
             </div>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/5 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Improved scroll indicator with subtle animation */}
-      <div className="absolute inset-x-0 bottom-3 flex items-center justify-center animate-bounce">
-        <div className="flex flex-col items-center">
+      <div className="absolute inset-x-0 bottom-3 flex items-center justify-center">
+        <motion.div
+          className="flex flex-col items-center"
+          animate={{ y: [0, -5, 0] }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            repeatType: "loop",
+          }}
+        >
           <span className="text-sm text-gray-400 mb-2">Scroll to explore</span>
           <div className="h-10 w-6 border-2 border-gray-400 rounded-full relative">
-            <div className="absolute top-1 left-1/2 w-2 h-2 bg-blue-400 rounded-full transform -translate-x-1/2 animate-scroll-indicator"></div>
+            <div className="absolute w-2 h-2 bg-blue-400 rounded-full left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
