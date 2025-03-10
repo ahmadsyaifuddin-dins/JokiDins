@@ -245,10 +245,10 @@ const Hero = () => {
               <div className="pl-4 md:pl-6 whitespace-pre">return {"{"}</div>
               <div className="pl-8 md:pl-12 whitespace-pre">
                 <span className="text-purple-400">kualitas</span>:{" "}
-                <span className="text-yellow-400">'premium'</span>,
+                <span className="text-yellow-400">'unggulan'</span>,
               </div>
               <div className="pl-8 md:pl-12 whitespace-pre">
-                <span className="text-purple-400">Pengerjaan</span>:{" "}
+                <span className="text-purple-400">pengerjaan</span>:{" "}
                 <span className="text-yellow-400">'tepat waktu'</span>,
               </div>
               <div className="pl-8 md:pl-12 whitespace-pre">
