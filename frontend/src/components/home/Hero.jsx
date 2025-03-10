@@ -29,72 +29,89 @@ const Hero = () => {
         <div className="flex flex-col items-center mb-8 animate-fade-in">
           <div className="relative">
             {/* Base text dengan gradasi normal */}
+            {/* Base gradient text */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-blue-700 to-indigo-800 tracking-tight mb-6">
               JokiDins
             </h1>
 
-            {/* Text dengan efek kilau yang lebih halus dan realistis */}
+            {/* Main shimmer layer */}
             <motion.h1
               className="absolute top-0 left-0 text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent tracking-tight mb-6 pointer-events-none"
               style={{
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
-                backgroundSize: "200% 100%",
+                backgroundSize: "300% 100%",
+                backgroundImage: `linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 25%,
+        rgba(255,255,255,0.15) 35%,
+        rgba(255,255,255,0.6) 50%,
+        rgba(255,255,255,0.15) 65%,
+        transparent 75%,
+        transparent 100%
+      )`,
               }}
-              initial={{
-                backgroundPosition: "-100% 0",
-                backgroundImage: `linear-gradient(90deg, 
-        transparent 0%, 
-        transparent 10%, 
-        rgba(255,255,255,0.1) 15%,
-        rgba(255,255,255,0.7) 25%, 
-        rgba(255,255,255,0.8) 30%, 
-        rgba(255,255,255,0.7) 35%, 
-        rgba(255,255,255,0.1) 45%, 
-        transparent 50%, 
-        transparent 100%)`,
-              }}
-              animate={{
-                backgroundPosition: ["-100% 0", "200% 0"],
-              }}
+              initial={{ backgroundPosition: "-150% 0" }}
+              animate={{ backgroundPosition: ["-150% 0", "150% 0"] }}
               transition={{
                 repeat: Infinity,
-                duration: 2.5,
-                repeatDelay: 1,
-                ease: "easeInOut",
+                duration: 2.8,
+                ease: "linear",
               }}
             >
               JokiDins
             </motion.h1>
 
-            {/* Layer kilau kedua dengan timing berbeda untuk efek lebih natural */}
+            {/* Secondary shimmer layer */}
             <motion.h1
               className="absolute top-0 left-0 text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent tracking-tight mb-6 pointer-events-none"
               style={{
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
-                backgroundSize: "200% 100%",
+                backgroundSize: "400% 100%",
+                backgroundImage: `linear-gradient(
+        95deg,
+        transparent 0%,
+        transparent 15%,
+        rgba(255,255,255,0.1) 25%,
+        rgba(255,255,255,0.4) 40%,
+        rgba(255,255,255,0.1) 55%,
+        transparent 65%,
+        transparent 100%
+      )`,
               }}
-              initial={{
-                backgroundPosition: "-100% 0",
-                backgroundImage: `linear-gradient(90deg, 
-        transparent 0%, 
-        transparent 10%, 
-        rgba(255,255,255,0.05) 20%,
-        rgba(255,255,255,0.2) 30%, 
-        rgba(255,255,255,0.2) 35%, 
-        rgba(255,255,255,0.05) 45%, 
-        transparent 50%, 
-        transparent 100%)`,
-              }}
-              animate={{
-                backgroundPosition: ["-150% 0", "300% 0"],
-              }}
+              initial={{ backgroundPosition: "-200% 0" }}
+              animate={{ backgroundPosition: ["-200% 0", "200% 0"] }}
               transition={{
                 repeat: Infinity,
-                duration: 2.5,
-                repeatDelay: 1,
-                ease: "easeInOut",
+                duration: 3.4,
+                ease: "linear",
+              }}
+            >
+              JokiDins
+            </motion.h1>
+
+            {/* Subtle ambient glow */}
+            <motion.h1
+              className="absolute top-0 left-0 text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent tracking-tight mb-6 pointer-events-none"
+              style={{
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                backgroundSize: "200% 200%",
+                backgroundImage: `linear-gradient(
+        45deg,
+        rgba(255,255,255,0.02) 0%,
+        rgba(255,255,255,0.05) 50%,
+        rgba(255,255,255,0.02) 100%
+      )`,
+              }}
+              initial={{ backgroundPosition: "0% 0%" }}
+              animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+              transition={{
+                repeat: Infinity,
+                duration: 8,
+                ease: "linear",
               }}
             >
               JokiDins
