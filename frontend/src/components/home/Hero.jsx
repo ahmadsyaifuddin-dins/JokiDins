@@ -121,8 +121,7 @@ const Hero = () => {
             </motion.h1>
           </div>
           <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-8 overflow-hidden text-ellipsis">
-            Tugas & proyek? Santai, serahin aja ke kita. Hasil maksimal tanpa
-            ribet 😸
+            Tugas & project numpuk? Santai, serahin aja ke kita. Hasil maksimal tanpa ribet 😸
           </p>
           <div className="flex gap-2 md:gap-4 justify-center">
             <Link to="/create-order" className="w-auto sm:w-auto">
