@@ -112,7 +112,7 @@ const OrderCreate = () => {
       const token = localStorage.getItem("token");
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/user/phones",
+          "https://jokidins-production.up.railway.app/api/user/phones",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -205,7 +205,7 @@ const OrderCreate = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/orders",
+        "https://jokidins-production.up.railway.app/api/orders",
         formData,
         {
           headers: {

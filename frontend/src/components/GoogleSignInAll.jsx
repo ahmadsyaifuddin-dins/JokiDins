@@ -44,7 +44,7 @@ const GoogleSignIn = () => {
             const gender = additionalData?.genders?.[0]?.value;
 
             // 4. Kirim ID token + data tambahan ke backend
-            const res = await axios.post("http://localhost:5000/api/auth/google", {
+            const res = await axios.post("https://jokidins-production.up.railway.app/api/auth/google", {
               token: idToken,
               birthday,
               gender

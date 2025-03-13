@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import { FaUser, FaEnvelope, FaLock, FaUserPlus } from "react-icons/fa";
 import { Toaster, toast } from "react-hot-toast";
 import GoogleSignIn from "../components/GoogleSignIn";
+import useToast from "../hooks/useToast";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -12,50 +13,22 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { showSuccess, showError } = useToast();
   
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
 
-  // Custom toast styles
-  const toastStyles = {
-    success: {
-      style: {
-        background: '#4ade80',
-        color: '#fff',
-        padding: '16px',
-        borderRadius: '10px',
-      },
-      iconTheme: {
-        primary: '#fff',
-        secondary: '#4ade80',
-      },
-      duration: 3000,
-    },
-    error: {
-      style: {
-        background: '#f87171',
-        color: '#fff',
-        padding: '16px',
-        borderRadius: '10px',
-      },
-      iconTheme: {
-        primary: '#fff',
-        secondary: '#f87171',
-      },
-      duration: 4000,
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("Password dan konfirmasi password tidak cocok", toastStyles.error);
+      showError("Password dan konfirmasi password tidak cocok");
       return;
     }
     
     setIsLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", {
+      const res = await axios.post("https://jokidins-production.up.railway.app/api/auth/register", {
         name,
         email,
         password,
@@ -67,7 +40,7 @@ const Register = () => {
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
       
-      toast.success("Registrasi berhasil!", toastStyles.success);
+      showSuccess("Registrasi berhasil!");
       
       // Delay navigation to allow toast to be seen
       setTimeout(() => {
@@ -76,9 +49,9 @@ const Register = () => {
     } catch (error) {
       console.error("Register error:", error);
       if (error.response?.data?.message) {
-        toast.error(error.response.data.message, toastStyles.error);
+        showError(error.response.data.message);
       } else {
-        toast.error("Registrasi gagal. Cek data yang dimasukkan.", toastStyles.error);
+        showError("Registrasi gagal. Cek data yang dimasukkan.");
       }
     } finally {
       setIsLoading(false);
