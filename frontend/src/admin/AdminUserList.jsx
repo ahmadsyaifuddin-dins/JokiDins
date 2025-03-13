@@ -137,7 +137,7 @@ const AdminUserList = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="max-w-full mx-auto p-6 bg-white">
       <div className="bg-white shadow-lg rounded-xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6">
           <h1 className="text-2xl font-bold text-white mb-2">Daftar Pengguna</h1>
