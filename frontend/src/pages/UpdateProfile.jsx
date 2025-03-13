@@ -15,6 +15,7 @@ const UpdateProfile = () => {
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPhoneListOpen, setIsPhoneListOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -36,11 +37,42 @@ const UpdateProfile = () => {
     }
   };
 
-  const handleRemovePhone = (phoneToRemove) => {
-    setSavedPhones(savedPhones.filter(p => p !== phoneToRemove));
-    if (selectedPhoneOption === phoneToRemove) {
-      setSelectedPhoneOption("new");
-      setPhoneInput("");
+  const handleRemovePhone = async (phoneToRemove) => {
+    try {
+      setIsDeleting(true);
+      
+      // Update local state first for immediate UI feedback
+      const updatedPhones = savedPhones.filter(p => p !== phoneToRemove);
+      setSavedPhones(updatedPhones);
+      
+      // Reset phone input if the removed phone was selected
+      if (selectedPhoneOption === phoneToRemove) {
+        setSelectedPhoneOption("new");
+        setPhoneInput("");
+      }
+      
+      // Send updated phone list to the server
+      const token = localStorage.getItem("token");
+      const res = await axios.put(
+        "http://localhost:5000/api/user/profile",
+        { phones: updatedPhones },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      // Update user context with the response
+      const updatedUser = res.data;
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      
+      showNotification("Nomor telepon berhasil dihapus!", "success");
+    } catch (error) {
+      console.error("Error removing phone:", error);
+      showNotification("Gagal menghapus nomor telepon.", "error");
+      
+      // Revert the local state if the server update failed
+      setSavedPhones(user?.phones || []);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -66,7 +98,7 @@ const UpdateProfile = () => {
       }
 
       const res = await axios.put(
-        "https://jokidins-production.up.railway.app/api/user/profile",
+        "http://localhost:5000/api/user/profile",
         { name, email, phones: updatedPhones, password },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -141,14 +173,13 @@ const UpdateProfile = () => {
               <input
                 type="text"
                 placeholder="Masukkan nama lengkap"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pl-10"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pl-3"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span className="text-gray-400">
-                  <User className="h-5 w-5" />
                 </span>
               </div>
             </div>
@@ -164,14 +195,13 @@ const UpdateProfile = () => {
               <input
                 type="email"
                 placeholder="Masukkan email"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pl-10"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pl-3"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span className="text-gray-400">
-                  <Mail className="h-5 w-5" />
                 </span>
               </div>
             </div>
@@ -246,9 +276,19 @@ const UpdateProfile = () => {
                           <button 
                             type="button"
                             onClick={() => handleRemovePhone(phone)}
-                            className="text-red-600 hover:text-red-800 p-1 rounded-md hover:bg-red-50"
+                            disabled={isDeleting}
+                            className={`text-red-600 hover:text-red-800 p-1 rounded-md hover:bg-red-50 ${
+                              isDeleting ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
                           >
-                            <Trash className="h-4 w-4" />
+                            {isDeleting ? (
+                              <svg className="animate-spin h-4 w-4 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                            ) : (
+                              <Trash className="h-4 w-4" />
+                            )}
                           </button>
                         </div>
                       </div>
@@ -279,15 +319,14 @@ const UpdateProfile = () => {
               <input
                 type="text"
                 placeholder="Nomor HP harus diawali 0"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pl-10"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pl-3"
                 value={phoneInput}
                 onChange={(e) => setPhoneInput(e.target.value)}
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span className="text-gray-400">
-                  <Phone className="h-5 w-5" />
                 </span>
-              </div>
+                </div>
             </div>
           </div>
           
@@ -295,48 +334,54 @@ const UpdateProfile = () => {
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700 flex items-center">
               <Lock className="h-4 w-4 mr-2 text-blue-600" />
-              Password Baru <span className="text-xs text-gray-500 ml-1">(opsional)</span>
+              Password
             </label>
             <div className="relative">
               <input
                 type="password"
-                placeholder="Kosongkan jika tidak ingin mengubah"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pl-10"
+                placeholder="Masukkan password baru (opsional)"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pl-3"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span className="text-gray-400">
-                  <Lock className="h-5 w-5" />
                 </span>
               </div>
+              <p className="mt-1 text-xs text-gray-500">Biarkan kosong jika tidak ingin mengubah password</p>
             </div>
           </div>
           
           {/* Submit Button */}
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={isSubmitting}
-            className={`w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-white bg-gradient-to-r from-blue-700 to-indigo-800 hover:from-blue-800 hover:to-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors ${
-              isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+            className={`w-full py-3 px-4 rounded-lg font-medium text-white flex items-center justify-center transition-all ${
+              isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
             {isSubmitting ? (
               <>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Menyimpan...
+                <span>Menyimpan...</span>
               </>
             ) : (
               <>
                 <Save className="h-5 w-5 mr-2" />
-                Simpan Perubahan
+                <span>Simpan Perubahan</span>
               </>
             )}
           </button>
         </form>
+        
+        <div className="bg-gray-50 p-6 border-t border-gray-200">
+          <p className="text-center text-sm text-gray-500">
+            Pastikan data yang Anda masukkan sudah benar sebelum menyimpan perubahan.
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ const AdminUserDetail = () => {
       try {
         const token = localStorage.getItem("token");
         // Pastikan endpoint detail sesuai, misal GET /api/user/users/:id
-        const res = await axios.get(`https://jokidins-production.up.railway.app/api/user/users/${id}`, {
+        const res = await axios.get(`http://localhost:5000/api/user/users/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserDetail(res.data);
@@ -34,7 +34,7 @@ const AdminUserDetail = () => {
     if (!window.confirm("Yakin ingin menghapus akun pengguna ini?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`https://jokidins-production.up.railway.app/api/user/users/${id}`, {
+      await axios.delete(`http://localhost:5000/api/user/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Akun pengguna berhasil dihapus!");
