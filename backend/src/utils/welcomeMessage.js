@@ -11,7 +11,7 @@ function getWelcomeMessage(name) {
     <p style="font-size: 16px; line-height: 1.5; color: #333;">Halo ${name},</p>
     
     <p style="font-size: 16px; line-height: 1.5; color: #333;">
-      Terima kasih telah bergabung dengan <strong>JokiDins</strong> melalui Google! Kami sangat senang Anda menjadi bagian dari komunitas kami.
+      Terima kasih telah bergabung dengan <strong>JokiDins!</strong>, Kami sangat senang Anda mempercayai kami untuk membantu Anda dalam menyelesaikan berbagai tugas dan proyek. Kami akan memberikan yang terbaik demi kepuasan Anda.
     </p>
     
     <p style="font-size: 16px; line-height: 1.5; color: #333;">
