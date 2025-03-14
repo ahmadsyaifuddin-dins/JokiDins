@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const User = require("../models/User");
+const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const getWelcomeMessage = require("../utils/welcomeMessage");
 const { generateVerificationCode, getVerificationCodeExpires } = require("../utils/verification");
@@ -164,6 +165,91 @@ exports.login = async (req, res) => {
         role: user.role,
       },
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Fungsi untuk lupa password: generate token reset dan kirim email
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    // Untuk keamanan, kita tetap kirim response yang sama walaupun user tidak ditemukan
+    if (!user) {
+      return res.status(200).json({ message: "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password." });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    // Hash token sebelum disimpan (untuk keamanan)
+    user.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    // Set token berlaku selama 1 jam
+    user.resetPasswordExpires = Date.now() + 3600000;
+    await user.save();
+
+    // Buat URL reset password (pastikan CLIENT_URL sudah diset di environment)
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    // Gunakan email template untuk reset password
+    const resetEmailMessage = `
+      <p>Halo ${user.name},</p>
+      <p>Kami menerima permintaan untuk mereset password akun Anda.</p>
+      <p>Silakan klik link berikut untuk mengatur ulang password Anda:</p>
+      <p><a href="${resetUrl}" target="_blank">${resetUrl}</a></p>
+      <p>Link ini akan kadaluwarsa dalam 1 jam.</p>
+      <p>Jika Anda tidak meminta reset password, abaikan email ini.</p>
+    `;
+    await sendEmail(user.email, "Reset Password Instructions", resetEmailMessage);
+
+    res.status(200).json({ message: "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password." });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Fungsi untuk reset password menggunakan token yang dikirim via email
+exports.resetPassword = async (req, res) => {
+  const { token } = req.params; // token dari URL
+  const { newPassword } = req.body;
+  try {
+    // Hash token dari URL untuk dicocokkan dengan yang tersimpan
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    // Cari user dengan token yang cocok dan belum kadaluwarsa
+    const user = await User.findOne({ 
+      resetPasswordToken: hashedToken, 
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+    if (!user) {
+      return res.status(400).json({ message: "Token reset password tidak valid atau sudah kadaluwarsa." });
+    }
+
+    // Hash new password dan update user
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    // Hapus token reset dan expiration-nya
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Password berhasil direset." });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.verifyResetToken = async (req, res) => {
+  const { token } = req.params;
+  try {
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+    if (!user) {
+      return res.status(404).json({ message: "Token tidak valid atau sudah kadaluwarsa." });
+    }
+    res.status(200).json({ message: "Token valid." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

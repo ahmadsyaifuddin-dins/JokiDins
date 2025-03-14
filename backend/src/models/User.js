@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: null
   },
+
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
+
   // Field tambahan (untuk masa depan)
   // birthday: { type: Date },
   // gender: { type: String },

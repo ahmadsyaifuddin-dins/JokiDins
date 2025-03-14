@@ -113,11 +113,11 @@ const Login = () => {
                 </label>
               </div>
               
-              <div className="text-sm opacity-50">
-                <span className="font-medium text-blue-900 cursor-not-allowed">
+              <Link to="/forgot-password" className="text-sm">
+                <span className="font-medium text-blue-900 hover:text-blue-950">
                   Lupa password?
                 </span>
-              </div>
+              </Link>
             </div>
             
             <button
