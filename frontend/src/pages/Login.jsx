@@ -5,44 +5,16 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import GoogleSignIn from "../components/GoogleSignIn";
 import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+import useToast from "../hooks/useToast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { showSuccess, showError } = useToast();
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
-
-  // Custom toast styles
-  const toastStyles = {
-    success: {
-      style: {
-        background: '#4ade80',
-        color: '#fff',
-        padding: '16px',
-        borderRadius: '10px',
-      },
-      iconTheme: {
-        primary: '#fff',
-        secondary: '#4ade80',
-      },
-      duration: 3000,
-    },
-    error: {
-      style: {
-        background: '#f87171',
-        color: '#fff',
-        padding: '16px',
-        borderRadius: '10px',
-      },
-      iconTheme: {
-        primary: '#fff',
-        secondary: '#f87171',
-      },
-      duration: 4000,
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,21 +28,24 @@ const Login = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
-      
-      // Success notification
-      toast.success("Login berhasil!", toastStyles.success);
-      
-      // Delay navigation slightly to allow toast to be seen
+
+      showSuccess("Login berhasil!");
       setTimeout(() => {
         navigate(user.role === "admin" ? "/admin/dashboard" : "/profile");
       }, 1000);
     } catch (error) {
       console.error("Login error:", error);
-      // Error notification
-      toast.error(
-        error.response?.data?.message || "Login gagal. Cek kembali email dan password.",
-        toastStyles.error
-      );
+      // Kalau error response menandakan akun belum diverifikasi,
+      // simpan email pending dan redirect ke halaman verifikasi
+      if (error.response?.data?.verificationRequired) {
+        localStorage.setItem("pendingEmail", error.response.data.email);
+        showError(error.response.data.message);
+        setTimeout(() => {
+          navigate("/verify");
+        }, 1500);
+      } else {
+        showError(error.response?.data?.message || "Login gagal. Cek kembali email dan password.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +53,6 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-100 to-indigo-100 p-4">
-      {/* Toast container */}
       <Toaster position="top-center" reverseOrder={false} />
       
       <div className="w-full max-w-md bg-white rounded-lg shadow-xl overflow-hidden">
@@ -87,14 +61,14 @@ const Login = () => {
           <p className="text-blue-100 text-center mt-1">Silakan login untuk melanjutkan</p>
         </div>
       
-          <div className="mt-6">
-            <GoogleSignIn />
-          </div>
+        <div className="mt-6">
+          <GoogleSignIn />
+        </div>
         
-          <div className="relative flex items-center justify-center mt-6">
-            <div className="border-t border-gray-300 absolute w-full"></div>
-            <div className="bg-white px-4 relative text-sm text-gray-500">atau</div>
-          </div>
+        <div className="relative flex items-center justify-center mt-6">
+          <div className="border-t border-gray-300 absolute w-full"></div>
+          <div className="bg-white px-4 relative text-sm text-gray-500">atau</div>
+        </div>
 
         <div className="p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
