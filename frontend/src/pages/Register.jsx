@@ -1,9 +1,10 @@
+// components/Register.jsx
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { FaUser, FaEnvelope, FaLock, FaUserPlus } from "react-icons/fa";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import GoogleSignIn from "../components/GoogleSignIn";
 import useToast from "../hooks/useToast";
 
@@ -14,10 +15,8 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { showSuccess, showError } = useToast();
-  
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,24 +27,20 @@ const Register = () => {
     
     setIsLoading(true);
     try {
-      const res = await axios.post("https://jokidins-production.up.railway.app/api/auth/register", {
+      await axios.post("https://jokidins-production.up.railway.app/api/auth/register", {
         name,
         email,
         password,
-        role: "user" // Role selalu dianggap sebagai "user"
+        role: "user"
       });
       
-      const { token, user } = res.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
+      showSuccess("Registrasi berhasil! Silakan periksa email untuk kode verifikasi.");
       
-      showSuccess("Registrasi berhasil!");
+      // Simpan email sementara untuk proses verifikasi
+      localStorage.setItem("pendingEmail", email);
       
-      // Delay navigation to allow toast to be seen
-      setTimeout(() => {
-        navigate("/profile");
-      }, 1000);
+      // Arahkan ke halaman verifikasi
+      navigate("/verify");
     } catch (error) {
       console.error("Register error:", error);
       if (error.response?.data?.message) {
@@ -60,7 +55,6 @@ const Register = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-indigo-100 to-purple-100 p-4">
-      {/* Toast container */}
       <Toaster position="top-center" reverseOrder={false} />
       
       <div className="w-full max-w-md bg-white rounded-lg shadow-xl overflow-hidden">
@@ -69,14 +63,14 @@ const Register = () => {
           <p className="text-indigo-100 text-center mt-1">Silakan isi data diri Anda</p>
         </div>
 
-          <div className="mt-6">
-            <GoogleSignIn />
-          </div>
+        <div className="mt-6">
+          <GoogleSignIn />
+        </div>
           
         <div className="relative flex items-center justify-center mt-6">
-            <div className="border-t border-gray-300 absolute w-full"></div>
-            <div className="bg-white px-4 relative text-sm text-gray-500">atau daftar secara manual</div>
-          </div>
+          <div className="border-t border-gray-300 absolute w-full"></div>
+          <div className="bg-white px-4 relative text-sm text-gray-500">atau daftar secara manual</div>
+        </div>
         
         <div className="p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -87,7 +81,7 @@ const Register = () => {
               <input
                 type="text"
                 placeholder="Nama Lengkap"
-                className="w-full pl-10 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition"
+                className="w-full pl-10 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 transition"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -101,7 +95,7 @@ const Register = () => {
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full pl-10 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition"
+                className="w-full pl-10 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 transition"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -115,7 +109,7 @@ const Register = () => {
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full pl-10 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition"
+                className="w-full pl-10 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 transition"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -129,7 +123,7 @@ const Register = () => {
               <input
                 type="password"
                 placeholder="Konfirmasi Password"
-                className="w-full pl-10 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition"
+                className="w-full pl-10 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 transition"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -140,7 +134,7 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center items-center gap-2 bg-blue-900 hover:bg-blue-950 text-white py-3 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-900 focus:ring-offset-2"
+                className="w-full flex justify-center items-center gap-2 bg-blue-900 hover:bg-blue-950 text-white py-3 px-4 rounded-lg transition duration-300"
               >
                 {isLoading ? (
                   <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

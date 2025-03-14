@@ -22,6 +22,7 @@ import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
+import Verify from "./components/verifyEmail";
 
 const App = () => {
   return (
@@ -83,6 +84,14 @@ const App = () => {
               element={
                 <PublicRoute>
                   <Register />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/verify"
+              element={
+                <PublicRoute>
+                  <Verify />
                 </PublicRoute>
               }
             />

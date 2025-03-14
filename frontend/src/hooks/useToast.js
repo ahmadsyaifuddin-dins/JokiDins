@@ -5,14 +5,14 @@ const useToast = () => {
   const showSuccess = (message) => {
     toast.success(message, {
       style: {
-        background: "#4ade80",
+        background: "#2e865f",
         color: "#fff",
         padding: "16px",
         borderRadius: "10px",
       },
       iconTheme: {
         primary: "#fff",
-        secondary: "#4ade80",
+        secondary: "#2e865f",
       },
       duration: 3000,
     });
