@@ -148,14 +148,13 @@ router.get("/:id/file", protect, async (req, res) => {
 
 // ============================================================
 // UPDATE ORDER (PUT /api/orders/:id)
-// ============================================================
 router.put("/:id", protect, upload.single("file"), async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order)
       return res.status(404).json({ message: "Order tidak ditemukan" });
 
-    // Jika bukan admin dan bukan pemilik order, tolak
+    // Cek apakah user punya izin
     if (
       req.user.role !== "admin" &&
       order.user.toString() !== req.user._id.toString()
@@ -163,10 +162,22 @@ router.put("/:id", protect, upload.single("file"), async (req, res) => {
       return res.status(401).json({ message: "Tidak diizinkan" });
     }
 
+    // Update field-field order
     order.service = req.body.service ?? order.service;
     order.description = req.body.description ?? order.description;
     order.deadline = req.body.deadline ?? order.deadline;
-    order.status = req.body.status ?? order.status;
+
+    // Update status dan completedAt
+    const newStatus = req.body.status ?? order.status;
+    // Jika status berubah menjadi "completed" dan sebelumnya belum completed,
+    // set completedAt ke waktu sekarang
+    if (newStatus === "completed" && order.status !== "completed") {
+      order.completedAt = new Date();
+    } else if (newStatus !== "completed") {
+      // Kalau status berubah dari completed ke status lain, reset completedAt
+      order.completedAt = null;
+    }
+    order.status = newStatus;
 
     if (req.file) {
       order.file = {
@@ -182,6 +193,7 @@ router.put("/:id", protect, upload.single("file"), async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 // ============================================================
 // DELETE ORDER (DELETE /api/orders/:id)

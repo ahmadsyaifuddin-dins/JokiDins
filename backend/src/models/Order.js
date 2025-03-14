@@ -36,6 +36,10 @@ const orderSchema = mongoose.Schema({
     filename: String,
     originalName: String,
     path: String
+  },
+  completedAt: {
+    type: Date,
+    default: null
   }
 }, {
   timestamps: true
