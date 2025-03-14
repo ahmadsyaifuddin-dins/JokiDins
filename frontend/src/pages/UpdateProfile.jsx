@@ -195,9 +195,9 @@ const UpdateProfile = () => {
               <input
                 type="email"
                 placeholder="Masukkan email"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pl-3"
+                className="w-full p-3 text-gray-600 bg-gray-100 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all pl-3"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                readOnly
                 required
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
