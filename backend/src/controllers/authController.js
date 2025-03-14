@@ -6,6 +6,7 @@ const User = require("../models/User");
 const sendEmail = require("../utils/sendEmail");
 const getWelcomeMessage = require("../utils/welcomeMessage");
 const { generateVerificationCode, getVerificationCodeExpires } = require("../utils/verification");
+const { getVerificationEmailMessage } = require("../utils/emailTemplates");
 
 const VERIFICATION_CODE_EXPIRATION = 5; // dalam menit
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -35,13 +36,11 @@ exports.register = async (req, res) => {
     });
     await newUser.save();
 
-    const verificationEmailMessage = `
-      <p>Halo ${name},</p>
-      <p>Terima kasih telah mendaftar di JokiDins. Berikut adalah kode verifikasi email Anda:</p>
-      <h2>${verificationCode}</h2>
-      <p>Masukkan kode tersebut pada halaman verifikasi untuk mengaktifkan akun Anda.</p>
-      <p>Kode verifikasi ini akan berlaku selama ${VERIFICATION_CODE_EXPIRATION} menit.</p>
-    `;
+    const verificationEmailMessage = getVerificationEmailMessage(
+        user.name,
+        verificationCode,
+        VERIFICATION_CODE_EXPIRATION
+      );
     await sendEmail(email, "Kode Verifikasi Email", verificationEmailMessage);
 
     res.status(201).json({
@@ -108,13 +107,11 @@ exports.resendVerification = async (req, res) => {
     user.verificationCodeExpires = verificationCodeExpires;
     await user.save();
 
-    const verificationEmailMessage = `
-      <p>Halo ${user.name},</p>
-      <p>Berikut adalah kode verifikasi email baru Anda:</p>
-      <h2>${verificationCode}</h2>
-      <p>Masukkan kode tersebut pada halaman verifikasi untuk mengaktifkan akun Anda.</p>
-      <p>Kode verifikasi ini akan berlaku selama ${VERIFICATION_CODE_EXPIRATION} menit.</p>
-    `;
+    const verificationEmailMessage = getVerificationEmailMessage(
+        user.name,
+        verificationCode,
+        VERIFICATION_CODE_EXPIRATION
+      );
     await sendEmail(email, "Kode Verifikasi Email Baru", verificationEmailMessage);
     res.status(200).json({ message: "Kode verifikasi baru telah dikirim ke email Anda." });
   } catch (error) {
@@ -138,13 +135,11 @@ exports.login = async (req, res) => {
       user.verificationCodeExpires = verificationCodeExpires;
       await user.save();
 
-      const verificationEmailMessage = `
-        <p>Halo ${user.name},</p>
-        <p>Anda belum memverifikasi akun Anda. Berikut adalah kode verifikasi email baru:</p>
-        <h2>${verificationCode}</h2>
-        <p>Masukkan kode tersebut pada halaman verifikasi untuk mengaktifkan akun Anda.</p>
-        <p>Kode verifikasi ini akan berlaku selama ${VERIFICATION_CODE_EXPIRATION} menit.</p>
-      `;
+      const verificationEmailMessage = getVerificationEmailMessage(
+        user.name,
+        verificationCode,
+        VERIFICATION_CODE_EXPIRATION
+      );
       await sendEmail(email, "Kode Verifikasi Email", verificationEmailMessage);
       return res.status(401).json({
         message: "Akun belum terverifikasi. Kode verifikasi baru telah dikirim ke email Anda.",
