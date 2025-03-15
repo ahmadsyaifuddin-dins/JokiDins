@@ -1,9 +1,11 @@
+// routes order.js
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
 const { protect } = require("../middleware/authMiddleware");
 const multer = require("multer");
 const fs = require("fs");
+const { sendTelegramNotification } = require("../services/telegramNotifier");
 
 const uploadDir = "uploads/order";
 
@@ -48,7 +50,7 @@ router.post("/", protect, upload.single("file"), async (req, res) => {
       description,
       deadline,
       phone,
-      provider
+      provider,
     };
 
     if (req.file) {
@@ -69,6 +71,32 @@ router.post("/", protect, upload.single("file"), async (req, res) => {
         $addToSet: { phones: phone },
       });
     }
+
+    const formattedDeadline = new Date(deadline).toLocaleString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    // Kirim notifikasi Telegram
+    const notifMessage = `
+    Order baru masuk Dins 😊!
+
+    Service: ${service}
+
+    Deskripsi: ${description}
+
+    Deadline: ${formattedDeadline}
+
+    No.HP: ${phone}
+
+    Provider: ${provider}
+    `;
+
+    await sendTelegramNotification(notifMessage);
+
     res.status(201).json(order);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -88,7 +116,7 @@ router.get("/", protect, async (req, res) => {
       // Kalau user biasa, hanya order miliknya
       const orders = await Order.find({ user: req.user._id }).populate(
         "user",
-        "email",
+        "email"
       );
       return res.json(orders);
     }
@@ -103,7 +131,10 @@ router.get("/", protect, async (req, res) => {
 router.get("/:id", protect, async (req, res) => {
   try {
     // Populate user agar admin bisa melihat info user, misal email
-    const order = await Order.findById(req.params.id).populate("user", "name email");
+    const order = await Order.findById(req.params.id).populate(
+      "user",
+      "name email"
+    );
     if (!order)
       return res.status(404).json({ message: "Order tidak ditemukan" });
 
@@ -193,7 +224,6 @@ router.put("/:id", protect, upload.single("file"), async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 // ============================================================
 // DELETE ORDER (DELETE /api/orders/:id)
