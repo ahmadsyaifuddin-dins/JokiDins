@@ -1,5 +1,13 @@
-import React from "react";
-import { Eye, PlayCircle, CheckCircle, XCircle, Trash2 } from "lucide-react";
+import React, { useState } from "react";
+import {
+  Eye,
+  Trash2,
+  Calendar,
+  Clock,
+  MoreVertical,
+  AlertTriangle,
+} from "lucide-react";
+import { formatDate, calculateTimeLeft } from "../utils/timeUtils";
 
 const DashboardOrdersTable = ({
   filteredOrders,
@@ -10,108 +18,240 @@ const DashboardOrdersTable = ({
   handleStatusChange,
   handleDelete,
 }) => {
+  const [activeDropdown, setActiveDropdown] = useState(null);
+
+  const toggleDropdown = (orderId) => {
+    setActiveDropdown(activeDropdown === orderId ? null : orderId);
+  };
+
+  const closeDropdowns = () => {
+    setActiveDropdown(null);
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                ID Order
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Nama Kostumer
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Layanan
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Nomor HP
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Aksi
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredOrders.map((order) => (
-              <tr key={order._id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  #{order._id.slice(-5).toUpperCase()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <div className="flex flex-col">
-                    <span className="text-gray-600">{order.user?.name || "Tidak ada nama"}</span>
-                    <span className="text-xs text-gray-500">{order.user?.email || ""}</span>
+    <div onClick={closeDropdowns} className="overflow-x-auto">
+      <table className="w-full border-collapse">
+        <thead className="bg-gray-50 border-t border-b border-gray-200">
+          <tr>
+            <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Order ID
+            </th>
+            <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Pelanggan
+            </th>
+            <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Deskripsi
+            </th>
+            <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Nomor HP
+            </th>
+            <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Status
+            </th>
+            <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Deadline
+            </th>
+            <th className="py-4 px-6 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Aksi
+            </th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {filteredOrders.map((order) => {
+            const timeLeft = calculateTimeLeft(
+              order.deadline,
+              order.completedAt,
+              order.status
+            );
+            const StatusIcon = getStatusIcon(order.status);
+            return (
+              <tr
+                key={order._id}
+                className="hover:bg-gray-50 transition-colors duration-150 ease-in-out"
+              >
+                <td className="py-4 px-6 whitespace-nowrap">
+                  <div className="text-sm font-medium text-gray-900">
+                    {order._id.slice(-8).toUpperCase()}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {formatDate(order.createdAt)}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  {order.service}
+                <td className="py-4 px-6">
+                  <div className="text-sm font-medium text-gray-900">
+                    {order.user?.name || "Nama tidak tersedia"}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {order.user?.email || "Email tidak tersedia"}
+                  </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  {Array.isArray(order.phone) && order.phone.length > 0 ? order.phone.join(", ") : "Tidak ada nomor"}
+                <td className="py-4 px-6">
+                  <div className="text-sm text-gray-900 line-clamp-2">
+                    {order.description || "Tidak ada deskripsi"}
+                  </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${getStatusBadgeColor(order.status)}`}>
-                    {getStatusIcon(order.status)}
+                <td className="py-4 px-6">
+                  <div className="text-sm text-gray-900">
+                    {Array.isArray(order.phone) && order.phone.length > 0
+                      ? order.phone.join(", ")
+                      : "Tidak ada nomor"}
+                  </div>
+                </td>
+                <td className="py-4 px-6">
+                  <span
+                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(
+                      order.status
+                    )}`}
+                  >
+                    <StatusIcon className="w-3.5 h-3.5 mr-1" />
                     {getStatusLabel(order.status)}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <div className="flex items-center gap-2">
+                <td className="py-4 px-6">
+                  <div className="flex items-center">
+                    <Calendar className="w-4 h-4 text-gray-400 mr-1" />
+                    <span className="text-sm text-gray-700">
+                      {formatDate(order.deadline)}
+                    </span>
+                  </div>
+                  <div className="flex items-center mt-1">
+                    <Clock className={`w-3.5 h-3.5 ${timeLeft.color} mr-1`} />
+                    <span className={`text-xs ${timeLeft.color} font-medium`}>
+                      {timeLeft.text}
+                    </span>
+                  </div>
+                </td>
+                <td className="py-4 px-6 text-right relative">
+                  <div className="flex items-center justify-end">
                     <button
-                      onClick={() => handleViewDetail(order._id)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleViewDetail(order._id);
+                      }}
+                      className="text-blue-600 hover:text-blue-800 mr-2"
+                      title="Lihat Detail"
                     >
-                      <Eye className="w-4 h-4" />
-                      Detail
+                      <Eye className="w-5 h-5" />
                     </button>
-                    <div className="flex items-center gap-1">
-                      {order.status !== "processing" && (
-                        <button
-                          onClick={() => handleStatusChange(order._id, "processing")}
-                          title="Proses Order"
-                          className="inline-flex items-center p-1.5 text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors duration-200"
-                        >
-                          <PlayCircle className="w-5 h-5" />
-                        </button>
-                      )}
-                      {order.status !== "completed" && (
-                        <button
-                          onClick={() => handleStatusChange(order._id, "completed")}
-                          title="Selesaikan Order"
-                          className="inline-flex items-center p-1.5 text-green-700 bg-green-100 hover:bg-green-200 rounded-lg transition-colors duration-200"
-                        >
-                          <CheckCircle className="w-5 h-5" />
-                        </button>
-                      )}
-                      {order.status !== "cancelled" && (
-                        <button
-                          onClick={() => handleStatusChange(order._id, "cancelled")}
-                          title="Batalkan Order"
-                          className="inline-flex items-center p-1.5 text-red-700 bg-red-100 hover:bg-red-200 rounded-lg transition-colors duration-200"
-                        >
-                          <XCircle className="w-5 h-5" />
-                        </button>
-                      )}
+                    <div className="relative">
                       <button
-                        onClick={() => handleDelete(order._id)}
-                        title="Hapus Order"
-                        className="inline-flex items-center p-1.5 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleDropdown(order._id);
+                        }}
+                        className="text-gray-500 hover:text-gray-700"
+                        title="Menu"
                       >
-                        <Trash2 className="w-5 h-5" />
+                        <MoreVertical className="w-5 h-5" />
                       </button>
+                      {activeDropdown === order._id && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                          <div className="py-1">
+                            <div className="px-4 py-2 text-sm text-gray-700 font-semibold border-b border-gray-200">
+                              Ubah Status
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(order._id, "pending");
+                                setActiveDropdown(null);
+                              }}
+                              className={`flex items-center w-full text-left px-4 py-2 text-sm ${
+                                order.status === "pending"
+                                  ? "bg-yellow-100 text-yellow-900"
+                                  : "text-gray-700 hover:bg-gray-100"
+                              }`}
+                            >
+                              {React.createElement(getStatusIcon("pending"), {
+                                className: "w-3.5 h-3.5 mr-1",
+                              })}
+                              {getStatusLabel("pending")}
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(order._id, "processing");
+                                setActiveDropdown(null);
+                              }}
+                              className={`flex items-center w-full text-left px-4 py-2 text-sm ${
+                                order.status === "processing"
+                                  ? "bg-blue-100 text-blue-900"
+                                  : "text-gray-700 hover:bg-gray-100"
+                              }`}
+                            >
+                              {React.createElement(
+                                getStatusIcon("processing"),
+                                { className: "w-3.5 h-3.5 mr-1" }
+                              )}
+                              {getStatusLabel("processing")}
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(order._id, "completed");
+                                setActiveDropdown(null);
+                              }}
+                              className={`flex items-center w-full text-left px-4 py-2 text-sm ${
+                                order.status === "completed"
+                                  ? "bg-green-100 text-green-900"
+                                  : "text-gray-700 hover:bg-gray-100"
+                              }`}
+                            >
+                              {React.createElement(getStatusIcon("completed"), {
+                                className: "w-3.5 h-3.5 mr-1",
+                              })}
+                              {getStatusLabel("completed")}
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(order._id, "cancelled");
+                                setActiveDropdown(null);
+                              }}
+                              className={`flex items-center w-full text-left px-4 py-2 text-sm ${
+                                order.status === "cancelled"
+                                  ? "bg-red-100 text-red-900"
+                                  : "text-gray-700 hover:bg-gray-100"
+                              }`}
+                            >
+                              {React.createElement(getStatusIcon("cancelled"), {
+                                className: " w-3.5 h-3.5 mr-1",
+                              })}
+                              {getStatusLabel("cancelled")}
+                            </button>
+                            <div className="border-t border-gray-200 mt-1">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDelete(order._id);
+                                  setActiveDropdown(null);
+                                }}
+                                className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                              >
+                                <div className="flex items-center">
+                                  <Trash2 className="w-4 h-4 mr-2" />
+                                  Hapus Order
+                                </div>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            );
+          })}
+          {filteredOrders.length === 0 && (
+            <tr>
+              <td colSpan="7" className="py-8 text-center text-gray-500">
+                Tidak ada data pesanan yang sesuai dengan filter
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };
