@@ -113,34 +113,92 @@ const TelegramLinkButton = () => {
       </button>
 
       {token && (
-        <div className="mt-6 p-5 bg-white border border-blue-100 rounded-xl shadow-xl w-full max-w-md transform transition-all duration-300 hover:shadow-blue-100">
-          <div className="flex flex-col space-y-3">
-            <p className="text-sm text-gray-700 font-medium">
-              Token berhasil dibuat! Silakan klik link berikut untuk
-              menghubungkan:
-            </p>
+        <div className="mt-6 p-4 md:p-5 bg-white border border-blue-100 rounded-xl shadow-lg w-full max-w-md transform transition-all duration-300 hover:shadow-blue-200 dark:bg-gray-800 dark:border-gray-700">
+          <div className="flex flex-col space-y-4">
+            <div className="flex items-center space-x-2">
+              <div className="flex-shrink-0 w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center dark:bg-blue-900">
+                <svg
+                  className="w-5 h-5 text-blue-500 dark:text-blue-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              <p className="text-sm text-gray-700 font-medium dark:text-gray-300">
+                Token berhasil dibuat!
+              </p>
+            </div>
 
-            <div className="bg-blue-50 p-3 rounded-lg overflow-hidden">
-              <p className="font-mono text-sm font-bold text-blue-600 break-all">
+            <div className="bg-blue-50 p-3 rounded-lg overflow-hidden border border-blue-100 dark:bg-gray-700 dark:border-gray-600">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Token Anda:
+                </span>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(token);
+                    alert("Token disalin!");
+                  }}
+                  className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 flex items-center"
+                >
+                  <svg
+                    className="w-3.5 h-3.5 mr-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
+                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path>
+                  </svg>
+                  Salin
+                </button>
+              </div>
+              <p className="font-mono text-sm font-bold text-blue-600 break-all dark:text-blue-400">
                 {token}
               </p>
             </div>
+
+            <p className="text-xs text-gray-500 text-center dark:text-gray-400">
+              Klik tombol di bawah untuk menghubungkan dengan Telegram Bot
+            </p>
 
             <a
               href={`https://t.me/JokiDins_Bot?start=${token}`}
               target="_blank"
               rel="noopener noreferrer"
               className={`
-                mt-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-400
-                text-white text-center font-medium rounded-lg
-                flex items-center justify-center space-x-2
-                transform hover:translate-y-[-2px] hover:shadow-md
-                transition-all duration-300
-                ${glowEffect ? "shadow-blue-300/50" : ""}
-              `}
+          px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-500
+          hover:from-blue-500 hover:to-blue-400
+          text-white text-center font-medium rounded-lg
+          flex items-center justify-center space-x-2
+          transform hover:translate-y-[-2px] hover:shadow-md
+          transition-all duration-300
+          ${glowEffect ? "shadow-blue-300/50" : ""}
+          relative overflow-hidden
+        `}
             >
-              <MessageCircleCode className="w-5 h-5" />
-              <span>Buka Telegram Bot</span>
+              {/* Shiny effect overlay */}
+              <span className="absolute top-0 left-0 w-full h-full">
+                <span
+                  className={`
+              absolute top-0 -left-1/2 w-1/3 h-full 
+              bg-gradient-to-r from-transparent via-white to-transparent 
+              transform -skew-x-12 opacity-30
+              transition-all duration-1000 ease-in-out
+              ${glowEffect ? "translate-x-full" : "translate-x-0"}
+            `}
+                ></span>
+              </span>
+
+              <span className="relative z-10">Buka Telegram Bot</span>
+
+             
             </a>
           </div>
         </div>
