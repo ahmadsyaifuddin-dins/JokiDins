@@ -80,24 +80,40 @@ router.post("/", protect, upload.single("file"), async (req, res) => {
       minute: "2-digit",
     });
 
-    // Kirim notifikasi Telegram
+    // Kirim notifikasi order masuk Telegram ke admin
     const notifMessage = `
-    Order baru masuk Dins 😊!
+      Ada Order baru masuk Dins 😊!
 
-    Dari: ${req.user.name}
+      👤 *Klien:* ${req.user.name}
 
-    Service: ${service}
+      🛠️ *Layanan:* ${service}
 
-    Deskripsi: ${description}
+      📝 *Deskripsi:* ${description}
 
-    Deadline: ${formattedDeadline}
+      ⏰ *Deadline:* ${formattedDeadline}
 
-    No.HP: ${phone}
+      📱 *Kontak:* ${phone}
 
-    Provider: ${provider}
-    `;
+      🔌 *Provider:* ${provider}
+      `.trim();
 
-    await sendTelegramNotification(notifMessage);
+    await sendTelegramNotification(process.env.TELEGRAM_CHAT_ID, notifMessage);
+
+    // Kirim notifikasi ke user yang nge-order
+    if (req.user.telegramChatId) {
+      const userNotifMessage = `
+Halo ${req.user.name}, order Joki *${service}* kamu baru saja kami terima!
+Kami sedang memproses order tersebut dan akan segera mengabari kamu.
+Terima kasih telah menggunakan JokiDins!
+  `.trim();
+      await sendTelegramNotification(
+        req.user.telegramChatId,
+        userNotifMessage,
+        "Markdown"
+      );
+    } else {
+      console.log("User belum menghubungkan akun Telegram.");
+    }
 
     res.status(201).json(order);
   } catch (error) {
@@ -221,6 +237,27 @@ router.put("/:id", protect, upload.single("file"), async (req, res) => {
     }
 
     const updatedOrder = await order.save();
+
+     // Kirim notifikasi ke user berdasarkan status order yang baru
+     if (req.user.telegramChatId) {
+      let statusMessage = "";
+      if (newStatus === "processing") {
+        statusMessage = `Halo ${req.user.name}, order *${order.service}* kamu sedang dikerjakan. Santai aja, kami lagi bekerja keras buat kamu!`;
+      } else if (newStatus === "completed") {
+        statusMessage = `Selamat ${req.user.name}, order *${order.service}* kamu sudah selesai! Silakan cek hasilnya.`;
+      }
+
+      if (statusMessage) {
+        await sendTelegramNotification(
+          req.user.telegramChatId,
+          statusMessage,
+          "Markdown"
+        );
+      }
+    } else {
+      console.log("User belum menghubungkan akun Telegram.");
+    }
+
     res.json(updatedOrder);
   } catch (error) {
     res.status(500).json({ message: error.message });

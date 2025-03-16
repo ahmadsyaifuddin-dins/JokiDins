@@ -42,6 +42,13 @@ const UserSchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 
+  telegramChatId: { 
+    type: String 
+  },
+  telegramToken: { 
+    type: String 
+  },
+
   // Field tambahan (untuk masa depan)
   // birthday: { type: Date },
   // gender: { type: String },

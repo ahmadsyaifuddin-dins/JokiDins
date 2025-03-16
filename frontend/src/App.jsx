@@ -147,7 +147,6 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-            
           </Routes>
         </main>
         <Footer />

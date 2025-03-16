@@ -1,16 +1,17 @@
-const axios = require('axios');
-const { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID } = process.env;
+const axios = require("axios");
 
-const sendTelegramNotification = async (message) => {
+const sendTelegramNotification = async (chatId, message, parseMode = "Markdown") => {
   try {
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
     const response = await axios.post(url, {
-      chat_id: TELEGRAM_CHAT_ID,
+      chat_id: chatId,
       text: message,
+      parse_mode: parseMode,
     });
-    console.log('Telegram notification sent:', response.data);
+    console.log("Telegram notification sent:", response.data);
   } catch (error) {
-    console.error('Error sending Telegram notification:', error);
+    console.error("Error sending Telegram notification:", error.message);
   }
 };
 

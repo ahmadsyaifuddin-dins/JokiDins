@@ -7,7 +7,8 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const orderRoutes = require("./routes/order");
-
+const telegramToken = require("./routes/telegram");  
+const telegramWebhook = require("./routes/telegramWebhook");
 const app = express();
 
 // Middleware
@@ -23,6 +24,10 @@ app.use("/api/user", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/uploads/order', express.static('uploads/order'));
 app.use('/uploads/avatar', express.static('uploads/avatar'));
+
+// Mount kedua endpoint Telegram di base path yang sama:
+app.use("/api/telegram", telegramToken);
+app.use("/api/telegram", telegramWebhook);
 
 // Contoh route lain (misalnya route utama)
 app.get("/", (req, res) => {
