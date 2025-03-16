@@ -111,14 +111,8 @@ const DashboardOrdersTable = ({
                 <td className="py-4 px-6">
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 text-gray-400 mr-1" />
-                    <span className="text-sm text-gray-700">
+                    <span className="text-sm text-gray-700 overflow-hidden whitespace-pre">
                       {formatDeadline(order.deadline)}
-                    </span>
-                  </div>
-                  <div className="flex items-center mt-1">
-                    <Clock className={`w-3.5 h-3.5 ${timeLeft.color} mr-1`} />
-                    <span className={`text-xs ${timeLeft.color} font-medium`}>
-                      {timeLeft.text}
                     </span>
                   </div>
                 </td>
