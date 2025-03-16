@@ -232,7 +232,7 @@ const OrderCreate = () => {
               
               <div className="relative p-6">
                 <div className="flex items-start">
-                  <div className="bg-white bg-opacity-20 p-3 rounded-full mr-4">
+                  <div className="hidden md:block bg-white bg-opacity-20 p-3 rounded-full mr-4">
                     <Send className="h-6 w-6 text-white" />
                   </div>
                   <div>
