@@ -218,12 +218,9 @@ router.put("/:id", protect, upload.single("file"), async (req, res) => {
 
     // Update status dan completedAt
     const newStatus = req.body.status ?? order.status;
-    // Jika status berubah menjadi "completed" dan sebelumnya belum completed,
-    // set completedAt ke waktu sekarang
     if (newStatus === "completed" && order.status !== "completed") {
       order.completedAt = new Date();
     } else if (newStatus !== "completed") {
-      // Kalau status berubah dari completed ke status lain, reset completedAt
       order.completedAt = null;
     }
     order.status = newStatus;
@@ -238,18 +235,25 @@ router.put("/:id", protect, upload.single("file"), async (req, res) => {
 
     const updatedOrder = await order.save();
 
-     // Kirim notifikasi ke user berdasarkan status order yang baru
-     if (req.user.telegramChatId) {
+    // Dapatkan data pemilik order: kalau admin yang update, ambil data user dari order
+    let orderOwner = req.user;
+    if (req.user.role === "admin") {
+      const User = require("../models/User");
+      orderOwner = await User.findById(order.user);
+    }
+
+    // Kirim notifikasi ke user berdasarkan status order yang baru
+    if (orderOwner && orderOwner.telegramChatId) {
       let statusMessage = "";
       if (newStatus === "processing") {
-        statusMessage = `Halo ${req.user.name}, order *${order.service}* kamu sedang dikerjakan. Santai aja, kami lagi bekerja keras buat kamu!`;
+        statusMessage = `Halo ${orderOwner.name}, order *${order.service}* kamu *sedang dikerjakan*. Santai aja, kami lagi bekerja keras buat kamu!`;
       } else if (newStatus === "completed") {
-        statusMessage = `Selamat ${req.user.name}, order *${order.service}* kamu sudah selesai! Silakan cek hasilnya.`;
+        statusMessage = `Selamat ${orderOwner.name}, order *${order.service}* kamu sudah *selesai!* Silakan cek hasilnya.`;
       }
 
       if (statusMessage) {
         await sendTelegramNotification(
-          req.user.telegramChatId,
+          orderOwner.telegramChatId,
           statusMessage,
           "Markdown"
         );
@@ -263,6 +267,7 @@ router.put("/:id", protect, upload.single("file"), async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 // ============================================================
 // DELETE ORDER (DELETE /api/orders/:id)
