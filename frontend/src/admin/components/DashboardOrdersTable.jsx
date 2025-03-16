@@ -1,3 +1,4 @@
+// src/admin/components/DashboardOrdersTable.jsx
 import React, { useState } from "react";
 import {
   Eye,
@@ -7,7 +8,7 @@ import {
   MoreVertical,
   AlertTriangle,
 } from "lucide-react";
-import { formatDate, calculateTimeLeft } from "../utils/timeUtils";
+import { formatDate, calculateTimeLeft, formatDeadline } from "../utils/timeUtils";
 
 const DashboardOrdersTable = ({
   filteredOrders,
@@ -111,7 +112,7 @@ const DashboardOrdersTable = ({
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 text-gray-400 mr-1" />
                     <span className="text-sm text-gray-700">
-                      {formatDate(order.deadline)}
+                      {formatDeadline(order.deadline)}
                     </span>
                   </div>
                   <div className="flex items-center mt-1">

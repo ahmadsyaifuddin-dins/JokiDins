@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import { format, parseISO } from "date-fns";
-import { id as localeID } from "date-fns/locale";
 import {
   ArrowLeft,
   Download,
@@ -17,6 +15,7 @@ import {
   RefreshCw,
   Clock4
 } from "lucide-react";
+import { formatDateDisplay, formatDeadlineDisplay } from "../utils/orderUtils";
 
 const OrderDetail = () => {
   const { id: orderId } = useParams();
@@ -26,17 +25,6 @@ const OrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("");
-
-  const formatDateTime = (dateString) => {
-    if (!dateString) return "-";
-    try {
-      const date = parseISO(dateString);
-      return format(date, "dd MMMM yyyy HH:mm", { locale: localeID });
-    } catch (err) {
-      console.error("Error formatting dateTime:", err);
-      return dateString;
-    }
-  };
 
   useEffect(() => {
     fetchOrderDetail();
@@ -333,7 +321,9 @@ const OrderDetail = () => {
                         <Clock className="h-5 w-5 mr-2" />
                         <span className="font-medium">Tenggat Waktu</span>
                       </div>
-                      <p className="text-gray-700 font-medium">{formatDateTime(order.deadline)}</p>
+                      <p className="text-gray-700 font-medium">
+                        {formatDeadlineDisplay(order.deadline)}
+                      </p>
                     </div>
                     
                     <div className="bg-white rounded-lg p-4 border border-gray-200">
@@ -341,7 +331,9 @@ const OrderDetail = () => {
                         <Clock className="h-5 w-5 mr-2" />
                         <span className="font-medium">Dibuat pada</span>
                       </div>
-                      <p className="text-gray-700">{formatDateTime(order.createdAt)}</p>
+                      <p className="text-gray-700">
+                        {formatDateDisplay(order.createdAt)}
+                      </p>
                     </div>
                     
                     <div className="bg-white rounded-lg p-4 border border-gray-200">
@@ -349,7 +341,9 @@ const OrderDetail = () => {
                         <Clock className="h-5 w-5 mr-2" />
                         <span className="font-medium">Terakhir diperbarui</span>
                       </div>
-                      <p className="text-gray-700">{formatDateTime(order.updatedAt)}</p>
+                      <p className="text-gray-700">
+                        {formatDateDisplay(order.updatedAt)}
+                      </p>
                     </div>
                   </div>
                 </div>

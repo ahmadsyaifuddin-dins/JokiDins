@@ -1,139 +1,134 @@
 // src/admin/utils/timeUtils.js
-
-import { format } from "date-fns";
+import { format, addHours } from "date-fns";
 import { id } from "date-fns/locale";
 
-// Format tanggal ke bahasa Indonesia
+// Format tanggal untuk createdAt dan updatedAt dengan timezone WITA
 export const formatDate = (dateString) => {
   try {
+    if (!dateString) return "Data tidak tersedia";
+    
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) return "Tanggal tidak valid";
-    return format(date, "dd MMM yyyy", { locale: id });
+    // Gunakan Intl.DateTimeFormat dengan zona waktu Asia/Makassar (WITA)
+    const witaOptions = {
+      timeZone: 'Asia/Makassar',
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    };
+    
+    return new Intl.DateTimeFormat('id-ID', witaOptions).format(date);
   } catch (error) {
-    return "Tanggal tidak valid";
+    console.error("Error formatting date:", error);
+    return "Format tanggal tidak valid";
   }
 };
 
-// Fungsi untuk mengubah milidetik menjadi teks (hari, jam, menit)
-export const getTimeDifferenceText = (diffTime) => {
-  const days = Math.floor(Math.abs(diffTime) / (1000 * 60 * 60 * 24));
-  const hours = Math.floor(
-    (Math.abs(diffTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-  );
-  const minutes = Math.floor(
-    (Math.abs(diffTime) % (1000 * 60 * 60)) / (1000 * 60)
-  );
-  
-  let result = "";
-  if (days > 0) result += `${days} hari `;
-  if (hours > 0) result += `${hours} jam `;
-  if (minutes > 0) result += `${minutes} menit`;
-  
-  return result.trim() || "0 menit";
+// Format deadline sesuai dengan nilai UTC aslinya (agar tampil sesuai input user)
+export const formatDeadline = (dateString) => {
+  try {
+    if (!dateString) return "Tidak ada deadline";
+    
+    const originalDate = new Date(dateString);
+    const day = originalDate.getUTCDate().toString().padStart(2, "0");
+    const month = format(new Date(0, originalDate.getUTCMonth()), "MMM", { locale: id });
+    const year = originalDate.getUTCFullYear();
+    const hours = originalDate.getUTCHours().toString().padStart(2, "0");
+    const minutes = originalDate.getUTCMinutes().toString().padStart(2, "0");
+    
+    return `${day} ${month} ${year}, ${hours}:${minutes}`;
+  } catch (error) {
+    console.error("Error formatting deadline:", error);
+    return "Format deadline tidak valid";
+  }
 };
 
-
-// Hitung sisa waktu dengan memperhitungkan status order
+// Hitung waktu tersisa hingga deadline (atau selisih waktu selesai)
 export const calculateTimeLeft = (deadline, completedAt, status) => {
-  const now = new Date();
-  const deadlineDate = new Date(deadline);
-
-  if (isNaN(deadlineDate.getTime())) {
-    return {
-      expired: false,
-      text: "Deadline tidak valid",
-      color: "text-gray-500",
-    };
+  const TOLERANCE_MS = 5 * 60 * 1000; // 5 menit toleransi
+  
+  // Jika status completed atau cancelled, tidak perlu menghitung countdown
+  if (status === "completed") {
+    return { text: "Selesai", color: "text-green-600" };
   }
-
-  // Jika order sudah selesai
-  if (status === "completed" && completedAt) {
-    const completionDate = new Date(completedAt);
-    if (isNaN(completionDate.getTime())) {
-      return {
-        expired: false,
-        text: "Tanggal penyelesaian tidak valid",
-        color: "text-gray-500",
-      };
-    }
-
-    const diffTime = completionDate - deadlineDate;
-
-    // Jika selesai lebih awal
-    if (diffTime < 0) {
-      return {
-        expired: false,
-        text: `Terselesaikan ${getTimeDifferenceText(
-          Math.abs(diffTime)
-        )} lebih awal`,
-        color: "text-green-500",
-      };
-    }
-    // Jika selesai tepat waktu (dalam toleransi 1 jam)
-    else if (diffTime <= 1000 * 60 * 60) {
-      return {
-        expired: false,
-        text: "Terselesaikan tepat waktu",
-        color: "text-green-500",
-      };
-    }
-    // Jika selesai terlambat
-    else {
-      return {
-        expired: true,
-        text: `Terlambat ${getTimeDifferenceText(diffTime)}`,
-        color: "text-red-500",
-      };
-    }
+  if (status === "cancelled") {
+    return { text: "Dibatalkan", color: "text-red-600" };
   }
-
-  // Untuk order yang belum selesai, hitung waktu yang tersisa
-  const diffTime = deadlineDate - now;
-
-  // Jika sudah lewat deadline
-  if (diffTime < 0) {
-    return {
-      expired: true,
-      text: `Terlambat ${getTimeDifferenceText(Math.abs(diffTime))}`,
-      color: "text-red-500",
-    };
+  
+  // Jika tidak ada deadline
+  if (!deadline) {
+    return { text: "Tidak ada tenggat", color: "text-gray-500" };
   }
-
-  // Jika deadline kurang dari 24 jam
-  if (diffTime <= 1000 * 60 * 60 * 24) {
-    const hours = Math.floor(diffTime / (1000 * 60 * 60));
-    const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
-
-    if (hours === 0 && minutes === 0) {
-      return {
-        expired: false,
-        text: "Deadline saat ini",
-        color: "text-yellow-500",
-      };
-    } else if (hours === 0) {
-      return {
-        expired: false,
-        text: `${minutes} menit lagi`,
-        color: "text-yellow-500",
-      };
+  
+  // Untuk perhitungan, kita koreksi deadline:
+  // Karena input deadline dianggap WITA tapi disimpan sebagai UTC,
+  // kita kurangi 8 jam agar deadline untuk perhitungan sesuai dengan waktu WITA.
+  const deadlineLocal = addHours(new Date(deadline), -8);
+  
+  // Jika pesanan sudah selesai, hitung apakah tepat waktu atau tidak
+  if (completedAt) {
+    const completedLocal = new Date(completedAt); // Anggap ini sudah dalam waktu lokal (WITA)
+    const diffTime = deadlineLocal - completedLocal; // positif: selesai lebih awal; negatif: terlambat
+    
+    if (Math.abs(diffTime) < TOLERANCE_MS) {
+      return { text: "Tepat waktu", color: "text-green-600" };
+    } else if (diffTime > 0) {
+      // Selesai lebih awal
+      const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+      
+      let text = "Lebih awal";
+      if (days > 0) text += ` ${days}hari`;
+      if (hours > 0) text += ` ${hours}jam`;
+      if (minutes > 0 && days === 0) text += ` ${minutes}m`;
+      
+      return { text, color: "text-green-600" };
     } else {
-      return {
-        expired: false,
-        text: `${hours} jam ${minutes} menit lagi`,
-        color: "text-yellow-500",
-      };
+      // Terlambat
+      const absDiff = Math.abs(diffTime);
+      const days = Math.floor(absDiff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((absDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((absDiff % (1000 * 60 * 60)) / (1000 * 60));
+      
+      let text = "Terlambat";
+      if (days > 0) text += ` ${days}hari`;
+      if (hours > 0 && days === 0) text += ` ${hours}jam`;
+      if (minutes > 0 && days === 0 && hours === 0) text += ` ${minutes}m`;
+      
+      return { text, color: "text-red-600" };
     }
   }
-
-  // Jika masih ada beberapa hari
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  if (diffDays === 1) {
-    return { expired: false, text: "Besok", color: "text-blue-500" };
+  
+  // Untuk pesanan yang belum selesai, hitung waktu tersisa
+  const now = new Date();
+  const diffTime = deadlineLocal - now;
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  
+  if (diffTime < 0) {
+    // Sudah lewat deadline
+    const absDiff = Math.abs(diffTime);
+    const days = Math.floor(absDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((absDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    
+    let text = "Terlambat";
+    if (days > 0 && hours > 0) text += ` ${days} hari ${hours} jam`;
+    else if (days > 0) text += ` ${days} hari`;
+    else if (hours > 0) text += ` ${hours} jam`;
+    
+    return { text, color: "text-red-600" };
+  } else if (diffDays === 0 && diffHours < 24) {
+    return { text: `${diffHours} jam lagi`, color: "text-amber-600" };
+  } else if (diffDays === 0) {
+    return { text: "Hari ini", color: "text-amber-600" };
+  } else if (diffDays === 1) {
+    return { text: "Besok", color: "text-amber-600" };
+  } else if (diffDays <= 3) {
+    return { text: `${diffDays} hari lagi`, color: "text-amber-600" };
+  } else {
+    return { text: `${diffDays} hari lagi`, color: "text-green-600" };
   }
-
-  return {
-    expired: false,
-    text: `${diffDays} hari lagi`,
-    color: "text-blue-500",
-  };
 };

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import { format, parseISO } from 'date-fns';
-import { id as localeID } from 'date-fns/locale';
-import { ArrowLeft, Calendar, Clock, FileText, Package, Download, CheckCircle, AlertCircle, Loader, RefreshCw } from 'lucide-react';
+import { Calendar, Clock, FileText, Package, Download, CheckCircle, AlertCircle, Loader, RefreshCw, ArrowLeft } from 'lucide-react';
+import { formatDateDisplay, formatDeadlineDisplay, getTimeDifference, getCompletionTimeDifference } from '../utils/orderUtils';
 
 const OrderDetail = () => {
   const { id: orderId } = useParams();
@@ -12,17 +11,6 @@ const OrderDetail = () => {
   const [error, setError] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const navigate = useNavigate();
-
-  const formatDateTime = (dateString) => {
-    if (!dateString) return '-';
-    try {
-      const date = parseISO(dateString);
-      return format(date, 'dd MMMM yyyy HH:mm', { locale: localeID });
-    } catch (error) {
-      console.error('Error formatting date:', error);
-      return dateString;
-    }
-  };
 
   useEffect(() => {
     fetchOrder();
@@ -214,7 +202,7 @@ const OrderDetail = () => {
 
           {/* Content Section */}
           <div className="p-4 md:p-6 space-y-6">
-            {/* Description */}
+            {/* Deskripsi Pesanan */}
             <div className="transition-all hover:shadow-md rounded-xl">
               <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                 <span className="inline-block w-1 h-4 bg-blue-500 mr-2 rounded"></span>
@@ -229,7 +217,7 @@ const OrderDetail = () => {
               </div>
             </div>
 
-            {/* Deadline */}
+            {/* Tenggat Waktu */}
             <div className="transition-all hover:shadow-md rounded-xl">
               <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                 <span className="inline-block w-1 h-4 bg-amber-500 mr-2 rounded"></span>
@@ -237,11 +225,16 @@ const OrderDetail = () => {
               </h2>
               <div className="flex items-center text-gray-600 bg-amber-50 rounded-xl p-4 border border-amber-100">
                 <Calendar className="h-5 w-5 mr-3 text-amber-500" />
-                <span className="font-medium">{formatDateTime(order.deadline)}</span>
+                <div>
+                  <span className="font-medium">{formatDeadlineDisplay(order.deadline)}</span>
+                  <span className={`ml-2 font-medium ${getTimeDifference(order.deadline).color}`}>
+                    ({getTimeDifference(order.deadline).text})
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* File */}
+            {/* Berkas Lampiran */}
             <div className="transition-all hover:shadow-md rounded-xl">
               <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                 <span className="inline-block w-1 h-4 bg-purple-500 mr-2 rounded"></span>
@@ -290,7 +283,7 @@ const OrderDetail = () => {
               )}
             </div>
 
-            {/* Order Timeline */}
+            {/* Riwayat Pesanan */}
             <div className="transition-all hover:shadow-md rounded-xl">
               <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                 <span className="inline-block w-1 h-4 bg-blue-500 mr-2 rounded"></span>
@@ -299,14 +292,14 @@ const OrderDetail = () => {
               <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
                 <div className="space-y-0">
                   {renderTimelineItem(
-                    formatDateTime(order.createdAt),
+                    formatDateDisplay(order.createdAt),
                     <Package className="h-4 w-4" />,
                     "Pesanan Dibuat",
                     "Pesanan telah berhasil dibuat dan menunggu untuk diproses"
                   )}
                   
                   {order.status === 'processing' && renderTimelineItem(
-                    formatDateTime(order.updatedAt),
+                    formatDateDisplay(order.updatedAt),
                     <RefreshCw className="h-4 w-4" />,
                     "Sedang Diproses", 
                     "Pesanan Anda sedang dikerjakan oleh tim kami"
@@ -321,16 +314,16 @@ const OrderDetail = () => {
                         "Pesanan Anda sedang dikerjakan oleh tim kami"
                       )}
                       {renderTimelineItem(
-                        formatDateTime(order.updatedAt),
+                        formatDateDisplay(order.updatedAt),
                         <CheckCircle className="h-4 w-4" />,
                         "Pesanan Selesai", 
-                        "Pesanan Anda telah berhasil diselesaikan"
+                        `Pesanan Anda telah berhasil diselesaikan (${getCompletionTimeDifference(order).text})`
                       )}
                     </>
                   )}
                   
                   {order.status === 'cancelled' && renderTimelineItem(
-                    formatDateTime(order.updatedAt),
+                    formatDateDisplay(order.updatedAt),
                     <AlertCircle className="h-4 w-4" />,
                     "Pesanan Dibatalkan", 
                     "Pesanan ini telah dibatalkan"
@@ -346,14 +339,16 @@ const OrderDetail = () => {
                   <Clock className="h-4 w-4 mr-2 text-gray-400" />
                   Dibuat pada
                 </div>
-                <p className="font-medium text-gray-800">{formatDateTime(order.createdAt)}</p>
+                <p className="font-medium text-gray-800">
+                  {formatDateDisplay(order.createdAt)}
+                </p>
               </div>
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 transition-all hover:shadow-md">
                 <div className="flex items-center text-sm text-gray-500 mb-2">
                   <Clock className="h-4 w-4 mr-2 text-gray-400" />
                   Terakhir diperbarui
                 </div>
-                <p className="font-medium text-gray-800">{formatDateTime(order.updatedAt)}</p>
+                <p className="font-medium text-gray-800">{formatDateDisplay(order.updatedAt)}</p>
               </div>
             </div>
           </div>

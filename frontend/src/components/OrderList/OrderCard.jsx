@@ -1,7 +1,7 @@
 import React from "react";
 import { Calendar, ExternalLink, Edit, RefreshCw, Download, FileText, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { formatDateDisplay } from "../../utils/orderUtils";
+import { formatDeadlineDisplay } from "../../utils/orderUtils";
 
 const OrderCard = ({ order, getStatusConfig, timeInfo, downloadingId, handleDownloadFile }) => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const OrderCard = ({ order, getStatusConfig, timeInfo, downloadingId, handleDown
             </div>
             <div className="ml-6 flex flex-col">
               <span className="font-semibold text-gray-800">
-                {formatDateDisplay(order.deadline)}
+                {formatDeadlineDisplay(order.deadline)}
               </span>
               <div className={`mt-1 flex items-center text-xs ${timeInfo.color}`}>
                 <Clock className="h-3 w-3 mr-1" />
