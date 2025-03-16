@@ -84,6 +84,8 @@ router.post("/", protect, upload.single("file"), async (req, res) => {
     const notifMessage = `
     Order baru masuk Dins 😊!
 
+    Dari: ${req.user.name}
+
     Service: ${service}
 
     Deskripsi: ${description}
