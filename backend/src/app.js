@@ -27,7 +27,7 @@ app.use('/uploads/avatar', express.static('uploads/avatar'));
 
 // Mount kedua endpoint Telegram di base path yang sama:
 app.use("/api/telegram", telegramToken);
-app.use("/api/telegram", telegramWebhook);
+app.use("/telegram", telegramWebhook);
 
 // Contoh route lain (misalnya route utama)
 app.get("/", (req, res) => {
