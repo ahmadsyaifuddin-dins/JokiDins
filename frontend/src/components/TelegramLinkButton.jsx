@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { MessageCircleCode, MessageCircleHeartIcon } from "lucide-react";
+import { ArrowRight, Check, CheckCircle, Send } from "lucide-react";
 
 const TelegramLinkButton = () => {
   const [token, setToken] = useState("");
@@ -95,17 +95,7 @@ const TelegramLinkButton = () => {
             </>
           ) : (
             <>
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm-2.5 14.5c-.128 0-.256-.049-.354-.146l-2.5-2.5c-.195-.195-.195-.512 0-.707s.512-.195.707 0l2.146 2.146 4.146-4.146c.195-.195.512-.195.707 0s.195.512 0 .707l-4.5 4.5c-.098.098-.226.146-.354.146z"
-                  fillRule="nonzero"
-                />
-              </svg>
+             <CheckCircle className="w-5 h-5 mr-3" />
               Link Telegram
             </>
           )}
@@ -139,25 +129,7 @@ const TelegramLinkButton = () => {
               <div className="flex justify-between items-center mb-2">
                 <span className="text-xs text-gray-500 dark:text-gray-400">
                   Token Anda:
-                </span>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(token);
-                    alert("Token disalin!");
-                  }}
-                  className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 flex items-center"
-                >
-                  <svg
-                    className="w-3.5 h-3.5 mr-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
-                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path>
-                  </svg>
-                  Salin
-                </button>
+                </span>             
               </div>
               <p className="font-mono text-sm font-bold text-blue-600 break-all dark:text-blue-400">
                 {token}
@@ -176,7 +148,7 @@ const TelegramLinkButton = () => {
           px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-500
           hover:from-blue-500 hover:to-blue-400
           text-white text-center font-medium rounded-lg
-          flex items-center justify-center space-x-2
+          flex items-center justify-center space-x-1
           transform hover:translate-y-[-2px] hover:shadow-md
           transition-all duration-300
           ${glowEffect ? "shadow-blue-300/50" : ""}
@@ -195,10 +167,8 @@ const TelegramLinkButton = () => {
             `}
                 ></span>
               </span>
-
               <span className="relative z-10">Buka Telegram Bot</span>
-
-             
+              <ArrowRight className="w-5 h-5 flex-shrink-0" />
             </a>
           </div>
         </div>
