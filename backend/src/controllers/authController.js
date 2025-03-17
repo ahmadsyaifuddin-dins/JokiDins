@@ -264,6 +264,7 @@ exports.googleLogin = async (req, res) => {
     });
     const payload = ticket.getPayload();
     const { email, name, picture } = payload;
+    const googleId = payload.sub; // Ambil googleId dari payload
 
     let user = await User.findOne({ email });
     let isNewUser = false;
@@ -277,6 +278,9 @@ exports.googleLogin = async (req, res) => {
         avatar: picture,
         isVerified: true,
         role: "user",
+        // Jika ada picture, berarti login lewat Google, kalau gak ada, dianggap manual
+        loginMethod: "google", 
+        googleId: picture ? googleId : null,
       });
       await user.save();
 
@@ -301,6 +305,8 @@ exports.googleLogin = async (req, res) => {
         role: user.role,
         isVerified: user.isVerified,
         phones: user.phones,
+        loginMethod: user.loginMethod,
+        googleId: user.googleId,
         isNewUser,
       },
     });
@@ -308,3 +314,4 @@ exports.googleLogin = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+

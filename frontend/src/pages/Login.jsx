@@ -29,7 +29,6 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
 
-      showSuccess("Login berhasil!");
       setTimeout(() => {
         navigate(user.role === "admin" ? "/admin/dashboard" : "/profile");
       }, 1000);
