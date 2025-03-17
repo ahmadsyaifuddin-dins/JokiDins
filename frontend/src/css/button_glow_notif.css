@@ -1,0 +1,21 @@
+.glow-confirm-button {
+    background-color: #3085d6 !important;
+    border: none;
+    box-shadow: 0 0 32px #3085d6;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .glow-confirm-button:hover {
+    box-shadow: 0 0 50px #3085d6;
+  }
+  
+  .glow-cancel-button {
+    background-color: #d33 !important;
+    border: none;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .glow-cancel-button:hover {
+    box-shadow: 0 0 12px #d33;
+  }
+  

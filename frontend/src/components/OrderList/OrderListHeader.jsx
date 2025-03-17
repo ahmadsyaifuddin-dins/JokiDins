@@ -83,15 +83,6 @@ const OrderListHeader = ({
           </div>
         </div>
       </div>
-      <div className="p-4">
-        <button
-          onClick={() => navigate("/create-order")}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm flex items-center"
-        >
-          <PlusCircle className="h-5 w-5 mr-2" />
-          Buat Pesanan Baru
-        </button>
-      </div>
     </div>
   );
 };

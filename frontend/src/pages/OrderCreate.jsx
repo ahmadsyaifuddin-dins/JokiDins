@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import '../css/button_glow_notif.css';
+import Swal from 'sweetalert2';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
@@ -6,9 +8,7 @@ import {
   Check,
   FileText,
   Calendar,
-  ArrowLeft,
   Send,
-  MessageSquare
 } from "lucide-react";
 import { Toaster, toast } from "react-hot-toast";
 import OrderHeader from "../components/orderCreate/OrderCreateHeader";
@@ -149,15 +149,24 @@ const OrderCreate = () => {
     if (!isTelegramLinked) {
       const linked = await checkTelegramStatus();
       if (!linked) {
-        const confirmSubmit = window.confirm(
-          "Kamu belum menghubungkan Telegram. Lanjutkan order tanpa notifikasi Telegram?"
-        );
-        if (!confirmSubmit) return;
+        const confirmSubmit = await Swal.fire({
+          title: "Kamu belum menghubungkan Telegram!",
+          text: "Lanjutkan order tanpa notifikasi Telegram?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Ya, lanjutkan",
+          cancelButtonText: "Batal",
+          customClass: {
+            confirmButton: "glow-confirm-button",
+            cancelButton: "glow-cancel-button"
+          }
+        });
+        if (!confirmSubmit.isConfirmed) return;
       } else {
         setIsTelegramLinked(true);
       }
     }
-
+    
     setIsLoading(true);
 
     const formData = new FormData();

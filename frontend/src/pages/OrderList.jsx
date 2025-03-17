@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Package, PlusCircle, Clock, RefreshCw, CheckCircle, AlertCircle } from "lucide-react";
+import { Package, PlusCircle, Clock, RefreshCw, CheckCircle, AlertCircle, FilePlus2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import OrderListSkeleton from "../loader/OrderListSkeleton";
@@ -159,7 +159,7 @@ const OrderList = () => {
             onClick={() => navigate("/create-order")}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm flex items-center"
           >
-            <PlusCircle className="h-5 w-5 mr-2" />
+            <FilePlus2 className="h-5 w-5 mr-2" />
             Buat Pesanan Baru
           </button>
         </div>
