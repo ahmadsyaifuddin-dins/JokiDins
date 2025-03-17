@@ -2,15 +2,24 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../utils/auth";
-import { User, LogOut, Mail, Users, Cake, Clock, Phone, Edit, Camera } from "lucide-react";
+import {
+  User,
+  LogOut,
+  Mail,
+  Users,
+  Cake,
+  Clock,
+  Phone,
+  Edit,
+  Camera,
+  Key,
+  MessageSquare,
+} from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import ProfileSkeleton from "../loader/ProfileSkeleton";
 
 const Profile = () => {
-  // Ambil user dari context
   const { user: contextUser } = useContext(AuthContext);
-  
-  // State profile diambil dari server
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -20,11 +29,12 @@ const Profile = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          "https://jokidins-production.up.railway.app/api/user/profile",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setProfile(res.data);
       } catch (error) {
         console.error("Gagal ambil data profile:", error);
@@ -44,7 +54,7 @@ const Profile = () => {
         <div className="bg-orange-50 text-orange-700 p-6 rounded-lg shadow-md max-w-md">
           <h3 className="text-xl font-semibold mb-2">Akses Terbatas</h3>
           <p>Silakan login terlebih dahulu untuk melihat profil Anda.</p>
-          <button 
+          <button
             onClick={() => navigate("/login")}
             className="mt-4 bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
           >
@@ -67,9 +77,17 @@ const Profile = () => {
           {/* Header Background with Pattern */}
           <div className="relative h-48 bg-gradient-to-r from-blue-800 to-indigo-900 overflow-hidden">
             <div className="absolute inset-0 opacity-20">
-              <svg className="h-full w-full" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                className="h-full w-full"
+                viewBox="0 0 800 400"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path d="M0 0h800v400H0z" fill="none" />
-                <path d="M800 400V0H0v400h800ZM90 310a50 50 0 0 0 0-100 50 50 0 0 0 0 100Zm290-30a50 50 0 0 0 0-100 50 50 0 0 0 0 100Zm290-40a50 50 0 0 0 0-100 50 50 0 0 0 0 100Z" fill="currentColor" fillOpacity=".1" />
+                <path
+                  d="M800 400V0H0v400h800ZM90 310a50 50 0 0 0 0-100 50 50 0 0 0 0 100Zm290-30a50 50 0 0 0 0-100 50 50 0 0 0 0 100Zm290-40a50 50 0 0 0 0-100 50 50 0 0 0 0 100Z"
+                  fill="currentColor"
+                  fillOpacity=".1"
+                />
               </svg>
             </div>
 
@@ -109,9 +127,7 @@ const Profile = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Email */}
               <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                <div className="bg-blue-100 p-3 rounded-lg">
-                  <Mail className="w-6 h-6 text-blue-700" />
-                </div>
+                <Mail className="w-6 h-6 text-blue-700" />
                 <div className="truncate">
                   <p className="text-sm font-medium text-blue-700">Email</p>
                   <p className="text-gray-700 font-medium truncate max-w-[250px]">
@@ -122,11 +138,11 @@ const Profile = () => {
 
               {/* Join Date */}
               <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                <div className="bg-indigo-100 p-3 rounded-lg">
-                  <Clock className="w-6 h-6 text-indigo-700" />
-                </div>
+                <Clock className="w-6 h-6 text-indigo-700" />
                 <div>
-                  <p className="text-sm font-medium text-indigo-700">Bergabung sejak</p>
+                  <p className="text-sm font-medium text-indigo-700">
+                    Bergabung sejak
+                  </p>
                   <p className="text-gray-700 font-medium">
                     {new Date(profile.createdAt).toLocaleDateString("id-ID", {
                       year: "numeric",
@@ -144,10 +160,15 @@ const Profile = () => {
                     <Phone className="w-6 h-6 text-purple-700" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-purple-700">Nomor HP Tersimpan</p>
+                    <p className="text-sm font-medium text-purple-700">
+                      Nomor HP Tersimpan
+                    </p>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {profile.phones.map((p, i) => (
-                        <span key={i} className="inline-flex items-center px-3 py-1 bg-purple-50 text-purple-800 rounded-full text-sm">
+                        <span
+                          key={i}
+                          className="inline-flex items-center px-3 py-1 bg-purple-50 text-purple-800 rounded-full text-sm"
+                        >
                           {p}
                         </span>
                       ))}
@@ -156,14 +177,53 @@ const Profile = () => {
                 </div>
               )}
 
+              {/* Email Terverifikasi */}
+              <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
+                <Mail className="w-6 h-6 text-green-700" />
+                <div>
+                  <p className="text-sm font-medium text-green-700">
+                    Email Terverifikasi
+                  </p>
+                  <p className="text-gray-700 font-medium">
+                    {profile.isVerified ? "Sudah" : "Belum"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Terhubung ke Telegram */}
+              <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
+                <MessageSquare className="w-6 h-6 text-blue-700" />
+                <div>
+                  <p className="text-sm font-medium text-blue-700">
+                    Terhubung ke Telegram
+                  </p>
+                  <p className="text-gray-700 font-medium">
+                    {profile.telegramChatId ? "Sudah" : "Belum"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Metode Login */}
+              <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
+                <Key className="w-6 h-6 text-indigo-700" />
+                <div>
+                  <p className="text-sm font-medium text-indigo-700">
+                    Metode Login
+                  </p>
+                  <p className="text-gray-700 font-medium capitalize">
+                    {profile.loginMethod}
+                  </p>
+                </div>
+              </div>
+
               {/* Gender */}
               {profile.gender && (
                 <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                  <div className="bg-teal-100 p-3 rounded-lg">
-                    <Users className="w-6 h-6 text-teal-700" />
-                  </div>
+                  <Users className="w-6 h-6 text-teal-700" />
                   <div>
-                    <p className="text-sm font-medium text-teal-700">Jenis Kelamin</p>
+                    <p className="text-sm font-medium text-teal-700">
+                      Jenis Kelamin
+                    </p>
                     <p className="text-gray-700 font-medium">{profile.gender}</p>
                   </div>
                 </div>
@@ -176,7 +236,9 @@ const Profile = () => {
                     <Cake className="w-6 h-6 text-pink-700" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-pink-700">Tanggal Lahir</p>
+                    <p className="text-sm font-medium text-pink-700">
+                      Tanggal Lahir
+                    </p>
                     <p className="text-gray-700 font-medium">
                       {new Date(profile.birthday).toLocaleDateString("id-ID", {
                         year: "numeric",
@@ -213,16 +275,7 @@ const Profile = () => {
         </div>
 
         {/* Additional Content or Stats (Optional) */}
-        {/* <div className="grid grid-cols-2 gap-6 mt-8">
-          <div className="bg-white rounded-xl shadow-md p-6 text-center transform transition-all duration-300 hover:shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-800">0</h3>
-            <p className="text-gray-500 mt-1">Pesanan Aktif</p>
-          </div>
-          <div className="bg-white rounded-xl shadow-md p-6 text-center transform transition-all duration-300 hover:shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-800">0</h3>
-            <p className="text-gray-500 mt-1">Riwayat Pesanan</p>
-          </div>
-        </div> */}
+        {/* ... */}
       </div>
     </div>
   );

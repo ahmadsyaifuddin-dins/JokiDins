@@ -252,14 +252,14 @@ const AdminUserDetail = () => {
                   <span className="font-medium text-gray-700">Metode Login</span>
                 </div>
                 <div className="pl-2 border-l-2 border-indigo-200">
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 capitalize">
-                    {userDetail.loginMethod || "Email/Password"}
-                    {userDetail.googleId && (
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 ml-2">
-                        Google ID: {userDetail.googleId}
-                      </span>
-                    )}       
-                  </span>
+                  <div className="px-3 py-1 rounded-full text-xs font-medium w-fit bg-indigo-100 text-indigo-800 capitalize">
+                    {userDetail.loginMethod || "Manual"}
+                  </div>
+                  {userDetail.googleId && (
+                    <p className="mt-2 text-gray-600 text-sm">
+                      Google ID: {userDetail.googleId}
+                    </p>
+                  )}
                 </div>
               </div>
 
