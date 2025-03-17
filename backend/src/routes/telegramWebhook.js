@@ -28,7 +28,7 @@ router.post("/webhook", async (req, res) => {
 
             // Buat pesan selamat datang yang personal dan informatif
             const userName = user.name || "User";
-            const welcomeText = `Halo ${userName}! Akun Telegram kamu sudah terhubung.
+            const welcomeText = `Halo ${userName}! Akun Telegram kamu sudah terhubung👍.
 Mulai sekarang, kamu akan menerima notifikasi real-time tentang order dan update penting.
 Ketik /help untuk melihat daftar perintah yang tersedia.`;
 
