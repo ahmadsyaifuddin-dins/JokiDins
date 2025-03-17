@@ -246,9 +246,11 @@ router.put("/:id", protect, upload.single("file"), async (req, res) => {
     if (orderOwner && orderOwner.telegramChatId) {
       let statusMessage = "";
       if (newStatus === "processing") {
-        statusMessage = `Halo ${orderOwner.name}, order *${order.service}* kamu *sedang dikerjakan*. Santai aja, kami lagi bekerja keras buat kamu!`;
+        statusMessage = `Halo ${orderOwner.name}, order Joki *${order.service}* kamu *sedang dikerjakan🚀*. Santai aja, kami lagi bekerja keras buat kamu!`;
       } else if (newStatus === "completed") {
-        statusMessage = `Selamat ${orderOwner.name}, order *${order.service}* kamu sudah *selesai!* Silakan cek hasilnya.`;
+        statusMessage = `Selamat ${orderOwner.name}, order Joki *${order.service}* kamu sudah *selesai!🥳* Silakan cek hasilnya.`;
+      } else if (newStatus === "canceled") {
+        statusMessage = `Maaf ${orderOwner.name}, order Joki *${order.service}* kamu *dibatalkan😥*. Cek kembali order kamu ya!`;
       }
 
       if (statusMessage) {
