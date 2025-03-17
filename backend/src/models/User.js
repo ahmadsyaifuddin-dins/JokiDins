@@ -49,7 +49,7 @@ const UserSchema = new mongoose.Schema({
     type: String 
   },
 
-  loginMethod: { type: String, enum: ["google", "manual"], default: "google" },
+  loginMethod: { type: String, enum: ["google", "manual"], default: "manual" },
 
   googleId: { type: String, default: null }
 
