@@ -17,10 +17,9 @@ import {
 } from "lucide-react";
 import { formatDateDisplay, formatDeadlineDisplay } from "../utils/orderUtils";
 import Swal from "sweetalert2";
-import useToast from "../hooks/useToast";
+import toast from "react-hot-toast";
 
 const OrderDetail = () => {
-  const { showSuccess, showError } = useToast();
   const { id: orderId } = useParams();
   const navigate = useNavigate();
   
@@ -83,11 +82,11 @@ const OrderDetail = () => {
         { status: selectedStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      showSuccess("Status pesanan berhasil diperbarui");
+      toast.success("Status pesanan berhasil diperbarui");
       fetchOrderDetail();
     } catch (err) {
       console.error("Error updating status:", err);
-      showError("Gagal memperbarui status pesanan");
+      toast.error("Gagal memperbarui status pesanan");
     }
   };
 
@@ -109,11 +108,11 @@ const OrderDetail = () => {
       await axios.delete(`https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      showSuccess("Pesanan berhasil dihapus.");
+      toast.success("Pesanan berhasil dihapus.");
       navigate("/admin/dashboard");
     } catch (err) {
       console.error("Error deleting order:", err);
-      showError("Gagal menghapus pesanan.");
+      toast.erorr("Gagal menghapus pesanan.");
     }
   };
 

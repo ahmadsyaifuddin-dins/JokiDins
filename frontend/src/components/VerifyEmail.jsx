@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import useToast from "../hooks/useToast";
+import useToast from "../hooks/useToastCustomize";
 
 const VerifyEmail = () => {
   const [verificationCode, setVerificationCode] = useState("");
@@ -128,8 +127,6 @@ const VerifyEmail = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-100 p-4">
-      <Toaster position="top-center" reverseOrder={false} />
-
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
         <div className="bg-blue-900 p-6">
           <div className="flex justify-center mb-4">

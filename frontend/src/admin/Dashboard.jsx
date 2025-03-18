@@ -14,10 +14,10 @@ import {
   getStatusLabel,
 } from "../admin/utils/dashboardUtils";
 import Swal from "sweetalert2";
-import useToast from "../hooks/useToast";
+import useToast from "../hooks/useToastCustomize";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
-  const { showSuccess, showError } = useToast();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -95,11 +95,11 @@ const Dashboard = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      showSuccess("Order berhasil dihapus");
+      toast.success("Order berhasil dihapus");
       fetchOrders();
     } catch (err) {
       console.error("Error deleting order:", err);
-      showError("Gagal menghapus order");
+      toast.error("Gagal menghapus order");
     }
   };
 

@@ -4,9 +4,8 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { FaUser, FaEnvelope, FaLock, FaUserPlus } from "react-icons/fa";
-import { Toaster } from "react-hot-toast";
 import GoogleSignIn from "../components/GoogleSignIn";
-import useToast from "../hooks/useToast";
+import useToast from "../hooks/useToastCustomize";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -54,9 +53,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-indigo-100 to-purple-100 p-4">
-      <Toaster position="top-center" reverseOrder={false} />
-      
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-indigo-100 to-purple-100 p-4">      
       <div className="w-full max-w-md bg-white rounded-lg shadow-xl overflow-hidden">
         <div className="bg-blue-900 py-6 px-6">
           <h2 className="text-2xl font-bold text-white text-center">Buat Akun Baru</h2>

@@ -10,7 +10,7 @@ import {
   Calendar,
   Send,
 } from "lucide-react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import OrderHeader from "../components/orderCreate/OrderCreateHeader";
 import PhoneInput from "../components/orderCreate/PhoneInput";
 import TelegramLinkButton from "../components/TelegramLinkButton";
@@ -215,19 +215,6 @@ const OrderCreate = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          className: "text-sm font-medium",
-          duration: 3000,
-          style: {
-            background: "#ffffff",
-            color: "#333333",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-            borderRadius: "0.5rem",
-          },
-        }}
-      />
       <div className="max-w-2xl mx-auto p-4">
         {/* Tampilkan card notifikasi Telegram jika belum terhubung */}
         {!isCheckingTelegram && !isTelegramLinked && (

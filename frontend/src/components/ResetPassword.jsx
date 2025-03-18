@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import useToast from "../hooks/useToast";
+import useToast from "../hooks/useToastCustomize";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -108,7 +107,6 @@ const ResetPassword = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Toaster position="top-center" reverseOrder={false} />
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-blue-900 mb-2">Reset Password</h2>

@@ -1,4 +1,4 @@
-// src/hooks/useToast.js
+// src/hooks/useToast.js Customized toast
 import toast from "react-hot-toast";
 
 const useToast = () => {

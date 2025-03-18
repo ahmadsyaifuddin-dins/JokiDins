@@ -5,14 +5,13 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import GoogleSignIn from "../components/GoogleSignIn";
 import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa";
-import { Toaster } from "react-hot-toast";
-import useToast from "../hooks/useToast";
+import useToast from "../hooks/useToastCustomize";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { showSuccess, showError } = useToast();
+  const { showError } = useToast();
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
 
@@ -51,9 +50,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-100 to-indigo-100 p-4">
-      <Toaster position="top-center" reverseOrder={false} />
-      
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-100 to-indigo-100 p-4">      
       <div className="w-full max-w-md bg-white rounded-lg shadow-xl overflow-hidden">
         <div className="bg-blue-900 py-4 px-6">
           <h2 className="text-2xl font-bold text-white text-center">Selamat Datang</h2>

@@ -32,8 +32,20 @@ const App = () => {
     <Router>
       <div className="min-h-screen flex flex-col bg-slate-950">
         <Navbar />
-        {/* <Toaster /> */}
-        <main className="flex-grow mt-5">
+        <Toaster 
+        position="top-right"
+        toastOptions={{
+          className: "text-sm font-medium",
+          duration: 3000,
+          style: {
+            background: "#ffffff",
+            color: "#333333",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+            borderRadius: "0.5rem"
+          }
+        }}
+        />
+          <main className="flex-grow mt-5">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/order" element={<OrderJoki />} />

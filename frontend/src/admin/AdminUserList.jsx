@@ -3,11 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 // Import custom hook buat toast
-import useToast from "../hooks/useToast";
+import toast from "react-hot-toast";
 
 const AdminUserList = () => {
-  // Destructure showSuccess dan showError dari useToast
-  const { showSuccess, showError } = useToast();
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -106,11 +104,11 @@ const AdminUserList = () => {
         }
       );
       // Gunakan toast dari custom hook
-      showSuccess("Akun pengguna berhasil dihapus.");
+      toast.success("Akun pengguna berhasil dihapus.");
       fetchUsers();
     } catch (err) {
       console.error("Gagal menghapus user:", err);
-      showError("Gagal menghapus user.");
+      toast.error("Gagal menghapus user.");
     }
   };
 

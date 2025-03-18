@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Check } from 'lucide-react';
-import { ErrorIcon, Toaster, toast,  } from 'react-hot-toast';
+import { ArrowLeft } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import OrderEditSkeleton from '../loader/OrderEditSkeleton';
 
 const OrderEdit = () => {
@@ -96,19 +96,6 @@ const OrderEdit = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <Toaster 
-        position="top-right"
-        toastOptions={{
-          className: "text-sm font-medium",
-          duration: 3000,
-          style: {
-            background: "#ffffff",
-            color: "#333333",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-            borderRadius: "0.5rem"
-          }
-        }}
-      />
       <div className="max-w-2xl mx-auto p-4">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           {/* Header dengan gradient */}

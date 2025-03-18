@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, User, Mail, Phone, Lock, Save, Trash, Edit, ChevronDown, ChevronUp } from "lucide-react";
+import toast from "react-hot-toast";
 
 const UpdateProfile = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -64,11 +65,12 @@ const UpdateProfile = () => {
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
       
-      showNotification("Nomor telepon berhasil dihapus!", "success");
+      toast.success("Nomor telepon berhasil dihapus!", {
+      });
     } catch (error) {
       console.error("Error removing phone:", error);
-      showNotification("Gagal menghapus nomor telepon.", "error");
-      
+      toast.error("Gagal menghapus nomor telepon.", {
+      });
       // Revert the local state if the server update failed
       setSavedPhones(user?.phones || []);
     } finally {
@@ -108,7 +110,7 @@ const UpdateProfile = () => {
       setUser(updatedUser);
       
       // Show success notification instead of alert
-      showNotification("Profile berhasil diupdate!", "success");
+      toast.success("Profile berhasil diupdate!", "success");
       
       setTimeout(() => {
         navigate("/profile");
@@ -119,32 +121,6 @@ const UpdateProfile = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const showNotification = (message, type) => {
-    const notification = document.createElement("div");
-    notification.className = `fixed top-16 right-4 p-4 rounded-lg shadow-lg flex items-center ${
-      type === "success" ? "bg-green-500" : "bg-red-500"
-    } text-white max-w-xs animate-fade-in-slide`;
-    
-    notification.innerHTML = `
-      <div class="mr-3">
-        ${type === "success" ? 
-          '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : 
-          '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>'
-        }
-      </div>
-      <p>${message}</p>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.classList.add("animate-fade-out-slide");
-      setTimeout(() => {
-        document.body.removeChild(notification);
-      }, 500);
-    }, 3000);
   };
 
   return (
