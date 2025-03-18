@@ -32,7 +32,7 @@ const App = () => {
     <Router>
       <div className="min-h-screen flex flex-col bg-slate-950">
         <Navbar />
-        <Toaster />
+        {/* <Toaster /> */}
         <main className="flex-grow mt-5">
           <Routes>
             <Route path="/" element={<Home />} />

@@ -165,26 +165,25 @@ const updateOrder = async (req, res) => {
 
     const updatedOrder = await order.save();
 
-    let orderOwner = req.user;
+    // Hanya kirim notifikasi jika yang update adalah admin
     if (req.user.role === "admin") {
-      orderOwner = await User.findById(order.user);
-    }
+      let orderOwner = await User.findById(order.user);
+      if (orderOwner && orderOwner.telegramChatId) {
+        let statusMessage = "";
+        if (newStatus === "processing") {
+          statusMessage = `Halo ${orderOwner.name}, order Joki *${order.service}* kamu *sedang dikerjakan🚀*. Santai aja, kami lagi bekerja keras buat kamu!`;
+        } else if (newStatus === "completed") {
+          statusMessage = `Selamat ${orderOwner.name}, order Joki *${order.service}* kamu sudah *selesai!🥳* Silakan cek hasilnya.`;
+        } else if (newStatus === "cancelled") {
+          statusMessage = `Maaf ${orderOwner.name}, order Joki *${order.service}* kamu *dibatalkan😥*. Cek kembali order kamu ya!`;
+        }
 
-    if (orderOwner && orderOwner.telegramChatId) {
-      let statusMessage = "";
-      if (newStatus === "processing") {
-        statusMessage = `Halo ${orderOwner.name}, order Joki *${order.service}* kamu *sedang dikerjakan🚀*. Santai aja, kami lagi bekerja keras buat kamu!`;
-      } else if (newStatus === "completed") {
-        statusMessage = `Selamat ${orderOwner.name}, order Joki *${order.service}* kamu sudah *selesai!🥳* Silakan cek hasilnya.`;
-      } else if (newStatus === "cancelled") {
-        statusMessage = `Maaf ${orderOwner.name}, order Joki *${order.service}* kamu *dibatalkan😥*. Cek kembali order kamu ya!`;
+        if (statusMessage) {
+          await sendTelegramNotification(orderOwner.telegramChatId, statusMessage, "Markdown");
+        }
+      } else {
+        console.log("User belum menghubungkan akun Telegram.");
       }
-
-      if (statusMessage) {
-        await sendTelegramNotification(orderOwner.telegramChatId, statusMessage, "Markdown");
-      }
-    } else {
-      console.log("User belum menghubungkan akun Telegram.");
     }
 
     res.json(updatedOrder);
