@@ -2,20 +2,20 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { 
-  Mail, 
-  Phone, 
-  User, 
-  Calendar, 
-  Trash, 
-  ArrowLeft, 
-  Check, 
-  X, 
-  Shield, 
-  Clock, 
-  ExternalLink, 
+import {
+  Mail,
+  Phone,
+  User,
+  Calendar,
+  Trash,
+  ArrowLeft,
+  Check,
+  X,
+  Shield,
+  Clock,
+  ExternalLink,
   Send,
-  SendIcon
+  SendIcon,
 } from "lucide-react";
 
 const AdminUserDetail = () => {
@@ -80,7 +80,9 @@ const AdminUserDetail = () => {
       <div className="flex items-center justify-center h-screen bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 font-medium">Memuat detail user...</p>
+          <p className="mt-4 text-gray-600 font-medium">
+            Memuat detail user...
+          </p>
         </div>
       </div>
     );
@@ -117,18 +119,18 @@ const AdminUserDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-5xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col space-y-3 md:flex-row md:space-y-0 md:justify-between mb-6">
           <button
             onClick={() => navigate("/admin/users")}
-            className="text-blue-600 hover:text-blue-800 transition flex items-center space-x-2 font-medium"
+            className="text-blue-600 hover:text-blue-800 transition flex items-center space-x-2 font-medium w-fit self-start"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Kembali ke Daftar Pengguna</span>
           </button>
-          
+
           <button
             onClick={handleDelete}
-            className="bg-red-50 text-red-600 px-4 py-2 rounded-lg hover:bg-red-100 transition flex items-center space-x-2 font-medium border border-red-200"
+            className="bg-red-50 text-red-600 px-4 py-2 rounded-lg hover:bg-red-100 transition flex items-center space-x-2 font-medium border border-red-200 w-fit self-end"
           >
             <Trash className="w-5 h-5" />
             <span>Hapus Akun</span>
@@ -163,7 +165,9 @@ const AdminUserDetail = () => {
           <div className="pt-20 px-8 pb-8">
             <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-8">
               <div>
-                <h1 className="text-3xl font-bold text-gray-800">{userDetail.name}</h1>
+                <h1 className="text-3xl font-bold text-gray-800">
+                  {userDetail.name}
+                </h1>
                 <p className="text-gray-500 mt-1">ID: {userDetail._id}</p>
               </div>
               <div className="mt-4 md:mt-0 flex items-center">
@@ -190,14 +194,23 @@ const AdminUserDetail = () => {
                   {userDetail.email}
                 </p>
                 <div className="mt-4 flex items-center">
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center 
-                    ${userDetail.isVerified 
-                      ? "bg-green-100 text-green-800" 
-                      : "bg-amber-100 text-amber-800"}`}
+                  <div
+                    className={`px-3 py-1 rounded-full text-xs font-medium flex items-center 
+                    ${
+                      userDetail.isVerified
+                        ? "bg-green-100 text-green-800"
+                        : "bg-amber-100 text-amber-800"
+                    }`}
                   >
-                    {userDetail.isVerified 
-                      ? <><Check className="w-3 h-3 mr-1" /> Terverifikasi</> 
-                      : <><X className="w-3 h-3 mr-1" /> Belum Terverifikasi</>}
+                    {userDetail.isVerified ? (
+                      <>
+                        <Check className="w-3 h-3 mr-1" /> Terverifikasi
+                      </>
+                    ) : (
+                      <>
+                        <X className="w-3 h-3 mr-1" /> Belum Terverifikasi
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -226,14 +239,23 @@ const AdminUserDetail = () => {
                   <span className="font-medium text-gray-700">Telegram</span>
                 </div>
                 <div className="pl-2 border-l-2 border-blue-200">
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium inline-flex items-center
-                    ${userDetail.telegramChatId 
-                      ? "bg-green-100 text-green-800" 
-                      : "bg-gray-100 text-gray-800"}`}
+                  <div
+                    className={`px-3 py-1 rounded-full text-xs font-medium inline-flex items-center
+                    ${
+                      userDetail.telegramChatId
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
                   >
-                    {userDetail.telegramChatId 
-                      ? <><Check className="w-3 h-3 mr-1" /> Terhubung</> 
-                      : <><X className="w-3 h-3 mr-1" /> Tidak Terhubung</>}
+                    {userDetail.telegramChatId ? (
+                      <>
+                        <Check className="w-3 h-3 mr-1" /> Terhubung
+                      </>
+                    ) : (
+                      <>
+                        <X className="w-3 h-3 mr-1" /> Tidak Terhubung
+                      </>
+                    )}
                   </div>
                   {userDetail.telegramChatId && (
                     <p className="mt-2 text-gray-600 text-sm">
@@ -249,7 +271,9 @@ const AdminUserDetail = () => {
                   <div className="p-2 bg-indigo-100 rounded-lg">
                     <User className="w-5 h-5 text-indigo-600" />
                   </div>
-                  <span className="font-medium text-gray-700">Metode Login</span>
+                  <span className="font-medium text-gray-700">
+                    Metode Login
+                  </span>
                 </div>
                 <div className="pl-2 border-l-2 border-indigo-200">
                   <div className="px-3 py-1 rounded-full text-xs font-medium w-fit bg-indigo-100 text-indigo-800 capitalize">
@@ -269,7 +293,9 @@ const AdminUserDetail = () => {
                   <div className="p-2 bg-amber-100 rounded-lg">
                     <Calendar className="w-5 h-5 text-amber-600" />
                   </div>
-                  <span className="font-medium text-gray-700">Tanggal Bergabung</span>
+                  <span className="font-medium text-gray-700">
+                    Tanggal Bergabung
+                  </span>
                 </div>
                 <p className="text-gray-800 pl-2 border-l-2 border-amber-200">
                   {formatDate(userDetail.createdAt)}
@@ -283,7 +309,9 @@ const AdminUserDetail = () => {
                     <div className="p-2 bg-green-100 rounded-lg">
                       <Clock className="w-5 h-5 text-green-600" />
                     </div>
-                    <span className="font-medium text-gray-700">Terakhir Diperbarui</span>
+                    <span className="font-medium text-gray-700">
+                      Terakhir Diperbarui
+                    </span>
                   </div>
                   <p className="text-gray-800 pl-2 border-l-2 border-green-200">
                     {formatDate(userDetail.updatedAt)}
