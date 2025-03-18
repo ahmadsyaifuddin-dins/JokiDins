@@ -16,8 +16,11 @@ import {
   Clock4
 } from "lucide-react";
 import { formatDateDisplay, formatDeadlineDisplay } from "../utils/orderUtils";
+import Swal from "sweetalert2";
+import useToast from "../hooks/useToast";
 
 const OrderDetail = () => {
+  const { showSuccess, showError } = useToast();
   const { id: orderId } = useParams();
   const navigate = useNavigate();
   
@@ -68,7 +71,7 @@ const OrderDetail = () => {
       link.remove();
     } catch (err) {
       console.error("Error downloading file:", err);
-      alert("Gagal mengunduh berkas");
+      showError("Gagal mengunduh berkas");
     }
   };
 
@@ -80,26 +83,37 @@ const OrderDetail = () => {
         { status: selectedStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert(`Status pesanan berhasil diperbarui menjadi: ${selectedStatus}`);
+      showSuccess("Status pesanan berhasil diperbarui");
       fetchOrderDetail();
     } catch (err) {
       console.error("Error updating status:", err);
-      alert("Gagal memperbarui status pesanan");
+      showError("Gagal memperbarui status pesanan");
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Apakah Anda yakin ingin menghapus pesanan ini?")) return;
+    const confirmDelete = await Swal.fire({
+      title: "Hapus pesanan?",
+      text: "Anda tidak dapat mengembalikan pesanan ini setelah dihapus!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+    });
+
+    if (!confirmDelete.isConfirmed) return;
+
     const token = localStorage.getItem("token");
     try {
       await axios.delete(`https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert("Pesanan berhasil dihapus!");
+      showSuccess("Pesanan berhasil dihapus.");
       navigate("/admin/dashboard");
     } catch (err) {
       console.error("Error deleting order:", err);
-      alert("Gagal menghapus pesanan");
+      showError("Gagal menghapus pesanan.");
     }
   };
 

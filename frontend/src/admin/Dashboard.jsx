@@ -13,8 +13,11 @@ import {
   getStatusBadgeColor,
   getStatusLabel,
 } from "../admin/utils/dashboardUtils";
+import Swal from "sweetalert2";
+import useToast from "../hooks/useToast";
 
 const Dashboard = () => {
+  const { showSuccess, showError } = useToast();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -74,18 +77,29 @@ const Dashboard = () => {
   };
 
   const handleDelete = async (orderId) => {
-    if (!window.confirm("Yakin ingin menghapus order ini?")) return;
+    const confirmDelete = await Swal.fire({
+      title: "Hapus order?",
+      text: "Anda tidak dapat mengembalikan order ini setelah dihapus!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+    });
+
+    if (!confirmDelete.isConfirmed) return;
+
     const token = localStorage.getItem("token");
     try {
       await axios.delete(`https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      showNotification("Order berhasil dihapus", "success");
+      showSuccess("Order berhasil dihapus");
       fetchOrders();
     } catch (err) {
       console.error("Error deleting order:", err);
-      showNotification("Gagal menghapus order", "error");
+      showError("Gagal menghapus order");
     }
   };
 

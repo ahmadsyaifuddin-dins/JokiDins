@@ -176,7 +176,7 @@ const updateOrder = async (req, res) => {
         statusMessage = `Halo ${orderOwner.name}, order Joki *${order.service}* kamu *sedang dikerjakan🚀*. Santai aja, kami lagi bekerja keras buat kamu!`;
       } else if (newStatus === "completed") {
         statusMessage = `Selamat ${orderOwner.name}, order Joki *${order.service}* kamu sudah *selesai!🥳* Silakan cek hasilnya.`;
-      } else if (newStatus === "canceled") {
+      } else if (newStatus === "cancelled") {
         statusMessage = `Maaf ${orderOwner.name}, order Joki *${order.service}* kamu *dibatalkan😥*. Cek kembali order kamu ya!`;
       }
 
