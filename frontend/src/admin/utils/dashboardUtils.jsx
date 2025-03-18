@@ -93,7 +93,7 @@ export const getStatusLabel = (status) => {
     case "completed":
       return "Selesai";
     case "cancelled":
-      return "Bermasalah";
+      return "Dibatalkan";
     default:
       return "Tidak Diketahui";
   }

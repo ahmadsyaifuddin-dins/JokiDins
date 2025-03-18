@@ -7,7 +7,7 @@ const DashboardFilters = ({ searchTerm, setSearchTerm, filterStatus, setFilterSt
     { value: "pending", label: "Menunggu" },
     { value: "in-progress", label: "Dikerjakan" },
     { value: "completed", label: "Selesai" },
-    { value: "issues", label: "Bermasalah" },
+    { value: "cancelled", label: "Dibatalkan" },
   ];
 
   return (

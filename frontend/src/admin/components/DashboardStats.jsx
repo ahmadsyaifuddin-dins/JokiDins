@@ -44,7 +44,7 @@ const DashboardStats = ({ stats }) => {
       changeType: "positive"
     },
     {
-      title: "Bermasalah",
+      title: "Dibatalkan",
       value: stats.cancelled,
       icon: <AlertTriangle className="w-6 h-6 text-red-600" />,
       color: "bg-red-50 text-red-600 border-red-200",
