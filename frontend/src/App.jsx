@@ -26,13 +26,12 @@ import VerifyEmail from "./components/VerifyEmail";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import { Toaster } from "react-hot-toast";
-import useAxiosInterceptor from "./utils/axiosInterceptor";
+import InterceptorWrapper from "./utils/axiosInterceptor";
 
 const App = () => {
-  useAxiosInterceptor(); // Untuk Ngecek setiap respons API, kalo dapat error 401 (token expired/invalid), langsung logout.
-
   return (
     <Router>
+      <InterceptorWrapper />
       <div className="min-h-screen flex flex-col bg-slate-950">
         <Navbar />
         <Toaster 
@@ -170,6 +169,12 @@ const App = () => {
       </div>
     </Router>
   );
+};
+
+
+const InterceptorWrapper = () => {
+  useAxiosInterceptor();
+  return null;
 };
 
 export default App;
