@@ -26,7 +26,7 @@ import VerifyEmail from "./components/VerifyEmail";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import { Toaster } from "react-hot-toast";
-import InterceptorWrapper from "./utils/axiosInterceptor";
+import useAxiosInterceptor from "./utils/axiosInterceptor";
 
 const App = () => {
   return (
