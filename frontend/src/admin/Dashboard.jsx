@@ -34,9 +34,14 @@ const Dashboard = () => {
 
   const fetchOrders = async () => {
     const token = localStorage.getItem("token");
+    // Kalau token nggak ada, langsung keluar dari fungsi
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
-      const res = await axios.get("https://jokidins-production.up.railway.app/api/orders", {
+      const res = await axios.get("http://localhost:5000/api/orders", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
@@ -48,6 +53,7 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+  
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -63,7 +69,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     try {
       await axios.put(
-        `https://jokidins-production.up.railway.app/api/orders/${orderId}`,
+        `http://localhost:5000/api/orders/${orderId}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -91,7 +97,7 @@ const Dashboard = () => {
 
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
+      await axios.delete(`http://localhost:5000/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

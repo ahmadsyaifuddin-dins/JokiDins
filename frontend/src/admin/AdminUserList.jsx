@@ -28,7 +28,7 @@ const AdminUserList = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "https://jokidins-production.up.railway.app/api/user/users",
+        "http://localhost:5000/api/user/users",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -96,7 +96,7 @@ const AdminUserList = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `https://jokidins-production.up.railway.app/api/user/users/${userId}`,
+        `http://localhost:5000/api/user/users/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

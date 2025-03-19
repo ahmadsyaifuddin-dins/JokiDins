@@ -26,7 +26,7 @@ const Register = () => {
     
     setIsLoading(true);
     try {
-      await axios.post("https://jokidins-production.up.railway.app/api/auth/register", {
+      await axios.post("http://localhost:5000/api/auth/register", {
         name,
         email,
         password,

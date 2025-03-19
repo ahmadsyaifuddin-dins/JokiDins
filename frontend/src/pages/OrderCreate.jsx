@@ -42,7 +42,7 @@ const OrderCreate = () => {
       setIsCheckingTelegram(true);
       const token = localStorage.getItem("token");
       try {
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
+        const res = await axios.get("http://localhost:5000/api/user/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
         // Asumsi field telegramChatId ada di profile
@@ -64,7 +64,7 @@ const OrderCreate = () => {
     const fetchPhones = async () => {
       const token = localStorage.getItem("token");
       try {
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/phones", {
+        const res = await axios.get("http://localhost:5000/api/user/phones", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setSavedPhones(res.data);
@@ -111,7 +111,7 @@ const OrderCreate = () => {
   const checkTelegramStatus = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
+      const res = await axios.get("http://localhost:5000/api/user/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.telegramChatId) {
@@ -181,7 +181,7 @@ const OrderCreate = () => {
     }
 
     try {
-      await axios.post("https://jokidins-production.up.railway.app/api/orders", formData, {
+      await axios.post("http://localhost:5000/api/orders", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

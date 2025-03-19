@@ -26,28 +26,30 @@ import VerifyEmail from "./components/VerifyEmail";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import { Toaster } from "react-hot-toast";
-import useAxiosInterceptor from "./utils/axiosInterceptor";
+import AutoLogoutWrapper from "./hooks/AutoLogoutWrapper";
+import AxiosInterceptorWrapper from "./hooks/AxiosInterceptorWrapper";
 
 const App = () => {
   return (
     <Router>
-      <InterceptorWrapper />
+      <AutoLogoutWrapper />
+      <AxiosInterceptorWrapper />
       <div className="min-h-screen flex flex-col bg-slate-950">
         <Navbar />
-        <Toaster 
-        position="top-right"
-        toastOptions={{
-          className: "text-sm font-medium",
-          duration: 3000,
-          style: {
-            background: "#ffffff",
-            color: "#333333",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-            borderRadius: "0.5rem"
-          }
-        }}
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            className: "text-sm font-medium",
+            duration: 3000,
+            style: {
+              background: "#ffffff",
+              color: "#333333",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+              borderRadius: "0.5rem",
+            },
+          }}
         />
-          <main className="flex-grow mt-5">
+        <main className="flex-grow mt-5">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/order" element={<OrderJoki />} />
@@ -55,9 +57,16 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route
+              path="/admin/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="/admin/profile"
               element={
@@ -90,7 +99,6 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-
             <Route
               path="/login"
               element={
@@ -169,12 +177,6 @@ const App = () => {
       </div>
     </Router>
   );
-};
-
-
-const InterceptorWrapper = () => {
-  useAxiosInterceptor();
-  return null;
 };
 
 export default App;

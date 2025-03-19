@@ -20,7 +20,7 @@ const OrderEdit = () => {
     const fetchOrder = async () => {
       const token = localStorage.getItem('token');
       try {
-        const res = await axios.get(`https://jokidins-production.up.railway.app/api/orders/${id}`, {
+        const res = await axios.get(`http://localhost:5000/api/orders/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const order = res.data;
@@ -49,7 +49,7 @@ const OrderEdit = () => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`https://jokidins-production.up.railway.app/api/orders/${id}`, {
+      await axios.put(`http://localhost:5000/api/orders/${id}`, {
         service,
         description,
         deadline
@@ -73,7 +73,7 @@ const OrderEdit = () => {
     if (!window.confirm("Apakah kamu yakin ingin membatalkan order ini?")) return;
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`https://jokidins-production.up.railway.app/api/orders/${id}`, {
+      await axios.put(`http://localhost:5000/api/orders/${id}`, {
         status: "cancelled"
       }, {
         headers: { Authorization: `Bearer ${token}` }

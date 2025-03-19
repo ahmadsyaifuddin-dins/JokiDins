@@ -19,8 +19,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    console.log("Logout dipanggil"); // cek di console
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
   };
 
   return (
