@@ -36,7 +36,7 @@ const OrderDetail = () => {
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get(`http://localhost:5000/api/orders/${orderId}`, {
+      const res = await axios.get(`https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrder(res.data);
@@ -54,7 +54,7 @@ const OrderDetail = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/orders/${orderId}/file`,
+        `https://jokidins-production.up.railway.app/api/orders/${orderId}/file`,
         {
           headers: { Authorization: `Bearer ${token}` },
           responseType: "blob",
@@ -78,7 +78,7 @@ const OrderDetail = () => {
     const token = localStorage.getItem("token");
     try {
       await axios.put(
-        `http://localhost:5000/api/orders/${orderId}`,
+        `https://jokidins-production.up.railway.app/api/orders/${orderId}`,
         { status: selectedStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -105,7 +105,7 @@ const OrderDetail = () => {
 
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`http://localhost:5000/api/orders/${orderId}`, {
+      await axios.delete(`https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Pesanan berhasil dihapus.");

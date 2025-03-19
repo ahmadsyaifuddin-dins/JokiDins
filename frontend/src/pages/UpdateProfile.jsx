@@ -55,7 +55,7 @@ const UpdateProfile = () => {
       // Send updated phone list to the server
       const token = localStorage.getItem("token");
       const res = await axios.put(
-        "http://localhost:5000/api/user/profile",
+        "https://jokidins-production.up.railway.app/api/user/profile",
         { phones: updatedPhones },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -100,7 +100,7 @@ const UpdateProfile = () => {
       }
 
       const res = await axios.put(
-        "http://localhost:5000/api/user/profile",
+        "https://jokidins-production.up.railway.app/api/user/profile",
         { name, email, phones: updatedPhones, password },
         { headers: { Authorization: `Bearer ${token}` } }
       );
