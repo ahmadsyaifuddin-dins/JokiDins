@@ -294,7 +294,7 @@ exports.googleLogin = async (req, res) => {
         await user.save();
       }
     }
-    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
     res.json({
       token: jwtToken,
       user: {
