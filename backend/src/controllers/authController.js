@@ -77,7 +77,7 @@ exports.verifyEmail = async (req, res) => {
     const welcomeMessage = getWelcomeMessage(user.name);
     await sendEmail(email, "Selamat Datang di JokiDins! 🚀", welcomeMessage);
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
     res.json({
       token,
       user: {
