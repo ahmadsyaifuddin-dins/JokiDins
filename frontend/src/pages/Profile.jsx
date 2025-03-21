@@ -199,9 +199,9 @@ const Profile = () => {
                 <div className="bg-blue-100 p-3 rounded-lg mr-4">
                   <Mail className="w-5 h-5 text-blue-600" />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 truncate">
                   <p className="text-sm font-medium text-gray-500">Email</p>
-                  <p className="text-gray-800 font-medium break-words">
+                  <p className="text-gray-800 font-medium truncate">
                     {profile.email}
                   </p>
                 </div>
