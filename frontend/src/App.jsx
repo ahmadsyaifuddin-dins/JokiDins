@@ -56,7 +56,6 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route
               path="/admin/dashboard"
@@ -119,6 +118,22 @@ const App = () => {
               element={
                 <PublicRoute>
                   <VerifyEmail />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/forgot-password"
+              element={
+                <PublicRoute>
+                  <ForgotPassword />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/reset-password/:token"
+              element={
+                <PublicRoute>
+                  <ResetPassword />
                 </PublicRoute>
               }
             />
