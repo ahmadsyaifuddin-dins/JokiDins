@@ -14,6 +14,11 @@ import {
   Camera,
   Key,
   MessageSquare,
+  Shield,
+  Bell,
+  Calendar,
+  ChevronRight,
+  RefreshCw,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import ProfileSkeleton from "../loader/ProfileSkeleton";
@@ -69,13 +74,22 @@ const Profile = () => {
     return <ProfileSkeleton />;
   }
 
+  // Format tanggal 
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("id-ID", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
   return (
     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8 min-h-screen">
-      <div className="max-w-3xl mx-auto">
-        {/* Profile Card */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
+      <div className="max-w-4xl mx-auto">
+        {/* Profile Header Card */}
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl mb-6">
           {/* Header Background with Pattern */}
-          <div className="relative h-48 bg-gradient-to-r from-blue-800 to-indigo-900 overflow-hidden">
+          <div className="relative h-56 bg-gradient-to-r from-blue-700 via-indigo-800 to-purple-800 overflow-hidden">
             <div className="absolute inset-0 opacity-20">
               <svg
                 className="h-full w-full"
@@ -92,190 +106,247 @@ const Profile = () => {
             </div>
 
             {/* Profile Avatar */}
-            <div className="absolute mt-8 left-1/2 transform -translate-x-1/2">
+            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">
               <div className="relative">
                 {profile.avatar ? (
                   <img
                     src={profile.avatar}
                     alt="Avatar"
-                    className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                    className="w-36 h-36 rounded-full object-cover border-4 border-white shadow-lg"
                   />
                 ) : (
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-4xl font-bold border-4 border-white shadow-lg">
+                  <div className="w-36 h-36 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-5xl font-bold border-4 border-white shadow-lg">
                     {profile.name.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <button className="absolute bottom-0 right-0 bg-blue-600 p-2 rounded-full text-white shadow-md hover:bg-blue-700 transition-all">
-                  <Camera className="w-4 h-4" />
+                <button className="absolute bottom-0 right-0 bg-blue-600 p-2.5 rounded-full text-white shadow-md hover:bg-blue-700 transition-all">
+                  <Camera className="w-5 h-5" />
                 </button>
+              </div>
+            </div>
+
+            {/* Quick Status Badges */}
+            <div className="absolute top-4 right-4 flex space-x-2">
+              <div className={`px-3 py-1.5 rounded-full text-xs font-medium shadow-md ${profile.isVerified ? "bg-green-500 text-white" : "bg-amber-400 text-white"}`}>
+                {profile.isVerified ? "Terverifikasi" : "Belum Terverifikasi"}
               </div>
             </div>
           </div>
 
-          {/* User Name & Role */}
-          <div className="pt-20 px-8 text-center">
+          {/* User Name & Basic Info */}
+          <div className=" pt-8 pb-4 px-8 text-center">
             <h2 className="text-3xl font-bold text-gray-800">{profile.name}</h2>
-            <div className="mt-1 inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-              <span className="capitalize">
-                {profile.role === "user" ? "Customer" : profile.role}
-              </span>
+            <p className="mt-1 text-gray-500 text-sm">
+              Bergabung {formatDate(profile.createdAt)}
+            </p>
+            
+            {/* User Status Overview */}
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg">
+                <Mail className="w-6 h-6 text-blue-600 mb-1" />
+                <span className="text-xs font-medium text-blue-600">Email</span>
+                <span className="text-gray-700 text-sm font-semibold">
+                  {profile.isVerified ? "Terverifikasi" : "Belum"}
+                </span>
+              </div>
+              
+              <div className="flex flex-col items-center p-3 bg-purple-50 rounded-lg">
+                <MessageSquare className="w-6 h-6 text-purple-600 mb-1" />
+                <span className="text-xs font-medium text-purple-600">Telegram</span>
+                <span className="text-gray-700 text-sm font-semibold">
+                  {profile.telegramChatId ? "Terhubung" : "Belum"}
+                </span>
+              </div>
+              
+              <div className="flex flex-col items-center p-3 bg-amber-50 rounded-lg">
+                <Phone className="w-6 h-6 text-amber-600 mb-1" />
+                <span className="text-xs font-medium text-amber-600">Nomor HP</span>
+                <span className="text-gray-700 text-sm font-semibold">
+                  {profile.phones?.length || 0} Tersimpan
+                </span>
+              </div>
+              
+              <div className="flex flex-col items-center p-3 bg-emerald-50 rounded-lg">
+                <Key className="w-6 h-6 text-emerald-600 mb-1" />
+                <span className="text-xs font-medium text-emerald-600">Login Via</span>
+                <span className="text-gray-700 text-sm font-semibold capitalize">
+                  {profile.loginMethod}
+                </span>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Profile Details */}
-          <div className="px-8 py-8 mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Profile Details Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Personal Information */}
+          <div className="md:col-span-2 bg-white rounded-xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-xl font-bold text-gray-800 flex items-center">
+                <User className="w-5 h-5 mr-2 text-blue-600" />
+                Informasi Pribadi
+              </h3>
+              <button 
+                onClick={() => navigate("/update-profile")}
+                className="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                <Edit className="w-4 h-4 mr-1" />
+                Edit
+              </button>
+            </div>
+            
+            <div className="space-y-4">
               {/* Email */}
-              <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                <Mail className="w-6 h-6 text-blue-700" />
-                <div className="truncate">
-                  <p className="text-sm font-medium text-blue-700">Email</p>
-                  <p className="text-gray-700 font-medium truncate max-w-[250px]">
+              <div className="flex items-start border-b border-gray-100 pb-4">
+                <div className="bg-blue-100 p-3 rounded-lg mr-4">
+                  <Mail className="w-5 h-5 text-blue-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-500">Email</p>
+                  <p className="text-gray-800 font-medium break-words">
                     {profile.email}
                   </p>
                 </div>
               </div>
-
-              {/* Join Date */}
-              <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                <Clock className="w-6 h-6 text-indigo-700" />
-                <div>
-                  <p className="text-sm font-medium text-indigo-700">
-                    Bergabung sejak
-                  </p>
-                  <p className="text-gray-700 font-medium">
-                    {new Date(profile.createdAt).toLocaleDateString("id-ID", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
+              
+              {/* Phone Numbers */}
+              <div className="flex items-start border-b border-gray-100 pb-4">
+                <div className="bg-amber-100 p-3 rounded-lg mr-4">
+                  <Phone className="w-5 h-5 text-amber-600" />
                 </div>
-              </div>
-
-              {/* Saved Phone Numbers */}
-              {profile.phones && profile.phones.length > 0 && (
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md md:col-span-2">
-                  <div className="bg-purple-100 p-3 rounded-lg">
-                    <Phone className="w-6 h-6 text-purple-700" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-purple-700">
-                      Nomor HP Tersimpan
-                    </p>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-500">Nomor HP Tersimpan</p>
+                  {profile.phones && profile.phones.length > 0 ? (
                     <div className="flex flex-wrap gap-2 mt-1">
                       {profile.phones.map((p, i) => (
                         <span
                           key={i}
-                          className="inline-flex items-center px-3 py-1 bg-purple-50 text-purple-800 rounded-full text-sm"
+                          className="inline-flex items-center px-3 py-1 bg-amber-50 text-amber-800 rounded-full text-sm"
                         >
                           {p}
                         </span>
                       ))}
                     </div>
-                  </div>
+                  ) : (
+                    <p className="text-gray-500 italic text-sm">Belum ada nomor HP tersimpan</p>
+                  )}
                 </div>
-              )}
-
-              {/* Email Terverifikasi */}
-              <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                <Mail className="w-6 h-6 text-green-700" />
-                <div>
-                  <p className="text-sm font-medium text-green-700">
-                    Email Terverifikasi
-                  </p>
-                  <p className="text-gray-700 font-medium">
-                    {profile.isVerified ? "Sudah" : "Belum"}
+              </div>
+              
+              {/* Gender */}
+              <div className="flex items-start border-b border-gray-100 pb-4">
+                <div className="bg-purple-100 p-3 rounded-lg mr-4">
+                  <Users className="w-5 h-5 text-purple-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-500">Jenis Kelamin</p>
+                  <p className="text-gray-800 font-medium">
+                    {profile.gender || "Belum disetel"}
                   </p>
                 </div>
               </div>
-
-              {/* Terhubung ke Telegram */}
-              <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                <MessageSquare className="w-6 h-6 text-blue-700" />
-                <div>
-                  <p className="text-sm font-medium text-blue-700">
-                    Terhubung ke Telegram
-                  </p>
-                  <p className="text-gray-700 font-medium">
-                    {profile.telegramChatId ? "Sudah" : "Belum"}
+              
+              {/* Birthday */}
+              <div className="flex items-start">
+                <div className="bg-pink-100 p-3 rounded-lg mr-4">
+                  <Cake className="w-5 h-5 text-pink-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-500">Tanggal Lahir</p>
+                  <p className="text-gray-800 font-medium">
+                    {profile.birthday ? formatDate(profile.birthday) : "Belum disetel"}
                   </p>
                 </div>
               </div>
-
-              {/* Metode Login */}
-              <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                <Key className="w-6 h-6 text-indigo-700" />
+            </div>
+          </div>
+          
+          {/* Account Information */}
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h3 className="text-xl font-bold text-gray-800 flex items-center mb-5">
+              <Shield className="w-5 h-5 mr-2 text-indigo-600" />
+              Informasi Akun
+            </h3>
+            
+            <div className="space-y-4">
+              {/* Account Type */}
+              <div className="flex justify-between items-center py-3 border-b border-gray-100">
                 <div>
-                  <p className="text-sm font-medium text-indigo-700">
-                    Metode Login
+                  <p className="text-sm text-gray-500">Tipe Akun</p>
+                  <p className="font-medium capitalize">
+                    {profile.role === "user" ? "Customer" : profile.role}
                   </p>
-                  <p className="text-gray-700 font-medium capitalize">
+                </div>
+                <div className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-1 rounded-full">
+                  Aktif
+                </div>
+              </div>
+              
+              {/* Login Method */}
+              <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                <div>
+                  <p className="text-sm text-gray-500">Metode Login</p>
+                  <p className="font-medium capitalize">
                     {profile.loginMethod}
                   </p>
                 </div>
+                <ChevronRight className="w-4 h-4 text-gray-400" />
               </div>
-
-              {/* Gender */}
-              {profile.gender && (
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                  <Users className="w-6 h-6 text-teal-700" />
-                  <div>
-                    <p className="text-sm font-medium text-teal-700">
-                      Jenis Kelamin
-                    </p>
-                    <p className="text-gray-700 font-medium">{profile.gender}</p>
-                  </div>
+              
+              {/* Joined Date */}
+              <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                <div>
+                  <p className="text-sm text-gray-500">Bergabung Sejak</p>
+                  <p className="font-medium">
+                    {formatDate(profile.createdAt)}
+                  </p>
                 </div>
-              )}
-
-              {/* Birthday */}
-              {profile.birthday && (
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                  <div className="bg-pink-100 p-3 rounded-lg">
-                    <Cake className="w-6 h-6 text-pink-700" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-pink-700">
-                      Tanggal Lahir
-                    </p>
-                    <p className="text-gray-700 font-medium">
-                      {new Date(profile.birthday).toLocaleDateString("id-ID", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </p>
-                  </div>
+                <Calendar className="w-5 h-5 text-gray-400" />
+              </div>
+              
+              {/* Telegram Connection */}
+              <div className="flex justify-between items-center py-3">
+                <div>
+                  <p className="text-sm text-gray-500">Terhubung ke Telegram</p>
+                  <p className="font-medium">
+                    {profile.telegramChatId ? "Sudah Terhubung" : "Belum Terhubung"}
+                  </p>
                 </div>
-              )}
+                <div className={`rounded-full h-3 w-3 ${profile.telegramChatId ? "bg-green-500" : "bg-gray-300"}`}></div>
+              </div>
             </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-10">
-              <button
-                onClick={() => navigate("/update-profile")}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-blue-900 transition-all duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-lg transform hover:-translate-y-1"
-              >
-                <Edit className="w-5 h-5" />
-                <span>Update Profile</span>
-              </button>
-              <button
-                onClick={() => {
-                  logout();
-                  navigate("/login");
-                }}
-                className="flex-1 bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md"
-              >
-                <LogOut className="w-5 h-5" />
-                <span>Logout</span>
-              </button>
-            </div>
+            
+            {/* Refresh Profile */}
+            <button 
+              onClick={() => window.location.reload()}
+              className="w-full mt-8 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Perbarui Data
+            </button>
           </div>
         </div>
-
-        {/* Additional Content or Stats (Optional) */}
-        {/* ... */}
+        
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 mt-6">
+          <button
+            onClick={() => navigate("/update-profile")}
+            className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3.5 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-xl transform hover:-translate-y-1"
+          >
+            <Edit className="w-5 h-5" />
+            <span className="font-semibold">Update Profile</span>
+          </button>
+          <button
+            onClick={() => {
+              logout();
+              navigate("/login");
+            }}
+            className="flex-1 bg-white border border-gray-300 text-gray-700 px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="font-semibold">Logout</span>
+          </button>
+        </div>
       </div>
     </div>
   );

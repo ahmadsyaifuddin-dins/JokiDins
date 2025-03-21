@@ -87,6 +87,10 @@ router.put("/profile", protect, async (req, res) => {
       if (req.body.phones) {
         user.phones = req.body.phones; // expect an array
       }
+      // Tambahan update untuk birthday dan gender
+      user.birthday = req.body.birthday || user.birthday;
+      user.gender = req.body.gender || user.gender;
+      
       if (req.body.password && req.body.password.trim() !== "") {
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(req.body.password, salt);
@@ -97,6 +101,8 @@ router.put("/profile", protect, async (req, res) => {
         name: updatedUser.name,
         email: updatedUser.email,
         phones: updatedUser.phones,
+        birthday: updatedUser.birthday,
+        gender: updatedUser.gender,
         role: updatedUser.role,
       });
     } else {
@@ -106,6 +112,7 @@ router.put("/profile", protect, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 
 module.exports = router;

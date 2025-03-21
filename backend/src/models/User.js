@@ -51,13 +51,11 @@ const UserSchema = new mongoose.Schema({
 
   loginMethod: { type: String, enum: ["google", "manual"], default: "manual" },
 
-  googleId: { type: String, default: null }
+  googleId: { type: String, default: null },
 
-
-  // Field tambahan (untuk masa depan)
-  // birthday: { type: Date },
-  // gender: { type: String },
-  // Bisa tambahin googleId buat menandakan user dari Google
+  birthday: { type: Date },
+  
+  gender: { type: String },
 }, 
 { timestamps: true });
 

@@ -16,6 +16,8 @@ import {
   ExternalLink,
   Send,
   SendIcon,
+  Cake,
+  Users,
 } from "lucide-react";
 
 const AdminUserDetail = () => {
@@ -61,12 +63,9 @@ const AdminUserDetail = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(
-        `https://jokidins-production.up.railway.app/api/user/users/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.delete(`https://jokidins-production.up.railway.app/api/user/users/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       Swal.fire("Berhasil!", "Akun pengguna berhasil dihapus.", "success");
       navigate("/admin/users");
     } catch (err) {
@@ -287,7 +286,7 @@ const AdminUserDetail = () => {
                 </div>
               </div>
 
-              {/* Created At */}
+              {/* Tanggal Bergabung */}
               <div className="bg-gray-50 p-5 rounded-xl">
                 <div className="flex items-center space-x-3 mb-3">
                   <div className="p-2 bg-amber-100 rounded-lg">
@@ -299,6 +298,38 @@ const AdminUserDetail = () => {
                 </div>
                 <p className="text-gray-800 pl-2 border-l-2 border-amber-200">
                   {formatDate(userDetail.createdAt)}
+                </p>
+              </div>
+
+              {/* Tanggal Lahir */}
+              <div className="bg-gray-50 p-5 rounded-xl">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="p-2 bg-pink-100 rounded-lg">
+                    <Cake className="w-5 h-5 text-pink-600" />
+                  </div>
+                  <span className="font-medium text-gray-700">
+                    Tanggal Lahir
+                  </span>
+                </div>
+                <p className="text-gray-800 pl-2 border-l-2 border-pink-200">
+                  {userDetail.birthday
+                    ? formatDate(userDetail.birthday)
+                    : "Tidak tersedia"}
+                </p>
+              </div>
+
+              {/* Jenis Kelamin */}
+              <div className="bg-gray-50 p-5 rounded-xl">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="p-2 bg-purple-100 rounded-lg">
+                    <Users className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <span className="font-medium text-gray-700">
+                    Jenis Kelamin
+                  </span>
+                </div>
+                <p className="text-gray-800 pl-2 border-l-2 border-purple-200">
+                  {userDetail.gender || "Tidak tersedia"}
                 </p>
               </div>
 
