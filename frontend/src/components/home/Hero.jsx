@@ -273,24 +273,6 @@ const Hero = () => {
           </div>
         </motion.div>
       </motion.div>
-
-      {/* Improved scroll indicator with subtle animation */}
-      <div className="absolute inset-x-0 bottom-3 flex items-center justify-center">
-        <motion.div
-          className="flex flex-col items-center"
-          animate={{ y: [0, -5, 0] }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            repeatType: "loop",
-          }}
-        >
-          <span className="text-sm text-gray-400 mb-2">Scroll to explore</span>
-          <div className="h-10 w-6 border-2 border-gray-400 rounded-full relative">
-            <div className="absolute w-2 h-2 bg-blue-400 rounded-full left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
-          </div>
-        </motion.div>
-      </div>
     </section>
   );
 };
