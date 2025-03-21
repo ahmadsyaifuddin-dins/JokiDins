@@ -206,7 +206,7 @@ const UpdateProfile = () => {
             {section === "basic" && (
               <div className="space-y-5 animate-fadeIn">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 items-center">
+                  <label className="flex text-sm font-medium text-gray-700 items-center">
                     <User className="h-4 w-4 mr-2 text-blue-600" />
                     Nama Lengkap
                   </label>
@@ -226,7 +226,7 @@ const UpdateProfile = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 items-center">
+                  <label className="flex text-sm font-medium text-gray-700 items-center">
                     <Mail className="h-4 w-4 mr-2 text-blue-600" />
                     Email
                   </label>
@@ -247,7 +247,7 @@ const UpdateProfile = () => {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 items-center">
+                    <label className="flex text-sm font-medium text-gray-700 items-center">
                       <Calendar className="h-4 w-4 mr-2 text-blue-600" />
                       Tanggal Lahir
                     </label>
@@ -265,7 +265,7 @@ const UpdateProfile = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 items-center">
+                    <label className="flex text-sm font-medium text-gray-700 items-center">
                       <UserCircle className="h-4 w-4 mr-2 text-blue-600" />
                       Jenis Kelamin
                     </label>
@@ -384,7 +384,7 @@ const UpdateProfile = () => {
                 
                 {savedPhones.length > 0 && (
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="flex text-sm font-medium text-gray-700">
                       Pilih Aksi
                     </label>
                     <div className="relative rounded-lg shadow-sm">
@@ -415,7 +415,7 @@ const UpdateProfile = () => {
                 )}
                 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 items-center">
+                  <label className="flex text-sm font-medium text-gray-700 items-center">
                     <Phone className="h-4 w-4 mr-2 text-blue-600" />
                     {selectedPhoneOption === "new" ? "Nomor Telepon Baru" : "Edit Nomor Telepon"}
                   </label>
@@ -454,7 +454,7 @@ const UpdateProfile = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 items-center">
+                  <label className="flex text-sm font-medium text-gray-700 items-center">
                     <Lock className="h-4 w-4 mr-2 text-blue-600" />
                     Password Baru
                   </label>
