@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import ProfileSkeleton from "../loader/ProfileSkeleton";
-import "../styles/active-indicator.css";
 
 const Profile = () => {
   const { user: contextUser } = useContext(AuthContext);
