@@ -2,8 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/authController");
-const { getUserById } = require("../controllers/userController");
-console.log("getUserById:", getUserById);
+const { getUserDetail } = require("../controllers/userController");
 const { protect, admin } = require("../middleware/authMiddleware");
 
 router.post("/register", authController.register);
@@ -13,7 +12,7 @@ router.post("/login", authController.login);
 router.post("/google", authController.googleLogin);
 
 // Endpoint detail user untuk admin
-router.get("/users/:id", protect, admin, getUserById);
+router.get("/users/:id", protect, admin, getUserDetail);
 
 // Endpoint lupa password
 router.post("/forgot-password", authController.forgotPassword);

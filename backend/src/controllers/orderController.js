@@ -3,6 +3,7 @@ const Order = require("../models/Order");
 const User = require("../models/User");
 const fs = require("fs");
 const { sendTelegramNotification } = require("../services/telegramNotifier");
+const Activity = require("../models/Activity");
 
 // CREATE ORDER
 const createOrder = async (req, res) => {
@@ -74,6 +75,11 @@ Terima kasih telah menggunakan JokiDins!
     } else {
       console.log("User belum menghubungkan akun Telegram.");
     }
+
+    Activity.create({ 
+      user: order.user, 
+      description: "User memesan order joki" 
+    }).catch(err => console.error("Error logging order:", err));
 
     res.status(201).json(order);
   } catch (error) {

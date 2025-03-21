@@ -69,7 +69,7 @@ const UpdateProfile = () => {
       
       const token = localStorage.getItem("token");
       const res = await axios.put(
-        "http://localhost:5000/api/user/profile",
+        "https://jokidins-production.up.railway.app/api/user/profile",
         { phones: updatedPhones },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -110,7 +110,7 @@ const UpdateProfile = () => {
       }
 
       const res = await axios.put(
-        "http://localhost:5000/api/user/profile",
+        "https://jokidins-production.up.railway.app/api/user/profile",
         { name, email, phones: updatedPhones, password, birthday, gender },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -244,7 +244,7 @@ const Hero = () => {
                 jokidins.jsx
               </span>
             </div>
-            <div className="font-mono text-xs md:text-sm text-gray-300 overflow-x-auto pb-2">
+            <div className="font-mono text-left text-xs md:text-sm text-gray-300 overflow-x-auto pb-2">
               <div className="text-blue-400 whitespace-pre">
                 const <span className="text-green-400">createProject</span> ={" "}
                 <span className="text-yellow-400">()</span> =&gt; {"{"}

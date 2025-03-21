@@ -10,7 +10,7 @@ import AdminProfile from "./admin/Profile";
 import AdminOrderDetail from "./admin/OrderDetail";
 import AdminUserList from "./admin/AdminUserList";
 import AdminUserDetail from "./admin/AdminUserDetail";
-import OrderJoki from "./pages/OrderJoki";
+import AdminUserActivity from "./admin/UserActivity";
 import Profile from "./pages/Profile";
 import UpdateProfile from "./pages/UpdateProfile";
 import OrderList from "./pages/OrderList";
@@ -94,6 +94,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <AdminUserDetail />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/userActivity/:id"
+              element={
+                <PrivateRoute>
+                  <AdminUserActivity />
                 </PrivateRoute>
               }
             />

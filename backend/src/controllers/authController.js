@@ -7,6 +7,7 @@ const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const getWelcomeMessage = require("../utils/welcomeMessage");
 const { generateVerificationCode, getVerificationCodeExpires } = require("../utils/verification");
+const Activity = require("../models/Activity");
 
 const VERIFICATION_CODE_EXPIRATION = 5; // dalam menit
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -165,6 +166,12 @@ exports.login = async (req, res) => {
         role: user.role,
       },
     });
+
+    await Activity.create({
+      user: user._id,
+      description: "User berhasil login"
+    });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -287,6 +294,10 @@ exports.googleLogin = async (req, res) => {
       const welcomeMessage = getWelcomeMessage(name);
       await sendEmail(email, "Selamat Datang di JokiDins! 🚀", welcomeMessage);
     } else {
+      await Activity.create({
+        user: user._id,
+        description: "User berhasil login dengan Google"
+      });
       if (!user.isVerified) {
         user.isVerified = true;
         user.verificationCode = null;
@@ -309,6 +320,10 @@ exports.googleLogin = async (req, res) => {
         googleId: user.googleId,
         isNewUser,
       },
+    });
+    await Activity.create({
+      user: user._id,
+      description: "User berhasil login dengan Google"
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

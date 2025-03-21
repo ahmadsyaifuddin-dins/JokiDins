@@ -9,6 +9,7 @@ const userRoutes = require("./routes/user");
 const orderRoutes = require("./routes/order");
 const telegramToken = require("./routes/telegram");  
 const telegramWebhook = require("./routes/telegramWebhook");
+const activityRoutes = require("./routes/activity");
 const app = express();
 
 // Middleware
@@ -28,6 +29,10 @@ app.use('/uploads/avatar', express.static('uploads/avatar'));
 // Mount kedua endpoint Telegram di base path yang sama:
 app.use("/api/telegram", telegramToken);
 app.use("/telegram", telegramWebhook);
+
+// Route untuk admin untuk melihat aktivitas pengguna
+app.use("/api/user/activity", activityRoutes);
+
 
 // Contoh route lain (misalnya route utama)
 app.get("/", (req, res) => {

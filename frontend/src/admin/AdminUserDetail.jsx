@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Mail,
   Phone,
@@ -359,12 +359,13 @@ const AdminUserDetail = () => {
               >
                 Edit Profil Pengguna
               </button>
-              <button
-                disabled
-                className="w-full sm:w-auto border border-blue-200 text-blue-600 px-6 py-3 rounded-lg opacity-50 cursor-not-allowed"
-              >
-                Lihat Aktivitas Pengguna
-              </button>
+              <Link to={`/admin/userActivity/${id}`}>
+                <button
+                  className="w-full sm:w-auto border border-blue-200 text-blue-600 px-6 py-3 rounded-lg"
+                >
+                  Lihat Aktivitas Pengguna
+                </button>
+              </Link>
             </div>
           </div>
         </div>
