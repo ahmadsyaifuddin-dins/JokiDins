@@ -13,11 +13,9 @@ import {
   X,
   Shield,
   Clock,
-  ExternalLink,
-  Send,
   SendIcon,
   Cake,
-  Users,
+  VenusAndMars,
 } from "lucide-react";
 
 const AdminUserDetail = () => {
@@ -322,7 +320,7 @@ const AdminUserDetail = () => {
               <div className="bg-gray-50 p-5 rounded-xl">
                 <div className="flex items-center space-x-3 mb-3">
                   <div className="p-2 bg-purple-100 rounded-lg">
-                    <Users className="w-5 h-5 text-purple-600" />
+                    <VenusAndMars className="w-5 h-5 text-purple-600" />
                   </div>
                   <span className="font-medium text-gray-700">
                     Jenis Kelamin
