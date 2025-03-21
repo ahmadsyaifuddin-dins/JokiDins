@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import '../css/button_glow_notif.css';
+import '../styles/button_glow_notif.css';
 import Swal from 'sweetalert2';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
