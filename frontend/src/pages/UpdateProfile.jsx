@@ -4,7 +4,8 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { 
   ArrowLeft, User, Mail, Phone, Lock, Save, Trash, Edit, 
-  ChevronDown, ChevronUp, Calendar, UserCircle, AlertCircle
+  ChevronDown, ChevronUp, Calendar, UserCircle, AlertCircle,
+  VenusAndMarsIcon
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -266,7 +267,7 @@ const UpdateProfile = () => {
 
                   <div className="space-y-2">
                     <label className="flex text-sm font-medium text-gray-700 items-center">
-                      <UserCircle className="h-4 w-4 mr-2 text-blue-600" />
+                      <VenusAndMarsIcon className="h-4 w-4 mr-2 text-blue-600" />
                       Jenis Kelamin
                     </label>
                     <div className="relative rounded-lg shadow-sm">
@@ -281,7 +282,7 @@ const UpdateProfile = () => {
                         <option value="Lainnya">Lainnya</option>
                       </select>
                       <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <UserCircle className="h-5 w-5 text-gray-400" />
+                        <VenusAndMarsIcon className="h-5 w-5 text-gray-400" />
                       </div>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <ChevronDown className="h-5 w-5 text-gray-400" />

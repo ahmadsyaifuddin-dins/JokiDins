@@ -6,19 +6,17 @@ import {
   User,
   LogOut,
   Mail,
-  Users,
   Cake,
-  Clock,
   Phone,
   Edit,
   Camera,
   Key,
   MessageSquare,
   Shield,
-  Bell,
   Calendar,
   ChevronRight,
   RefreshCw,
+  VenusAndMars,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import ProfileSkeleton from "../loader/ProfileSkeleton";
@@ -236,7 +234,7 @@ const Profile = () => {
               {/* Gender */}
               <div className="flex items-start border-b border-gray-100 pb-4">
                 <div className="bg-purple-100 p-3 rounded-lg mr-4">
-                  <Users className="w-5 h-5 text-purple-600" />
+                  <VenusAndMars className="w-5 h-5 text-purple-600" />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-500">Jenis Kelamin</p>
