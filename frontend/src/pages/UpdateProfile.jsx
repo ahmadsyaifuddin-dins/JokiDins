@@ -197,7 +197,7 @@ const UpdateProfile = () => {
             </div>
             <div className="text-center mt-3">
               <h2 className="text-xl font-bold text-white">{name || "Username"}</h2>
-              <p className="text-blue-100 mt-1">{email || "email@example.com"}</p>
+              <p className="text-blue-100 mt-1 truncate">{email || "email@example.com"}</p>
             </div>
           </div>
           
