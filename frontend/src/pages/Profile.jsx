@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import ProfileSkeleton from "../loader/ProfileSkeleton";
+import "../styles/active-indicator.css";
 
 const Profile = () => {
   const { user: contextUser } = useContext(AuthContext);
@@ -32,12 +33,9 @@ const Profile = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const res = await axios.get(
-          "https://jokidins-production.up.railway.app/api/user/profile",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setProfile(res.data);
       } catch (error) {
         console.error("Gagal ambil data profile:", error);
@@ -72,7 +70,7 @@ const Profile = () => {
     return <ProfileSkeleton />;
   }
 
-  // Format tanggal 
+  // Format tanggal
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("id-ID", {
       year: "numeric",
@@ -125,7 +123,13 @@ const Profile = () => {
 
             {/* Quick Status Badges */}
             <div className="absolute top-4 right-4 flex space-x-2">
-              <div className={`px-3 py-1.5 rounded-full text-xs font-medium shadow-md ${profile.isVerified ? "bg-green-500 text-white" : "bg-amber-400 text-white"}`}>
+              <div
+                className={`px-3 py-1.5 rounded-full text-xs font-medium shadow-md ${
+                  profile.isVerified
+                    ? "bg-green-500 text-white"
+                    : "bg-amber-400 text-white"
+                }`}
+              >
                 {profile.isVerified ? "Terverifikasi" : "Belum Terverifikasi"}
               </div>
             </div>
@@ -137,7 +141,7 @@ const Profile = () => {
             <p className="mt-1 text-gray-500 text-sm">
               Bergabung {formatDate(profile.createdAt)}
             </p>
-            
+
             {/* User Status Overview */}
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg">
@@ -147,26 +151,32 @@ const Profile = () => {
                   {profile.isVerified ? "Terverifikasi" : "Belum"}
                 </span>
               </div>
-              
+
               <div className="flex flex-col items-center p-3 bg-purple-50 rounded-lg">
                 <MessageSquare className="w-6 h-6 text-purple-600 mb-1" />
-                <span className="text-xs font-medium text-purple-600">Telegram</span>
+                <span className="text-xs font-medium text-purple-600">
+                  Telegram
+                </span>
                 <span className="text-gray-700 text-sm font-semibold">
                   {profile.telegramChatId ? "Terhubung" : "Belum"}
                 </span>
               </div>
-              
+
               <div className="flex flex-col items-center p-3 bg-amber-50 rounded-lg">
                 <Phone className="w-6 h-6 text-amber-600 mb-1" />
-                <span className="text-xs font-medium text-amber-600">Nomor HP</span>
+                <span className="text-xs font-medium text-amber-600">
+                  Nomor HP
+                </span>
                 <span className="text-gray-700 text-sm font-semibold">
                   {profile.phones?.length || 0} Tersimpan
                 </span>
               </div>
-              
+
               <div className="flex flex-col items-center p-3 bg-emerald-50 rounded-lg">
                 <Key className="w-6 h-6 text-emerald-600 mb-1" />
-                <span className="text-xs font-medium text-emerald-600">Login Via</span>
+                <span className="text-xs font-medium text-emerald-600">
+                  Login Via
+                </span>
                 <span className="text-gray-700 text-sm font-semibold capitalize">
                   {profile.loginMethod}
                 </span>
@@ -184,7 +194,7 @@ const Profile = () => {
                 <User className="w-5 h-5 mr-2 text-blue-600" />
                 Informasi Pribadi
               </h3>
-              <button 
+              <button
                 onClick={() => navigate("/update-profile")}
                 className="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
@@ -192,7 +202,7 @@ const Profile = () => {
                 Edit
               </button>
             </div>
-            
+
             <div className="space-y-4">
               {/* Email */}
               <div className="flex items-start border-b border-gray-100 pb-4">
@@ -206,14 +216,16 @@ const Profile = () => {
                   </p>
                 </div>
               </div>
-              
+
               {/* Phone Numbers */}
               <div className="flex items-start border-b border-gray-100 pb-4">
                 <div className="bg-amber-100 p-3 rounded-lg mr-4">
                   <Phone className="w-5 h-5 text-amber-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-500">Nomor HP Tersimpan</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Nomor HP Tersimpan
+                  </p>
                   {profile.phones && profile.phones.length > 0 ? (
                     <div className="flex flex-wrap gap-2 mt-1">
                       {profile.phones.map((p, i) => (
@@ -226,46 +238,54 @@ const Profile = () => {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-gray-500 italic text-sm">Belum ada nomor HP tersimpan</p>
+                    <p className="text-gray-500 italic text-sm">
+                      Belum ada nomor HP tersimpan
+                    </p>
                   )}
                 </div>
               </div>
-              
+
               {/* Gender */}
               <div className="flex items-start border-b border-gray-100 pb-4">
                 <div className="bg-purple-100 p-3 rounded-lg mr-4">
                   <VenusAndMars className="w-5 h-5 text-purple-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-500">Jenis Kelamin</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Jenis Kelamin
+                  </p>
                   <p className="text-gray-800 font-medium">
                     {profile.gender || "Belum disetel"}
                   </p>
                 </div>
               </div>
-              
+
               {/* Birthday */}
               <div className="flex items-start">
                 <div className="bg-pink-100 p-3 rounded-lg mr-4">
                   <Cake className="w-5 h-5 text-pink-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-500">Tanggal Lahir</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Tanggal Lahir
+                  </p>
                   <p className="text-gray-800 font-medium">
-                    {profile.birthday ? formatDate(profile.birthday) : "Belum disetel"}
+                    {profile.birthday
+                      ? formatDate(profile.birthday)
+                      : "Belum disetel"}
                   </p>
                 </div>
               </div>
             </div>
           </div>
-          
+
           {/* Account Information */}
           <div className="bg-white rounded-xl shadow-lg p-6">
             <h3 className="text-xl font-bold text-gray-800 flex items-center mb-5">
               <Shield className="w-5 h-5 mr-2 text-indigo-600" />
               Informasi Akun
             </h3>
-            
+
             <div className="space-y-4">
               {/* Account Type */}
               <div className="flex justify-between items-center py-3 border-b border-gray-100">
@@ -279,7 +299,7 @@ const Profile = () => {
                   Aktif
                 </div>
               </div>
-              
+
               {/* Login Method */}
               <div className="flex justify-between items-center py-3 border-b border-gray-100">
                 <div>
@@ -290,32 +310,38 @@ const Profile = () => {
                 </div>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </div>
-              
+
               {/* Joined Date */}
               <div className="flex justify-between items-center py-3 border-b border-gray-100">
                 <div>
                   <p className="text-sm text-gray-500">Bergabung Sejak</p>
-                  <p className="font-medium">
-                    {formatDate(profile.createdAt)}
-                  </p>
+                  <p className="font-medium">{formatDate(profile.createdAt)}</p>
                 </div>
                 <Calendar className="w-5 h-5 text-gray-400" />
               </div>
-              
+
               {/* Telegram Connection */}
-              <div className="flex justify-between items-center py-3">
-                <div>
-                  <p className="text-sm text-gray-500">Terhubung ke Telegram</p>
+              <div className="py-3 border-b border-gray-100">
+                <p className="text-sm text-gray-500">Terhubung ke Telegram</p>
+                <div className="flex justify-between items-center">
                   <p className="font-medium">
-                    {profile.telegramChatId ? "Sudah Terhubung" : "Belum Terhubung"}
+                    {profile.telegramChatId
+                      ? "Sudah Terhubung"
+                      : "Belum Terhubung"}
                   </p>
+                  <div
+                    className={`ml-2 rounded-full h-3 w-3 ${
+                      profile.telegramChatId
+                        ? "bg-green-500 active-indicator"
+                        : "bg-gray-300"
+                    }`}
+                  ></div>
                 </div>
-                <div className={`rounded-full h-3 w-3 ${profile.telegramChatId ? "bg-green-500" : "bg-gray-300"}`}></div>
               </div>
             </div>
-            
+
             {/* Refresh Profile */}
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="w-full mt-8 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center"
             >
@@ -324,7 +350,7 @@ const Profile = () => {
             </button>
           </div>
         </div>
-        
+
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 mt-6">
           <button

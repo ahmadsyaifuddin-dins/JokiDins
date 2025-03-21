@@ -163,6 +163,8 @@ exports.login = async (req, res) => {
         name: user.name,
         email: user.email,
         phones: user.phones,
+        birthday: user.birthday,
+        gender: user.gender,
         role: user.role,
       },
     });
@@ -285,7 +287,8 @@ exports.googleLogin = async (req, res) => {
         avatar: picture,
         isVerified: true,
         role: "user",
-        // Jika ada picture, berarti login lewat Google, kalau gak ada, dianggap manual
+        birthday: user.birthday,
+        gender: user.gender,
         loginMethod: "google", 
         googleId: picture ? googleId : null,
       });
@@ -316,6 +319,8 @@ exports.googleLogin = async (req, res) => {
         role: user.role,
         isVerified: user.isVerified,
         phones: user.phones,
+        birthday: user.birthday,
+        gender: user.gender,
         loginMethod: user.loginMethod,
         googleId: user.googleId,
         isNewUser,
