@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import * as XLSX from "xlsx";
 import IncomeChart from "../components/IncomePage/IncomeChart";
 import IncomeBarChart from "../components/IncomePage/IncomeBarChart";
 import IncomeForm from "../components/IncomePage/IncomeForm";
@@ -11,6 +8,7 @@ import IncomeTotal from "../components/IncomePage/IncomeTotal";
 import IncomeTable from "../components/IncomePage/IncomeTable";
 import IncomeExport from "../components/IncomePage/IncomeExport";
 import Swal from "sweetalert2";
+import {exportToPDF, exportToExcel} from "../utils/exportUtils";
 
 const IncomePage = () => {
   // State untuk form input
@@ -207,23 +205,12 @@ const IncomePage = () => {
     }
   };
 
-  // Fungsi Export ke PDF
-  const exportToPDF = () => {
-    const doc = new jsPDF();
-    autoTable(doc, { html: "#history-table" });
-    doc.save("history.pdf");
+  const handleExportPDF = () => {
+    exportToPDF(historyData, "history.pdf");
   };
 
-  // Fungsi Export ke Excel (menggunakan SheetJS)
-  const exportToExcel = () => {
-    const formattedData = historyData.map((row) => ({
-      Nominal: row.nominal,
-      "Tanggal Input": new Date(row.date).toLocaleString(),
-    }));
-    const worksheet = XLSX.utils.json_to_sheet(formattedData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "History");
-    XLSX.writeFile(workbook, "history.xlsx");
+  const handleExportExcel = () => {
+    exportToExcel(historyData, "history.xlsx");
   };
 
   // Fungsi untuk filter data berdasarkan nominal dan tanggal
@@ -411,8 +398,8 @@ const IncomePage = () => {
                     </div>
                     <div className="flex space-x-2">
                       <IncomeExport
-                        exportToPDF={exportToPDF}
-                        exportToExcel={exportToExcel}
+                        exportToPDF={handleExportPDF}
+                        exportToExcel={handleExportExcel}
                       />
                     </div>
                   </div>
