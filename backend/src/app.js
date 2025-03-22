@@ -10,6 +10,8 @@ const orderRoutes = require("./routes/order");
 const telegramToken = require("./routes/telegram");  
 const telegramWebhook = require("./routes/telegramWebhook");
 const activityRoutes = require("./routes/activity");
+const pendapatanRoutes = require("./routes/pendapatan");
+
 const app = express();
 
 // Middleware
@@ -33,6 +35,7 @@ app.use("/telegram", telegramWebhook);
 // Route untuk admin untuk melihat aktivitas pengguna
 app.use("/api/user/activity", activityRoutes);
 
+app.use("/api/pendapatan", pendapatanRoutes);
 
 // Contoh route lain (misalnya route utama)
 app.get("/", (req, res) => {

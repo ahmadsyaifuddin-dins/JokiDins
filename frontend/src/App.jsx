@@ -11,6 +11,7 @@ import AdminOrderDetail from "./admin/OrderDetail";
 import AdminUserList from "./admin/AdminUserList";
 import AdminUserDetail from "./admin/AdminUserDetail";
 import AdminUserActivity from "./admin/UserActivity";
+import IncomePage from "./pages/IncomePage";
 import Profile from "./pages/Profile";
 import UpdateProfile from "./pages/UpdateProfile";
 import OrderList from "./pages/OrderList";
@@ -62,6 +63,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/pendapatan"
+              element={
+                <PrivateRoute>
+                  <IncomePage />
                 </PrivateRoute>
               }
             />
