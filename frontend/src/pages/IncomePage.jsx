@@ -10,6 +10,7 @@ import IncomeFilter from "../components/IncomePage/IncomeFilter";
 import IncomeTotal from "../components/IncomePage/IncomeTotal";
 import IncomeTable from "../components/IncomePage/IncomeTable";
 import IncomeExport from "../components/IncomePage/IncomeExport";
+import Swal from "sweetalert2";
 
 const IncomePage = () => {
   // State untuk form input
@@ -176,7 +177,17 @@ const IncomePage = () => {
 
   // Fungsi untuk menghapus data pendapatan
   const handleDelete = async (id) => {
-    if (!window.confirm("Apakah kamu yakin ingin menghapus data ini?")) return;
+    const confirmDelete = await Swal.fire({
+      title: "Hapus Data?",
+      text: "Apakah kamu yakin ingin menghapus data ini?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    });
+    if (!confirmDelete.isConfirmed) return;
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
@@ -192,7 +203,7 @@ const IncomePage = () => {
       }
     } catch (err) {
       console.error("Error deleting income:", err);
-      alert("Terjadi kesalahan saat menghapus data.");
+      Swal.fire({ icon: "error", title: "Terjadi kesalahan", text: "Terjadi kesalahan saat menghapus data." });
     }
   };
 
@@ -301,8 +312,19 @@ const IncomePage = () => {
           {liveNotification && (
             <div className="max-w-4xl mx-auto mb-6 p-3 bg-gradient-to-r from-blue-600 to-blue-500 text-center rounded-lg shadow-lg transform transition-all duration-300 animate-pulse">
               <div className="flex items-center justify-center">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
                 </svg>
                 {liveNotification}
               </div>
@@ -312,13 +334,26 @@ const IncomePage = () => {
           {isLoading ? (
             <div className="max-w-4xl mx-auto my-12 text-center">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500 mb-4"></div>
-              <p className="text-xl text-slate-300">Memuat data pendapatan...</p>
+              <p className="text-xl text-slate-300">
+                Memuat data pendapatan...
+              </p>
             </div>
           ) : fetchError ? (
             <div className="max-w-4xl mx-auto my-12 text-center">
               <div className="bg-red-900/40 p-6 rounded-lg">
-                <svg className="w-12 h-12 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <svg
+                  className="w-12 h-12 text-red-400 mx-auto mb-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
                 </svg>
                 <p className="text-xl text-red-400">{fetchError}</p>
               </div>
@@ -328,13 +363,17 @@ const IncomePage = () => {
               <div className="space-y-6">
                 {/* Chart/Graph Line */}
                 <div className="bg-slate-800/70 backdrop-blur-sm p-5 rounded-xl shadow-lg border border-slate-700/50">
-                  <h2 className="text-xl font-semibold mb-4 text-blue-400">Tren Pendapatan</h2>
+                  <h2 className="text-xl font-semibold mb-4 text-blue-400">
+                    Tren Pendapatan
+                  </h2>
                   <IncomeChart data={filteredHistory} />
                 </div>
 
                 {/* Form Input Pendapatan */}
                 <div className="bg-slate-800/70 backdrop-blur-sm p-5 rounded-xl shadow-lg border border-slate-700/50">
-                  <h2 className="text-xl font-semibold mb-4 text-blue-400">Tambah Pendapatan Baru</h2>
+                  <h2 className="text-xl font-semibold mb-4 text-blue-400">
+                    Tambah Pendapatan Baru
+                  </h2>
                   <IncomeForm
                     nominal={nominal}
                     setNominal={setNominal}
@@ -353,7 +392,9 @@ const IncomePage = () => {
               <div className="space-y-6">
                 {/* Bar Chart untuk pendapatan per bulan */}
                 <div className="bg-slate-800/70 backdrop-blur-sm p-5 rounded-xl shadow-lg border border-slate-700/50">
-                  <h2 className="text-xl font-semibold mb-4 text-blue-400">Pendapatan per Bulan</h2>
+                  <h2 className="text-xl font-semibold mb-4 text-blue-400">
+                    Pendapatan per Bulan
+                  </h2>
                   <IncomeBarChart data={filteredHistory} />
                 </div>
 
@@ -361,8 +402,12 @@ const IncomePage = () => {
                 <div className="bg-slate-800/70 backdrop-blur-sm p-5 rounded-xl shadow-lg border border-slate-700/50">
                   <div className="flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
                     <div>
-                      <h2 className="text-xl font-semibold mb-2 text-blue-400">Filter & Export</h2>
-                      <p className="text-sm text-slate-400 mb-3">Cari, filter, dan ekspor data pendapatan</p>
+                      <h2 className="text-xl font-semibold mb-2 text-blue-400">
+                        Filter & Export
+                      </h2>
+                      <p className="text-sm text-slate-400 mb-3">
+                        Cari, filter, dan ekspor data pendapatan
+                      </p>
                     </div>
                     <div className="flex space-x-2">
                       <IncomeExport
@@ -371,7 +416,7 @@ const IncomePage = () => {
                       />
                     </div>
                   </div>
-                  
+
                   <div className="mt-4">
                     <IncomeFilter
                       searchNominal={searchNominal}
@@ -387,29 +432,31 @@ const IncomePage = () => {
 
               {/* Tabel History Pendapatan - Full Width */}
               <div className="lg:col-span-2 bg-slate-800/70 backdrop-blur-sm p-5 rounded-xl shadow-lg border border-slate-700/50">
-                <h2 className="text-xl font-semibold mb-4 text-blue-400">Riwayat Pendapatan</h2>
+                <h2 className="text-xl font-semibold mb-4 text-blue-400">
+                  Riwayat Pendapatan
+                </h2>
                 <IncomeTable
-  currentItems={currentItems}
-  filteredCount={filteredCount}
-  sortConfig={sortConfig}
-  requestSort={requestSort}
-  handlePrevPage={handlePrevPage}
-  handleNextPage={handleNextPage}
-  currentPage={currentPage}
-  itemsPerPage={itemsPerPage}
-  totalPages={totalPages}
-  editingId={editingId}
-  editingNominal={editingNominal}
-  setEditingNominal={setEditingNominal}
-  setEditingId={setEditingId}
-  handleUpdate={handleUpdate}
-  handleDelete={handleDelete}
-/>
-
-                
+                  currentItems={currentItems}
+                  filteredCount={filteredCount}
+                  sortConfig={sortConfig}
+                  requestSort={requestSort}
+                  handlePrevPage={handlePrevPage}
+                  handleNextPage={handleNextPage}
+                  currentPage={currentPage}
+                  itemsPerPage={itemsPerPage}
+                  totalPages={totalPages}
+                  editingId={editingId}
+                  editingNominal={editingNominal}
+                  setEditingNominal={setEditingNominal}
+                  setEditingId={setEditingId}
+                  handleUpdate={handleUpdate}
+                  handleDelete={handleDelete}
+                />
                 {sortedHistory.length === 0 && (
                   <div className="bg-slate-700/30 rounded-lg p-8 text-center">
-                    <p className="text-slate-400">Tidak ada data yang sesuai dengan filter</p>
+                    <p className="text-slate-400">
+                      Tidak ada data yang sesuai dengan filter
+                    </p>
                   </div>
                 )}
               </div>
@@ -420,5 +467,4 @@ const IncomePage = () => {
     </div>
   );
 };
-
 export default IncomePage;
