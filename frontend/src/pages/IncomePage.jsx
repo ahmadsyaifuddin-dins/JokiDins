@@ -226,6 +226,8 @@ const IncomePage = () => {
     return nominalMatch && startMatch && endMatch;
   });
 
+  const filteredCount = filteredHistory.length;
+
   // Sorting data dengan useMemo
   const sortedHistory = useMemo(() => {
     const sortableItems = [...filteredHistory];
@@ -387,21 +389,23 @@ const IncomePage = () => {
               <div className="lg:col-span-2 bg-slate-800/70 backdrop-blur-sm p-5 rounded-xl shadow-lg border border-slate-700/50">
                 <h2 className="text-xl font-semibold mb-4 text-blue-400">Riwayat Pendapatan</h2>
                 <IncomeTable
-                  currentItems={currentItems}
-                  sortConfig={sortConfig}
-                  requestSort={requestSort}
-                  handlePrevPage={handlePrevPage}
-                  handleNextPage={handleNextPage}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  itemsPerPage={itemsPerPage}
-                  editingId={editingId}
-                  editingNominal={editingNominal}
-                  setEditingNominal={setEditingNominal}
-                  setEditingId={setEditingId}
-                  handleUpdate={handleUpdate}
-                  handleDelete={handleDelete}
-                />
+  currentItems={currentItems}
+  filteredCount={filteredCount}
+  sortConfig={sortConfig}
+  requestSort={requestSort}
+  handlePrevPage={handlePrevPage}
+  handleNextPage={handleNextPage}
+  currentPage={currentPage}
+  itemsPerPage={itemsPerPage}
+  totalPages={totalPages}
+  editingId={editingId}
+  editingNominal={editingNominal}
+  setEditingNominal={setEditingNominal}
+  setEditingId={setEditingId}
+  handleUpdate={handleUpdate}
+  handleDelete={handleDelete}
+/>
+
                 
                 {sortedHistory.length === 0 && (
                   <div className="bg-slate-700/30 rounded-lg p-8 text-center">
