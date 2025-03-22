@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import ProfileSkeleton from "../loader/ProfileSkeleton";
+// import "../styles/active_indicator_tele.css";
 
 const Profile = () => {
   const { user: contextUser } = useContext(AuthContext);
@@ -27,14 +28,44 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Add this after your useState declarations
+  useEffect(() => {
+    // Create style element for the animation
+    const style = document.createElement("style");
+    style.innerHTML = `
+    @keyframes pulse-animation {
+      0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+      }
+    }
+  `;
+
+    // Add the style to the document head
+    document.head.appendChild(style);
+
+    // Clean up function
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://jokidins-production.up.railway.app/api/user/profile",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setProfile(res.data);
       } catch (error) {
         console.error("Gagal ambil data profile:", error);
@@ -328,13 +359,26 @@ const Profile = () => {
                       ? "Sudah Terhubung"
                       : "Belum Terhubung"}
                   </p>
-                  <div
-                    className={`ml-2 rounded-full h-3 w-3 ${
-                      profile.telegramChatId
-                        ? "bg-green-500 active-indicator"
-                        : "bg-gray-300"
-                    }`}
-                  ></div>
+                  <div className="flex items-center">
+                    {profile.telegramChatId && (
+                      <span className="text-xs text-green-600 mr-2 font-medium">
+                        Active
+                      </span>
+                    )}
+                    <div
+                      className={`rounded-full h-4 w-4 ${
+                        profile.telegramChatId ? "bg-green-500" : "bg-gray-300"
+                      }`}
+                      style={
+                        profile.telegramChatId
+                          ? {
+                              animation: "pulse-animation 0.7s infinite",
+                              boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.7)",
+                            }
+                          : {}
+                      }
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
