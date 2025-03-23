@@ -291,10 +291,10 @@ const IncomePage = () => {
       <div className="container mx-auto px-4 py-8">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-blue-500">
-            Dashboard Pendapatan
+            Dashboard Pendapatan JokiDins
           </h1>
           <p className="text-center text-slate-400 mt-2">
-            Kelola dan analisis pendapatan Anda dengan mudah
+            Kelola dan analisis pendapatan JokiDins dengan mudah
           </p>
         </header>
 
