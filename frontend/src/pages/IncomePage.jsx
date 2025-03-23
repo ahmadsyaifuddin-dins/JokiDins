@@ -8,7 +8,7 @@ import IncomeTotal from "../components/IncomePage/IncomeTotal";
 import IncomeTable from "../components/IncomePage/IncomeTable";
 import IncomeExport from "../components/IncomePage/IncomeExport";
 import Swal from "sweetalert2";
-import {exportToPDF, exportToExcel} from "../utils/exportUtils";
+import { exportToPDF, exportToExcel } from "../utils/exportUtils";
 
 const IncomePage = () => {
   // State untuk form input
@@ -201,16 +201,20 @@ const IncomePage = () => {
       }
     } catch (err) {
       console.error("Error deleting income:", err);
-      Swal.fire({ icon: "error", title: "Terjadi kesalahan", text: "Terjadi kesalahan saat menghapus data." });
+      Swal.fire({
+        icon: "error",
+        title: "Terjadi kesalahan",
+        text: "Terjadi kesalahan saat menghapus data.",
+      });
     }
   };
 
-  const handleExportPDF = () => {
-    exportToPDF(historyData, "history.pdf");
+  const handleExportPDF = (allData, filteredData) => {
+    exportToPDF(allData, filteredData, "history-pendapatan.pdf");
   };
 
-  const handleExportExcel = () => {
-    exportToExcel(historyData, "history.xlsx");
+  const handleExportExcel = (allData, filteredData) => {
+    exportToExcel(allData, filteredData, "history-pendapatan.xlsx");
   };
 
   // Fungsi untuk filter data berdasarkan nominal dan tanggal
@@ -400,6 +404,8 @@ const IncomePage = () => {
                       <IncomeExport
                         exportToPDF={handleExportPDF}
                         exportToExcel={handleExportExcel}
+                        allData={historyData}
+                        filteredData={filteredHistory}
                       />
                     </div>
                   </div>
