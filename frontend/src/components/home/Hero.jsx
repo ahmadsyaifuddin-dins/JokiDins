@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center py-16 md:py-24 overflow-hidden">
       {/* Animated background with improved particle system */}
       <div className="absolute inset-0 opacity-20">
         <div
@@ -17,20 +17,18 @@ const Hero = () => {
           }}
         />
       </div>
-
       {/* Enhanced glowing orbs with consistent blur effects */}
       <div className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-900 rounded-full filter blur-xl opacity-20 animate-pulse duration-4000"></div>
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-blue-950 rounded-full filter blur-xl opacity-20 animate-pulse duration-5000"></div>
       <div className="absolute top-2/3 left-1/3 w-64 h-64 bg-slate-950 rounded-full filter blur-xl opacity-10 animate-pulse duration-3000"></div>
-
       {/* Content Container with animations - Fixed by using motion.div instead of opacity-0 */}
       <motion.div
-        className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+        className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center h-full flex flex-col justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <div className="flex flex-col items-center mb-8">
+        <div className="flex flex-col items-center mb-8 space-y-8 md:space-y-12">
           <div className="relative">
             {/* Base gradient text */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-blue-700 to-indigo-800 tracking-tight mb-6">
@@ -120,8 +118,9 @@ const Hero = () => {
               JokiDins
             </motion.h1>
           </div>
-          <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-8 overflow-hidden text-ellipsis">
-            Tugas & project numpuk? Santai, serahin aja ke kita. Hasil maksimal tanpa ribet 😸
+          <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-8">
+            Tugas & project numpuk? Santai, serahin aja ke kita. Hasil maksimal
+            tanpa ribet 😸
           </p>
           <div className="flex gap-2 md:gap-4 justify-center">
             <Link to="/create-order" className="w-auto sm:w-auto">
@@ -230,7 +229,7 @@ const Hero = () => {
 
         {/* Enhanced code snippet preview with better 3D effect and syntax highlighting - Fixed by using motion.div */}
         <motion.div
-          className="mt-5 mb-8 block"
+          className="mt-auto mb-8 block"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
