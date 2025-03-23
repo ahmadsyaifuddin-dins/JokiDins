@@ -14,7 +14,7 @@ const IncomeTotal = ({ total, startDate, endDate }) => {
     <div className="p-4 rounded-lg bg-gradient-to-r from-blue-800/30 to-emerald-800/30 border border-emerald-700/30">
       <div className="flex flex-col md:flex-row justify-between items-center">
         <div className="mb-3 md:mb-0">
-          <h3 className="text-slate-300 text-sm font-medium">Total Pendapatan</h3>
+          <h3 className="text-slate-300 text-sm font-medium">Total Pendapatan JokiDins</h3>
           <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400">
             {formatRupiah(total)}
           </p>
