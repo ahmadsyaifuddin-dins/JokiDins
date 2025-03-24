@@ -90,7 +90,7 @@ const AnimatedText = ({ texts, decryptSpeed = 90, maxIterations = 40, delay = 10
 
   return (
     <motion.p 
-      className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-8 font-mono"
+      className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-8 "
       key={originalText} // Re-mount the component when text changes for better animation
       initial={{ opacity: 0.9 }}
       animate={{ opacity: 1 }}
