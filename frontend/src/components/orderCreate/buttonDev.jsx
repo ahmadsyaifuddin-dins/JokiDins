@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Button = () => {
   return (
@@ -8,31 +8,14 @@ const Button = () => {
         <div className="outline" />
         <div className="state state--default">
           <div className="icon">
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g style={{ filter: "url(#shadow)" }}>
-                <path
-                  d="M14.2199 21.63C13.0399 21.63 11.3699 20.8 10.0499 16.83L9.32988 14.67L7.16988 13.95C3.20988 12.63 2.37988 10.96 2.37988 9.78001C2.37988 8.61001 3.20988 6.93001 7.16988 5.60001L15.6599 2.77001C17.7799 2.06001 19.5499 2.27001 20.6399 3.35001C21.7299 4.43001 21.9399 6.21001 21.2299 8.33001L18.3999 16.82C17.0699 20.8 15.3999 21.63 14.2199 21.63ZM7.63988 7.03001C4.85988 7.96001 3.86988 9.06001 3.86988 9.78001C3.86988 10.5 4.85988 11.6 7.63988 12.52L10.1599 13.36C10.3799 13.43 10.5599 13.61 10.6299 13.83L11.4699 16.35C12.3899 19.13 13.4999 20.12 14.2199 20.12C14.9399 20.12 16.0399 19.13 16.9699 16.35L19.7999 7.86001C20.3099 6.32001 20.2199 5.06001 19.5699 4.41001C18.9199 3.76001 17.6599 3.68001 16.1299 4.19001L7.63988 7.03001Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M10.11 14.4C9.92005 14.4 9.73005 14.33 9.58005 14.18C9.29005 13.89 9.29005 13.41 9.58005 13.12L13.16 9.53C13.45 9.24 13.93 9.24 14.22 9.53C14.51 9.82 14.51 10.3 14.22 10.59L10.64 14.18C10.5 14.33 10.3 14.4 10.11 14.4Z"
-                  fill="currentColor"
-                />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="1.2em" width="1.2em">
+              <g style={{filter: 'url(#shadow)'}}>
+                <path fill="currentColor" d="M14.2199 21.63C13.0399 21.63 11.3699 20.8 10.0499 16.83L9.32988 14.67L7.16988 13.95C3.20988 12.63 2.37988 10.96 2.37988 9.78001C2.37988 8.61001 3.20988 6.93001 7.16988 5.60001L15.6599 2.77001C17.7799 2.06001 19.5499 2.27001 20.6399 3.35001C21.7299 4.43001 21.9399 6.21001 21.2299 8.33001L18.3999 16.82C17.0699 20.8 15.3999 21.63 14.2199 21.63ZM7.63988 7.03001C4.85988 7.96001 3.86988 9.06001 3.86988 9.78001C3.86988 10.5 4.85988 11.6 7.63988 12.52L10.1599 13.36C10.3799 13.43 10.5599 13.61 10.6299 13.83L11.4699 16.35C12.3899 19.13 13.4999 20.12 14.2199 20.12C14.9399 20.12 16.0399 19.13 16.9699 16.35L19.7999 7.86001C20.3099 6.32001 20.2199 5.06001 19.5699 4.41001C18.9199 3.76001 17.6599 3.68001 16.1299 4.19001L7.63988 7.03001Z" />
+                <path fill="currentColor" d="M10.11 14.4C9.92005 14.4 9.73005 14.33 9.58005 14.18C9.29005 13.89 9.29005 13.41 9.58005 13.12L13.16 9.53C13.45 9.24 13.93 9.24 14.22 9.53C14.51 9.82 14.51 10.3 14.22 10.59L10.64 14.18C10.5 14.33 10.3 14.4 10.11 14.4Z" />
               </g>
               <defs>
                 <filter id="shadow">
-                  <feDropShadow
-                    dx={0}
-                    dy={1}
-                    stdDeviation="0.6"
-                    floodOpacity="0.5"
-                  />
+                  <feDropShadow floodOpacity="0.6" stdDeviation="0.8" dy={1} dx={0} />
                 </filter>
               </defs>
             </svg>
@@ -52,24 +35,10 @@ const Button = () => {
         </div>
         <div className="state state--sent">
           <div className="icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              height="1em"
-              width="1em"
-              strokeWidth="0.5px"
-              stroke="black"
-            >
-              <g style={{ filter: "url(#shadow)" }}>
-                <path
-                  fill="currentColor"
-                  d="M12 22.75C6.07 22.75 1.25 17.93 1.25 12C1.25 6.07 6.07 1.25 12 1.25C17.93 1.25 22.75 6.07 22.75 12C22.75 17.93 17.93 22.75 12 22.75ZM12 2.75C6.9 2.75 2.75 6.9 2.75 12C2.75 17.1 6.9 21.25 12 21.25C17.1 21.25 21.25 17.1 21.25 12C21.25 6.9 17.1 2.75 12 2.75Z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M10.5795 15.5801C10.3795 15.5801 10.1895 15.5001 10.0495 15.3601L7.21945 12.5301C6.92945 12.2401 6.92945 11.7601 7.21945 11.4701C7.50945 11.1801 7.98945 11.1801 8.27945 11.4701L10.5795 13.7701L15.7195 8.6301C16.0095 8.3401 16.4895 8.3401 16.7795 8.6301C17.0695 8.9201 17.0695 9.4001 16.7795 9.6901L11.1095 15.3601C10.9695 15.5001 10.7795 15.5801 10.5795 15.5801Z"
-                />
+            <svg stroke="black" strokeWidth="0.5px" width="1.2em" height="1.2em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g style={{ filter: 'url(#shadow)' }}>
+                <path d="M12 22.75C6.07 22.75 1.25 17.93 1.25 12C1.25 6.07 6.07 1.25 12 1.25C17.93 1.25 22.75 6.07 22.75 12C22.75 17.93 17.93 22.75 12 22.75ZM12 2.75C6.9 2.75 2.75 6.9 2.75 12C2.75 17.1 6.9 21.25 12 21.25C17.1 21.25 21.25 17.1 21.25 12C21.25 6.9 17.1 2.75 12 2.75Z" fill="currentColor" />
+                <path d="M10.5795 15.5801C10.3795 15.5801 10.1895 15.5001 10.0495 15.3601L7.21945 12.5301C6.92945 12.2401 6.92945 11.7601 7.21945 11.4701C7.50945 11.1801 7.98945 11.1801 8.27945 11.4701L10.5795 13.7701L15.7195 8.6301C16.0095 8.3401 16.4895 8.3401 16.7795 8.6301C17.0695 8.9201 17.0695 9.4001 16.7795 9.6901L11.1095 15.3601C10.9695 15.5001 10.7795 15.5801 10.5795 15.5801Z" fill="currentColor" />
               </g>
             </svg>
           </div>
@@ -84,27 +53,29 @@ const Button = () => {
       </button>
     </StyledWrapper>
   );
-};
+}
 
 const StyledWrapper = styled.div`
   .button {
-    --primary: #3498db;
-    --neutral-1: #f7f8f7;
-    --neutral-2: #e7e7e7;
-    --radius: 14px;
+    --primary: #4f46e5;
+    --neutral-1: #ffffff;
+    --neutral-2: #f3f4f6;
+    --radius: 16px;
 
     cursor: pointer;
     border-radius: var(--radius);
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     border: none;
-    box-shadow: 0 0.5px 0.5px 1px rgba(255, 255, 255, 0.2),
-      0 10px 20px rgba(0, 0, 0, 0.2), 0 4px 5px 0px rgba(0, 0, 0, 0.05);
+    box-shadow:
+      0 1px 1px rgba(255, 255, 255, 0.4),
+      0 12px 24px rgba(0, 0, 0, 0.15),
+      0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    transition: all 0.3s ease;
-
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
     /* Modified for responsive width */
     width: 100%; 
     max-width: 100%;
@@ -119,18 +90,6 @@ const StyledWrapper = styled.div`
       min-width: 300px;
     }
     
-    @media (min-width: 1024px) {
-      min-width: 350px;
-    }
-    
-    @media (min-width: 1280px) {
-      min-width: 400px;
-    }
-    
-    @media (min-width: 1536px) {
-      min-width: 450px;
-    }
-
     padding: 17px;
     height: 52px;
     font-family: "Inter", system-ui, sans-serif;
@@ -141,13 +100,17 @@ const StyledWrapper = styled.div`
   }
 
   .button:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 1px 2px rgba(255, 255, 255, 0.3),
-      0 15px 30px rgba(0, 0, 0, 0.3), 0 10px 3px -3px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+      0 2px 2px rgba(255, 255, 255, 0.4),
+      0 18px 32px rgba(0, 0, 0, 0.15),
+      0 8px 12px rgba(0, 0, 0, 0.1);
   }
+
   .button:active {
     transform: scale(1);
-    box-shadow: 0 0 1px 2px rgba(255, 255, 255, 0.3),
+    box-shadow:
+      0 0 1px 2px rgba(255, 255, 255, 0.3),
       0 10px 3px -3px rgba(0, 0, 0, 0.2);
   }
   .button:after {
@@ -156,7 +119,8 @@ const StyledWrapper = styled.div`
     inset: 0;
     border-radius: var(--radius);
     border: 2.5px solid transparent;
-    background: linear-gradient(var(--neutral-1), var(--neutral-2)) padding-box,
+    background:
+      linear-gradient(var(--neutral-1), var(--neutral-2)) padding-box,
       linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.45))
         border-box;
     z-index: 0;
@@ -213,11 +177,12 @@ const StyledWrapper = styled.div`
     background: conic-gradient(
       from 180deg,
       transparent 60%,
-      white 80%,
+      var(--primary) 85%,
       transparent 100%
     );
-    animation: spin 2s linear infinite;
+    animation: spin 2.5s linear infinite;
     animation-play-state: paused;
+    opacity: 0.7;
   }
   @keyframes spin {
     0% {
@@ -255,7 +220,7 @@ const StyledWrapper = styled.div`
     }
     50% {
       opacity: 1;
-      transform: translateY(-3px) translateX(0) rotate(0);
+      transform: translateY(-4px) translateX(0) rotate(0);
       color: var(--primary);
     }
     100% {
@@ -315,11 +280,11 @@ const StyledWrapper = styled.div`
     }
     60% {
       opacity: 1;
-      transform: translateX(70px) rotate(45deg) scale(2);
+      transform: translateX(80px) rotate(45deg) scale(2.2);
     }
     100% {
       opacity: 0;
-      transform: translateX(160px) rotate(45deg) scale(0);
+      transform: translateX(180px) rotate(45deg) scale(0);
     }
   }
   @keyframes land {
