@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from "react";
-import '../styles/button_glow_notif.css';
-import Swal from 'sweetalert2';
+import React, {useRef, useState, useEffect } from "react";
+import "../styles/button_glow_notif.css";
+import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {
-  AlertCircle,
-  Check,
-  FileText,
-  Calendar,
-  Send,
-} from "lucide-react";
+import { AlertCircle, Check, FileText, Calendar, Send } from "lucide-react";
 import { toast } from "react-hot-toast";
 import OrderHeader from "../components/orderCreate/OrderCreateHeader";
 import PhoneInput from "../components/orderCreate/PhoneInput";
 import TelegramLinkButton from "../components/TelegramLinkButton";
-import { detectProvider, validatePhone, providerColors } from "../utils/phoneHelper";
+import {
+  detectProvider,
+  validatePhone,
+  providerColors,
+} from "../utils/phoneHelper";
+import Button from "../components/orderCreate/Button"; // Import the new button component
 
 const OrderCreate = () => {
   const [service, setService] = useState("");
@@ -23,6 +22,8 @@ const OrderCreate = () => {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const formRef = useRef(null);
 
   // State untuk nomor HP
   const [savedPhones, setSavedPhones] = useState([]);
@@ -42,9 +43,12 @@ const OrderCreate = () => {
       setIsCheckingTelegram(true);
       const token = localStorage.getItem("token");
       try {
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://jokidins-production.up.railway.app/api/user/profile",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         // Asumsi field telegramChatId ada di profile
         if (res.data.telegramChatId) {
           setIsTelegramLinked(true);
@@ -64,9 +68,12 @@ const OrderCreate = () => {
     const fetchPhones = async () => {
       const token = localStorage.getItem("token");
       try {
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/phones", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://jokidins-production.up.railway.app/api/user/phones",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setSavedPhones(res.data);
       } catch (error) {
         console.error("Gagal ambil nomor HP tersimpan:", error);
@@ -111,9 +118,12 @@ const OrderCreate = () => {
   const checkTelegramStatus = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://jokidins-production.up.railway.app/api/user/profile",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (res.data.telegramChatId) {
         setIsTelegramLinked(true);
         return true;
@@ -126,14 +136,29 @@ const OrderCreate = () => {
   };
 
   const handleSubmit = async (e) => {
+    if (!formRef.current.checkValidity()) {
+      // 2) Tampilkan bubble error bawaan
+      // (Ini memicu pesan "Harap isi bidang ini" kalau browser-nya berbahasa Indonesia,
+      //  atau "Please fill out this field" jika browser bahasa Inggris, dsb.)
+      e.preventDefault();
+      formRef.current.reportValidity();
+      return;
+    }
     e.preventDefault();
+    
+    // Prevent double submission
+    if (isLoading) return;
+    
     const token = localStorage.getItem("token");
 
     if (selectedPhoneOption === "new") {
       if (!validatePhone(phone)) {
-        toast.error("Nomor HP tidak valid. Pastikan format dan panjangnya benar.", {
-          icon: <AlertCircle className="h-5 w-5 text-red-500" />,
-        });
+        toast.error(
+          "Nomor HP tidak valid. Pastikan format dan panjangnya benar.",
+          {
+            icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+          }
+        );
         return;
       }
     } else {
@@ -158,22 +183,25 @@ const OrderCreate = () => {
           cancelButtonText: "Batal",
           customClass: {
             confirmButton: "glow-confirm-button",
-            cancelButton: "glow-cancel-button"
-          }
+            cancelButton: "glow-cancel-button",
+          },
         });
         if (!confirmSubmit.isConfirmed) return;
       } else {
         setIsTelegramLinked(true);
       }
     }
-    
+
     setIsLoading(true);
 
     const formData = new FormData();
     formData.append("service", service);
     formData.append("description", description);
     formData.append("deadline", deadline);
-    formData.append("phone", selectedPhoneOption === "new" ? phone : selectedPhoneOption);
+    formData.append(
+      "phone",
+      selectedPhoneOption === "new" ? phone : selectedPhoneOption
+    );
     formData.append("provider", provider);
 
     if (file) {
@@ -181,12 +209,16 @@ const OrderCreate = () => {
     }
 
     try {
-      await axios.post("https://jokidins-production.up.railway.app/api/orders", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axios.post(
+        "https://jokidins-production.up.railway.app/api/orders",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       toast.success("Order berhasil dibuat!", {
         icon: <Check className="h-5 w-5 text-green-500" />,
@@ -201,8 +233,7 @@ const OrderCreate = () => {
       toast.error("Gagal membuat order. Silakan coba lagi.", {
         icon: <AlertCircle className="h-5 w-5 text-red-500" />,
       });
-    } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Only reset loading state on error
     }
   };
 
@@ -225,7 +256,7 @@ const OrderCreate = () => {
                 <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-white"></div>
                 <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-white"></div>
               </div>
-              
+
               <div className="relative p-6">
                 <div className="flex items-start">
                   <div className="hidden md:block bg-white bg-opacity-20 p-3 rounded-full mr-4">
@@ -236,9 +267,11 @@ const OrderCreate = () => {
                       Aktifkan Notifikasi Telegram
                     </h3>
                     <p className="text-blue-100 text-sm mb-4">
-                      Dapatkan update real-time status order langsung ke Telegram kamu. Kamu akan mendapatkan notifikasi saat order diproses, selesai, atau ada perubahan status.
+                      Dapatkan update real-time status order langsung ke
+                      Telegram kamu. Kamu akan mendapatkan notifikasi saat order
+                      diproses, selesai, atau ada perubahan status.
                     </p>
-                    
+
                     <div className="mt-2">
                       <TelegramLinkButton onLinked={handleTelegramLinked} />
                     </div>
@@ -257,7 +290,8 @@ const OrderCreate = () => {
             </div>
             <div>
               <p className="text-green-800 font-medium">
-                Telegram sudah terhubung! Kamu akan menerima notifikasi status order.
+                Telegram sudah terhubung! Kamu akan menerima notifikasi status
+                order.
               </p>
             </div>
           </div>
@@ -266,9 +300,12 @@ const OrderCreate = () => {
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <OrderHeader />
           <div className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label htmlFor="service" className="flex items-center text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="service"
+                  className="flex items-center text-sm font-medium text-gray-700"
+                >
                   <FileText className="h-4 w-4 mr-2 text-blue-600" />
                   Joki Apa
                 </label>
@@ -284,7 +321,10 @@ const OrderCreate = () => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="description" className="flex items-center text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="description"
+                  className="flex items-center text-sm font-medium text-gray-700"
+                >
                   <FileText className="h-4 w-4 mr-2 text-blue-600" />
                   Deskripsi Joki
                 </label>
@@ -299,7 +339,10 @@ const OrderCreate = () => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="deadline" className="flex items-center text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="deadline"
+                  className="flex items-center text-sm font-medium text-gray-700"
+                >
                   <Calendar className="h-4 w-4 mr-2 text-blue-600" />
                   Deadline (Tanggal & Waktu)
                 </label>
@@ -324,44 +367,11 @@ const OrderCreate = () => {
                 detectProvider={detectProvider}
               />
 
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className={`w-full flex items-center justify-center bg-gradient-to-r from-blue-800 to-blue-600 text-white py-3 px-4 rounded-lg 
-                           hover:from-blue-700 hover:to-blue-500 focus:outline-none focus:ring-2 
-                           focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium text-sm ${
-                             isLoading ? "opacity-70 cursor-not-allowed" : ""
-                           }`}
-                >
-                  {isLoading ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Sedang Memproses...
-                    </>
-                  ) : (
-                    "Kirim"
-                  )}
-                </button>
+              <div className="space-y-2">
+                <Button 
+                  onClick={handleSubmit} 
+                  isLoading={isLoading} 
+                />
               </div>
             </form>
           </div>
