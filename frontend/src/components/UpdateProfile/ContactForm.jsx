@@ -181,7 +181,8 @@ const ContactForm = ({
         </label>
         <div className="relative rounded-lg shadow-sm">
           <input
-            type="text"
+            type="tel"
+            inputMode="numeric"
             placeholder="Nomor HP harus diawali 0"
             className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
             value={phoneInput}
