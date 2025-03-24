@@ -14,7 +14,7 @@ const ProfileAccountInfo = ({ profile, formatDate }) => {
         <div className="flex justify-between items-center py-3 border-b border-gray-100">
           <div>
             <p className="text-sm text-gray-500">Tipe Akun</p>
-            <p className="font-medium capitalize">{profile.role === "user" ? "Customer" : profile.role}</p>
+            <p className="font-medium capitalize">{profile.role === "user" ? "Kustomer" : profile.role}</p>
           </div>
           <div className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-1 rounded-full">
             Aktif
@@ -44,11 +44,11 @@ const ProfileAccountInfo = ({ profile, formatDate }) => {
           <p className="text-sm text-gray-500">Terhubung ke Telegram</p>
           <div className="flex justify-between items-center">
             <p className="font-medium">
-              {profile.telegramChatId ? "Sudah Terhubung" : "Belum Terhubung"}
+              {profile.telegramChatId ? "Terhubung" : "Belum Terhubung"}
             </p>
             <div className="flex items-center">
               {profile.telegramChatId && (
-                <span className="text-xs text-green-600 mr-2 font-medium">Active</span>
+                <span className="text-xs text-green-600 mr-2 font-medium">Terkoneksi</span>
               )}
               <div
                 className={`rounded-full h-4 w-4 ${profile.telegramChatId ? "bg-green-500" : "bg-gray-300"}`}
