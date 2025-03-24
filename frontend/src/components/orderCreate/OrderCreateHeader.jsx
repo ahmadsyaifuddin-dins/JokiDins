@@ -14,7 +14,7 @@ const OrderCreateHeader = () => {
         <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
         <span className="font-medium">Kembali ke Daftar Pesanan</span>
       </button>
-      <h1 className="text-2xl font-bold text-white">Buat Order Baru</h1>
+      <h1 className="text-2xl font-bold text-white">Buat Order Joki Baru</h1>
       <p className="text-blue-100 mt-1">
         Silakan isi detail order anda di bawah ini
       </p>

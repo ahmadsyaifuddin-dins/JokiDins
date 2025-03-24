@@ -359,7 +359,7 @@ const OrderCreate = () => {
                       Sedang Memproses...
                     </>
                   ) : (
-                    "Buat Order"
+                    "Kirim"
                   )}
                 </button>
               </div>
