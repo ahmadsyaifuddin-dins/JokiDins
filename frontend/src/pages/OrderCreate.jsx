@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect } from "react";
+import React, {useRef, useState, useEffect, useContext} from "react";
 import "../styles/button_glow_notif.css";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -15,6 +15,7 @@ import {
 } from "../utils/phoneHelper";
 import Button from "../components/orderCreate/Button"; // Import the new button component
 import ButtonDefault from "../components/orderCreate/ButtonDefault";
+import { AuthContext } from "../context/AuthContext";
 
 const OrderCreate = () => {
   const [service, setService] = useState("");
@@ -25,6 +26,9 @@ const OrderCreate = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const formRef = useRef(null);
+
+  const { user, setUser } = useContext(AuthContext);
+
 
   // State untuk nomor HP
   const [savedPhones, setSavedPhones] = useState([]);
@@ -210,22 +214,32 @@ const OrderCreate = () => {
     }
 
     try {
-      await axios.post(
-        "https://jokidins-production.up.railway.app/api/orders",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
+      await axios.post("https://jokidins-production.up.railway.app/api/orders", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    
+      // Update global state user, tambahkan nomor baru ke field phones
+      if (selectedPhoneOption === "new" && user) {
+        const updatedPhones = user.phones ? [...user.phones, phone] : [phone];
+        setUser({
+          ...user,
+          phones: updatedPhones,
+        });
+        // Jangan lupa update localStorage juga, biar konsisten
+        localStorage.setItem("user", JSON.stringify({
+          ...user,
+          phones: updatedPhones,
+        }));
+      }
+    
       toast.success("Order berhasil dibuat!", {
         icon: <Check className="h-5 w-5 text-green-500" />,
         duration: 4000,
       });
-
+    
       setTimeout(() => {
         navigate("/OrderList");
       }, 1500);
@@ -234,7 +248,7 @@ const OrderCreate = () => {
       toast.error("Gagal membuat order. Silakan coba lagi.", {
         icon: <AlertCircle className="h-5 w-5 text-red-500" />,
       });
-      setIsLoading(false); // Only reset loading state on error
+      setIsLoading(false);
     }
   };
 
