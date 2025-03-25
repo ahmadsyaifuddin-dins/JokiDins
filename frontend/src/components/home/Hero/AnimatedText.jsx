@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const AnimatedText = ({ texts, decryptSpeed = 30, maxIterations = 100, delay = 50, cycleDuration = 7000 }) => {
+const AnimatedText = ({ texts, decryptSpeed = 70, maxIterations = 100, delay = 50, cycleDuration = 7000 }) => {
   const [originalText, setOriginalText] = useState("");
   const [displayText, setDisplayText] = useState("");
   const [isDecrypting, setIsDecrypting] = useState(true);
