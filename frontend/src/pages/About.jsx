@@ -94,39 +94,47 @@ const About = () => {
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-            <div className="w-24 h-24 bg-blue-950 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-              AS
-            </div>
-            <h3 className="text-xl font-semibold text-blue-950 mb-1">Ahmad Syaifuddin</h3>
-            <p className="text-gray-500 mb-4">Founder & CEO</p>
-            <p className="text-gray-600">
-              Berpengalaman lebih dari 2 tahun dalam bidang pendidikan dan manajemen proyek
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-            <div className="w-24 h-24 bg-blue-950 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-              RS
-            </div>
-            <h3 className="text-xl font-semibold text-blue-950 mb-1">Unknown</h3>
-            <p className="text-gray-500 mb-4">Head of Academic</p>
-            <p className="text-gray-600">
-              Spesialis dalam penelitian akademik dengan pengalaman mengajar 6 tahun
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-            <div className="w-24 h-24 bg-blue-950 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-              BP
-            </div>
-            <h3 className="text-xl font-semibold text-blue-950 mb-1">Unknown</h3>
-            <p className="text-gray-500 mb-4">Technical Lead</p>
-            <p className="text-gray-600">
-              Ahli IT dengan spesialisasi dalam pengembangan sistem dan keamanan data
-            </p>
-          </div>
-        </div>
+  <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+    <div className="w-24 h-24 bg-blue-950 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+      AS
+    </div>
+    <h3 className="text-xl font-semibold text-blue-950 mb-1">Ahmad Syaifuddin</h3>
+    <p className="text-gray-500 mb-4">Founder & CEO</p>
+    <p className="text-gray-600">
+      Ahli teknologi informasi dengan pengalaman lebih dari 1 tahun dalam pengembangan strategi bisnis digital dan manajemen proyek teknologi
+    </p>
+  </div>
+  <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+    <div className="w-24 h-24 bg-blue-950 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+      TD
+    </div>
+    <h3 className="text-xl font-semibold text-blue-950 mb-1">Tiara Desmitha Oliviany</h3>
+    <p className="text-gray-500 mb-4">Administrator</p>
+    <p className="text-gray-600">
+      Ahli administrasi berpengalaman dengan keahlian dalam manajemen operasional dan pengembangan sistem informasi
+    </p>
+  </div>
+  <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+    <div className="w-24 h-24 bg-blue-950 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+     F
+    </div>
+    <h3 className="text-xl font-semibold text-blue-950 mb-1">Fitriani</h3>
+    <p className="text-gray-500 mb-4">Marketing Manager</p>
+    <p className="text-gray-600">
+      Praktisi marketing berbakat dengan strategi inovatif dalam pengembangan brand dan akuisisi pelanggan
+    </p>
+  </div>
+  <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+    <div className="w-24 h-24 bg-blue-950 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+     MR
+    </div>
+    <h3 className="text-xl font-semibold text-blue-950 mb-1">Maulida Rahmah</h3>
+    <p className="text-gray-500 mb-4">Konsultan Bisnis & HRD</p>
+    <p className="text-gray-600">
+      Pakar sumber daya manusia dan konsultasi bisnis dengan fokus pada pengembangan strategi organisasi dan manajemen talenta
+    </p>
+  </div>
+</div>
       </div>
     </div>
   );
