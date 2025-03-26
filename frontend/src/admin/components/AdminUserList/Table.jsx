@@ -54,6 +54,7 @@ const Table = ({
   };
 
   if (filteredUsers.length === 0) {
+    console.log(filteredUsers);
     return (
       <div className="p-8 text-center">
         <div className="text-gray-500 font-medium mb-2">

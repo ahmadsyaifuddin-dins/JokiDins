@@ -8,6 +8,7 @@ const {
   getProfile,
   updateProfile,
   getPhones,
+  status,
 } = require("../controllers/userController");
 
 // Hanya admin yang bisa akses data user
@@ -27,5 +28,8 @@ router.put("/profile", protect, updateProfile);
 
 // Ambil nomor telepon dari profile user
 router.get('/phones', protect, getPhones);
+
+// Endpoint untuk cek status akun
+router.get("/status", protect, status);
 
 module.exports = router;

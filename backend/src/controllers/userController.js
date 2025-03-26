@@ -158,6 +158,18 @@ const getPhones = async (req, res) => {
   }
 };
 
+
+const status = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ is_active: user.is_active });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getUsers,
   getUserDetail,
@@ -165,4 +177,5 @@ module.exports = {
   getProfile,
   updateProfile,
   getPhones,
+  status,
 };

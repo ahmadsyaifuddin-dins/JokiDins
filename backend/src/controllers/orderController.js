@@ -222,6 +222,22 @@ const deleteOrder = async (req, res) => {
   }
 };
 
+// DELETE ALL ORDERS (ADMIN ONLY)
+const deleteAllOrders = async (req, res) => {
+  try {
+    // Cek role admin
+    if (req.user.role !== "admin") {
+      return res.status(401).json({ message: "Tidak diizinkan, hanya admin yang bisa hapus semua order" });
+    }
+
+    // Hapus semua order
+    await Order.deleteMany({});
+    res.json({ message: "Semua order berhasil dihapus" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createOrder,
   getOrders,
@@ -229,4 +245,5 @@ module.exports = {
   downloadFile,
   updateOrder,
   deleteOrder,
+  deleteAllOrders,
 };

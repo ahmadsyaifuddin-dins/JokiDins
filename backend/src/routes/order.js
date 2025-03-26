@@ -11,6 +11,7 @@ const {
   downloadFile,
   updateOrder,
   deleteOrder,
+  deleteAllOrders,
 } = require("../controllers/orderController");
 
 const uploadDir = "uploads/order";
@@ -40,6 +41,7 @@ router.put("/:id", protect, upload.single("file"), updateOrder);
 router.get("/", protect, getOrders);
 router.get("/:id", protect, getOrderById);
 router.get("/:id/file", protect, downloadFile);
+router.delete("/all", protect, deleteAllOrders);
 router.delete("/:id", protect, deleteOrder);
 
 module.exports = router;
