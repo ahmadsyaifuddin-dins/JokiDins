@@ -97,7 +97,7 @@ const Timeline = () => {
         {timelineSteps.map((step, index) => (
           <VerticalTimelineElement
             key={step.title}
-            date={`Langkah ${index + 1}`}
+            date={`Langkah ${index + 3}`}
             iconStyle={{
               background: step.color,
               color: "#ffffff",
