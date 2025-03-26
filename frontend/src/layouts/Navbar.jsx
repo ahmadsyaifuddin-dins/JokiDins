@@ -119,8 +119,8 @@ const Navbar = () => {
             <div className="flex-shrink-0">
               <Link to="/">
                 <div className="flex items-center">
-                  <img src="/logo.svg" alt="JokiDins Logo" className="h-9 w-9 mr-2" />
-                  <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">JokiDins</span>
+                  <img src="/images/dinsy-removebg-preview.png" alt="JokiDins Logo" className="h-20 w-20 h mr-2" />
+                  <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">JokiDins</span>
                 </div>
               </Link>
             </div>
