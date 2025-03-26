@@ -11,6 +11,10 @@ exports.disableUser = async (req, res) => {
         return res.status(404).json({ message: "User tidak ditemukan." });
       }
       
+      // Update status akun jadi nonaktif
+      user.is_active = false;
+      await user.save();
+      
       const emailTemplate = disableAccountMessage(user.name);
       await sendEmail(user.email, emailTemplate.subject, emailTemplate.html);
   
@@ -19,7 +23,7 @@ exports.disableUser = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
-
+  
   exports.enableUser = async (req, res) => {
     try {
       const userId = req.params.id;
@@ -27,7 +31,11 @@ exports.disableUser = async (req, res) => {
       if (!user) {
         return res.status(404).json({ message: "User tidak ditemukan." });
       }
-        
+      
+      // Update status akun jadi aktif
+      user.is_active = true;
+      await user.save();
+      
       const emailTemplate = enableAccountMessage(user.name);
       await sendEmail(user.email, emailTemplate.subject, emailTemplate.html);
   
@@ -36,3 +44,4 @@ exports.disableUser = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
+  
