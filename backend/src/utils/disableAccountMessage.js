@@ -22,7 +22,7 @@ const disableAccountMessage = (userName) => {
             <div class="content">
               <p>Kepada ${userName},</p>
               
-              <p>Kami ingin menginformasikan bahwa status akun Anda telah diperbarui pada ${new Date().toLocaleDateString()}.</p>
+              <p>Kami ingin menginformasikan bahwa status akun Anda telah dinonaktifkan pada ${new Date().toLocaleDateString()}.</p>
               
               <p>Jika Anda merasa ini bukan merupakan tindakan yang Anda kehendaki, atau memiliki pertanyaan lebih lanjut, silakan hubungi tim dukungan kami.</p>
               
