@@ -72,6 +72,78 @@ const AdminUserDetail = () => {
     }
   };
 
+  const handleDisable = async (userId) => {
+    const confirmDisable = await Swal.fire({
+      title: "Nonaktifkan akun pengguna?",
+      text: "Pengguna tidak akan bisa login setelah dinonaktifkan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Nonaktifkan",
+    });
+
+    if (!confirmDisable.isConfirmed) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      // Pastikan endpoint disable sesuai dengan backend-mu
+      await axios.post(
+        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/disable`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("Akun pengguna berhasil dinonaktifkan.");
+      fetchUsers();
+    } catch (err) {
+      if (err.response && err.response.status === 404) {
+        toast.error("Akun pengguna tidak ditemukan.");
+      } else if (err.response && err.response.status === 400) {
+        toast.error("Anda tidak dapat menonaktifkan diri sendiri.");
+      } else {
+        console.error("Gagal menonaktifkan user:", err);
+        toast.error("Gagal menonaktifkan user. Silakan coba lagi.");
+      }
+    }
+  };
+
+  const handleEnable = async (userId) => {
+    const confirmEnable = await Swal.fire({
+      title: "Aktifkan akun pengguna?",
+      text: "Pengguna akan bisa login kembali setelah diaktifkan!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Aktifkan",
+    });
+
+    if (!confirmEnable.isConfirmed) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      // Pastikan endpoint enable sesuai dengan backend-mu
+      await axios.post(
+        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/enable`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("Akun pengguna berhasil diaktifkan.");
+      fetchUsers();
+    } catch (err) {
+      console.error("Gagal mengaktifkan user:", err);
+      toast.error("Gagal mengaktifkan user.");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-50">

@@ -11,6 +11,7 @@ const telegramToken = require("./routes/telegram");
 const telegramWebhook = require("./routes/telegramWebhook");
 const activityRoutes = require("./routes/activity");
 const pendapatanRoutes = require("./routes/pendapatan");
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.json());
 connectDB();
 
 // Routes
+app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/orders", orderRoutes);

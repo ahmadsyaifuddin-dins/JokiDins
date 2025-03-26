@@ -41,9 +41,10 @@ const GoogleSignIn = () => {
   };
 
   const handleSuccess = async (credentialResponse) => {
+    let loadingToast = null;
     try {
       // Show loading toast
-      const loadingToast = toast.loading("Menghubungkan dengan Google...");
+      loadingToast = toast.loading("Menghubungkan dengan Google...");
       
       // Kirim ID token ke backend
       const res = await axios.post("https://jokidins-production.up.railway.app/api/auth/google", {
@@ -64,8 +65,15 @@ const GoogleSignIn = () => {
         navigate(user.role === "admin" ? "/admin/dashboard" : "/profile");
       }, 1000);
     } catch (error) {
+      if (loadingToast) toast.dismiss(loadingToast);
       console.error("Google login error:", error);
-      toast.error("Login dengan Google gagal.", toastStyles.error);
+      
+      // Kalau backend mengembalikan pesan spesifik (misal akun nonaktif), tampilkan pesan itu
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message, toastStyles.error);
+      } else {
+        toast.error("Login dengan Google gagal.", toastStyles.error);
+      }
     }
   };
 

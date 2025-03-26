@@ -133,6 +133,11 @@ exports.login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Email atau password salah." });
 
+    // Pengecekan akun aktif
+    if (!user.is_active) {
+      return res.status(403).json({ message: "Akun dinonaktifkan. Hubungi Developer." });
+    }
+
     if (!user.isVerified) {
       const verificationCode = generateVerificationCode();
       const verificationCodeExpires = getVerificationCodeExpires(VERIFICATION_CODE_EXPIRATION);
@@ -258,6 +263,10 @@ exports.verifyResetToken = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "Token tidak valid atau sudah kadaluwarsa." });
     }
+     // Pengecekan akun aktif
+    //  if (!user.is_active) {
+    //   return res.status(403).json({ message: "Akun dinonaktifkan. Hubungi Developer." });
+    // }
     res.status(200).json({ message: "Token valid." });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -277,6 +286,16 @@ exports.googleLogin = async (req, res) => {
 
     let user = await User.findOne({ email });
     let isNewUser = false;
+    
+    // Jika user ditemukan, cek status aktifnya
+    if (user) {
+      // Cek apakah akun aktif
+      if (!user.is_active) {
+        return res.status(403).json({ message: "Akun dinonaktifkan. Hubungi admin." });
+      }
+    }
+
+    // Jika user belum ada, buat akun baru (secara default akun baru aktif)
     if (!user) {
       isNewUser = true;
       const defaultPassword = await bcrypt.hash("defaultGooglePassword", 10);
@@ -287,10 +306,10 @@ exports.googleLogin = async (req, res) => {
         avatar: picture,
         isVerified: true,
         role: "user",
-        birthday: user.birthday,
-        gender: user.gender,
         loginMethod: "google", 
         googleId: picture ? googleId : null,
+        // Pastikan akun baru otomatis aktif (default true)
+        is_active: true,
       });
       await user.save();
 
@@ -334,4 +353,3 @@ exports.googleLogin = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-

@@ -56,6 +56,9 @@ const UserSchema = new mongoose.Schema({
   birthday: { type: Date },
   
   gender: { type: String },
+  
+  is_active: { type: Boolean, default: true },
+
 }, 
 { timestamps: true });
 
