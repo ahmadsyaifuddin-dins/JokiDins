@@ -60,7 +60,7 @@ const Features = ({ isVisible, scrollY }) => {
               <span className="px-4 py-2 bg-gray-800/80 backdrop-blur-sm rounded-full text-blue-400 text-sm font-medium mb-4 inline-block shadow-lg shadow-blue-900/10">
                 Keunggulan
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500 py-2 leading-tight">
                 Mengapa Memilih JokiDins?
               </h2>
               <p className="text-xl text-gray-400 max-w-2xl mx-auto">
