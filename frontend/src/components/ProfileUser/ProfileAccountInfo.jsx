@@ -14,7 +14,7 @@ const ProfileAccountInfo = ({ profile, formatDate }) => {
         <div className="flex justify-between items-center py-3 border-b border-gray-100">
           <div>
             <p className="text-sm text-gray-500">Tipe Akun</p>
-            <p className="font-medium capitalize">{profile.role === "user" ? "Kustomer" : profile.role}</p>
+            <p className="font-medium capitalize">{profile.role === "user" ? "Kostumer" : profile.role}</p>
           </div>
           <div className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-1 rounded-full">
             Aktif
