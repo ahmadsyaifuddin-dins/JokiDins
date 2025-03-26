@@ -69,7 +69,7 @@ const Timeline = () => {
     <div className="bg-gray-950 text-white py-16 px-4">
       <div className="text-center mb-16">
         <span className="px-4 py-2 bg-gray-800/80 backdrop-blur-sm rounded-full text-blue-400 text-sm font-medium mb-4 inline-block shadow-lg shadow-blue-900/10">
-          Garis Waktu
+          Timeline
         </span>
         <h2
           className="
