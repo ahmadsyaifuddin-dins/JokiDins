@@ -1,5 +1,6 @@
 const User = require("../models/User");
-const { disableAccountMessage, enableAccountMessage } = require("../utils/disableAccountMessage");
+const { disableAccountMessage } = require("../utils/disableAccountMessage");
+const { enableAccountMessage } = require("../utils/enableAccountMessage");
 const sendEmail = require("../utils/sendEmail"); // pastikan sudah import fungsi sendEmail
 
 exports.disableUser = async (req, res) => {
