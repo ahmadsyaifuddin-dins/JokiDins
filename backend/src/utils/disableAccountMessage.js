@@ -39,3 +39,8 @@ const disableAccountMessage = (userName) => {
       `
     };
   };
+
+  module.exports = {
+    disableAccountMessage,
+    enableAccountMessage
+  };
