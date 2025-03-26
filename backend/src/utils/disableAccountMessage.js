@@ -1,6 +1,6 @@
 const disableAccountMessage = (userName) => {
     return {
-      subject: "Status Akun Anda Telah Diperbarui",
+      subject: "Akun anda di Suspent",
       html: `
         <!DOCTYPE html>
         <html lang="id">
@@ -20,7 +20,7 @@ const disableAccountMessage = (userName) => {
               <h1>Pemberitahuan Status Akun</h1>
             </div>
             <div class="content">
-              <p>Kepada Yth. ${userName},</p>
+              <p>Kepada ${userName},</p>
               
               <p>Kami ingin menginformasikan bahwa status akun Anda telah diperbarui pada ${new Date().toLocaleDateString()}.</p>
               

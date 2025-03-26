@@ -20,7 +20,7 @@ const enableAccountMessage = (userName) => {
               <h1>Konfirmasi Aktivasi Akun</h1>
             </div>
             <div class="content">
-              <p>Kepada Yth. ${userName},</p>
+              <p>Kepada ${userName},</p>
               
               <p>Kami ingin memberitahukan bahwa akun Anda telah diaktifkan kembali pada ${new Date().toLocaleDateString()}.</p>
               
