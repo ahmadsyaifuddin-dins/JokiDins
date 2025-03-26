@@ -19,6 +19,7 @@ import Hero from "../components/home/Hero";
 import Services from "../components/home/Services";
 import Platform from "../components/home/Platform";
 import Stats from "../components/home/Stats";
+import Timeline from "../components/home/Timeline";
 
 const Home = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -75,6 +76,8 @@ const Home = () => {
 
       {/* Services Section - Improved card design and animations */}
       <Services isVisible={isVisible.services} />
+
+      <Timeline />
 
       {/* Platform Section - Enhanced with better animations */}
       <Platform isVisible={isVisible.platform}/>
