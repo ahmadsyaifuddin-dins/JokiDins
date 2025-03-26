@@ -8,7 +8,7 @@ const Services = ({ isVisible }) => {
           title: "Web & Aplikasi Web Profesional",
           description:
             "Website dan aplikasi web yang responsif dan kekinian, dirancang khusus buat mendongkrak bisnismu. Gak ribet, tapi tetap profesional sesuai banget buat bisnis, kampus, atau organisasi kamu",
-          tags: ["Laravel", "ReactJS", "VueJS", "NextJS", "NestJS", "Svelte"],
+          tags: ["Laravel", "ReactJS", "VueJS", "NextJS", "NestJS", "Svelte", "Astro"],
           color: "blue",
           bgFrom: "from-blue-900/20",
           bgTo: "to-indigo-900/20",
