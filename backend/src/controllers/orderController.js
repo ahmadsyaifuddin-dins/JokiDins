@@ -8,6 +8,12 @@ const Activity = require("../models/Activity");
 // CREATE ORDER
 const createOrder = async (req, res) => {
   try {
+    
+     // Cek dulu status akun user
+     if (!req.user.is_active) {
+      return res.status(403).json({ message: "Akun kamu dinonaktifkan. Kamu tidak dapat membuat order." });
+    }
+
     const { service, description, deadline, phone, provider } = req.body;
     if (!phone || !provider) {
       return res.status(400).json({ message: "Nomor HP dan provider wajib diisi" });

@@ -11,11 +11,16 @@ const useAxiosInterceptor = () => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
       (error) => {
-        if (error.response && error.response.status === 401) {
-          // Cek apakah kita sudah di halaman login
+        // Kalau respon error 401 (Unauthorized) atau 403 (Forbidden: bisa karena akun nonaktif)
+        if (
+          error.response &&
+          (error.response.status === 401 || error.response.status === 403)
+        ) {
+          // Kalau kita udah di halaman login, gak usah redirect lagi
           if (location.pathname !== "/login") {
             // Hapus token dan redirect
             localStorage.removeItem("token");
+            localStorage.removeItem("user");
             navigate("/login", { replace: true });
           }
         }
