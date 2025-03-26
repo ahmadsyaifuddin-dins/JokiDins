@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const AnimatedText = ({ texts, decryptSpeed = 70, maxIterations = 100, delay = 50, cycleDuration = 7000 }) => {
+const AnimatedText = ({ texts, decryptSpeed = 80, maxIterations = 90, delay = 10, cycleDuration = 7000 }) => {
   const [originalText, setOriginalText] = useState("");
   const [displayText, setDisplayText] = useState("");
   const [isDecrypting, setIsDecrypting] = useState(true);
   const [textIndex, setTextIndex] = useState(0);
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?";
+  const chars = "ABCDEFGHIJKLMNOPRSTUVWYabcdefghijklmnoprstu!?";
 
   // Function to pick a random text from the array that's different from the current one
   const pickRandomText = () => {
