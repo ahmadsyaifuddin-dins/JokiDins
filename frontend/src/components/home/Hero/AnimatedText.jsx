@@ -6,7 +6,7 @@ const AnimatedText = ({ texts, decryptSpeed = 80, maxIterations = 90, delay = 10
   const [displayText, setDisplayText] = useState("");
   const [isDecrypting, setIsDecrypting] = useState(true);
   const [textIndex, setTextIndex] = useState(0);
-  const chars = "ABCDEFGHIJKLMNOPRSTUVWYabcdefghijklmnoprstu!?";
+  const chars = "ABCDEFGHIJKLMNOPRSTUYabcdefghijklmnoprstuy!?";
 
   // Function to pick a random text from the array that's different from the current one
   const pickRandomText = () => {
