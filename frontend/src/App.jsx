@@ -29,12 +29,14 @@ import ResetPassword from "./components/ResetPassword";
 import { Toaster } from "react-hot-toast";
 import AutoLogoutWrapper from "./hooks/AutoLogoutWrapper";
 import AxiosInterceptorWrapper from "./hooks/AxiosInterceptorWrapper";
+import UseAccountStatusCheck from "./hooks/useAccountCheckStatus";
 
 const App = () => {
   return (
     <Router>
       <AutoLogoutWrapper />
       <AxiosInterceptorWrapper />
+      <UseAccountStatusCheck />
       <div className="min-h-screen flex flex-col bg-slate-950">
         <Navbar />
         <Toaster

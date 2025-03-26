@@ -171,6 +171,7 @@ exports.login = async (req, res) => {
         birthday: user.birthday,
         gender: user.gender,
         role: user.role,
+        is_active : user.is_active,
       },
     });
 
@@ -343,6 +344,7 @@ exports.googleLogin = async (req, res) => {
         loginMethod: user.loginMethod,
         googleId: user.googleId,
         isNewUser,
+        is_active: user.is_active
       },
     });
     await Activity.create({
