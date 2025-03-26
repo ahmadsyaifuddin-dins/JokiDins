@@ -10,6 +10,11 @@ exports.disableUser = async (req, res) => {
       if (!user) {
         return res.status(404).json({ message: "User tidak ditemukan." });
       }
+
+// Cegah admin mengnonaktifkan akun sendiri
+     if (req.user._id.toString() === user._id.toString()) {
+       return res.status(400).json({ message: "Admin tidak dapat mengnonaktifkan akun sendiri" });
+     }
       
       // Update status akun jadi nonaktif
       user.is_active = false;
