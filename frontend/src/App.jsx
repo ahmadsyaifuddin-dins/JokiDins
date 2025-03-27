@@ -27,14 +27,14 @@ import VerifyEmail from "./components/VerifyEmail";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import { Toaster } from "react-hot-toast";
-import AutoLogoutWrapper from "./hooks/AutoLogoutWrapper";
+// import AutoLogoutWrapper from "./hooks/AutoLogoutWrapper";
 import AxiosInterceptorWrapper from "./hooks/AxiosInterceptorWrapper";
 // import UseAccountStatusCheck from "./hooks/useAccountCheckStatus";
 
 const App = () => {
   return (
     <Router>
-      <AutoLogoutWrapper />
+      {/* <AutoLogoutWrapper /> */}
       <AxiosInterceptorWrapper />
       {/* <UseAccountStatusCheck /> */}
       <div className="min-h-screen flex flex-col bg-slate-950">

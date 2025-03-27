@@ -1,28 +1,42 @@
-// hooks/useAxiosInterceptor.jsx
-import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useRef, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const useAxiosInterceptor = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { logout } = useContext(AuthContext);
+  const currentPathname = useRef(window.location.pathname);
+  const hasRedirected = useRef(false);
+
+  const handleUnauthorized = useCallback(() => {
+    if (
+      !hasRedirected.current &&
+      currentPathname.current !== "/login"
+    ) {
+      hasRedirected.current = true;
+
+      // Use the logout method from AuthContext
+      logout();
+
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+        hasRedirected.current = false;
+      }, 2000);
+    }
+  }, [navigate, logout]);
 
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
       (error) => {
-        // Kalau respon error 401 (Unauthorized) atau 403 (Forbidden: bisa karena akun nonaktif)
         if (
           error.response &&
           (error.response.status === 401 || error.response.status === 403)
         ) {
-          // Kalau kita udah di halaman login, gak usah redirect lagi
-          if (location.pathname !== "/login") {
-            // Hapus token dan redirect
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            navigate("/login", { replace: true });
-          }
+          handleUnauthorized();
         }
         return Promise.reject(error);
       }
@@ -31,7 +45,7 @@ const useAxiosInterceptor = () => {
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, [navigate, location]);
+  }, [handleUnauthorized]);
 
   return null;
 };

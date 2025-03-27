@@ -78,7 +78,7 @@ exports.verifyEmail = async (req, res) => {
     const welcomeMessage = getWelcomeMessage(user.name);
     await sendEmail(email, "Selamat Datang di JokiDins! 🚀", welcomeMessage);
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30m" });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
     res.json({
       token,
       user: {
@@ -160,7 +160,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30m" });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
     res.json({
       token,
       user: {
@@ -328,7 +328,7 @@ exports.googleLogin = async (req, res) => {
         await user.save();
       }
     }
-    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30m" });
+    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
     res.json({
       token: jwtToken,
       user: {

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 
 export const AuthContext = createContext(null);
 
@@ -6,24 +6,30 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Cek localStorage di awal agar data user tetap ada saat refresh
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Failed to parse user data", error);
+        localStorage.removeItem('user');
+      }
     }
   }, []);
 
-  const login = (userData) => {
+  // Use useCallback to memoize login and logout functions
+  const login = useCallback((userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
-  };
+  }, []);
 
-  const logout = () => {
-    console.log("Logout dipanggil"); // cek di console
+  const logout = useCallback(() => {
+    console.log("Logout called");
     setUser(null);
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-  };
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout, setUser }}>

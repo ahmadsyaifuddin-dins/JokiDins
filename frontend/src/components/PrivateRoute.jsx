@@ -1,24 +1,30 @@
-// components/PrivateRoute.jsx
 import { Navigate } from "react-router-dom";
 import { decodeJwt } from "../utils/decodeJwt";
-import { useContext } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   const { logout } = useContext(AuthContext);
+  const [isTokenValid, setIsTokenValid] = useState(true);
 
-  // Kalau token nggak ada, langsung redirect ke login
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
+  // Memoize the token check to prevent unnecessary rerenders
+  const tokenValidity = useMemo(() => {
+    if (token) {
+      const decodedToken = decodeJwt(token);
+      return decodedToken && decodedToken.exp * 1000 > Date.now();
+    }
+    return false;
+  }, [token]);
 
-  const decodedToken = decodeJwt(token);
+  useEffect(() => {
+    if (token && !tokenValidity) {
+      setIsTokenValid(false);
+      logout();
+    }
+  }, [token, tokenValidity, logout]);
 
-  // Jika token gagal di-decode atau sudah expired
-  if (!decodedToken || decodedToken.exp * 1000 < Date.now()) {
-    // Panggil logout untuk update state AuthContext (hapus user)
-    logout();
+  if (!token || !isTokenValid) {
     return <Navigate to="/login" replace />;
   }
 
