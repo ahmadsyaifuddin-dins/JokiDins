@@ -37,9 +37,10 @@ const Profile = () => {
   }, [contextUser]);
 
   // Fungsi untuk update avatar
-  const updateAvatar = (avatarUrl) => {
-    setProfile((prev) => ({ ...prev, avatar: avatarUrl }));
+  const updateAvatar = (newAvatarUrl) => {
+    setProfile(prev => ({ ...prev, avatar: `${newAvatarUrl}?t=${Date.now()}` }));
   };
+  
 
   if (!contextUser) {
     return (
