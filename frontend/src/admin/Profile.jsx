@@ -1,29 +1,49 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../utils/auth";
-import { User, LogOut, Mail, Users, Cake, Clock, Phone, Edit, Camera } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import ProfileSkeleton from "../loader/ProfileSkeleton";
+import ProfileHeader from "../components/ProfileUser/ProfileHeader";
+import ProfilePersonalInfo from "../components/ProfileUser/ProfilePersonalInfo";
+import ProfileAccountInfo from "../components/ProfileUser/ProfileAccountInfo";
+import ProfileActions from "../components/ProfileUser/ProfileActions";
 
 const Profile = () => {
-  // Ambil user dari context
   const { user: contextUser } = useContext(AuthContext);
-  
-  // State profile diambil dari server
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Inject style animasi pulse
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @keyframes pulse-animation {
+        0% {
+          box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  // Fetch profile data
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
         const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(res.data);
       } catch (error) {
@@ -38,13 +58,14 @@ const Profile = () => {
     }
   }, [contextUser]);
 
+  // Jika belum login
   if (!contextUser) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center">
         <div className="bg-orange-50 text-orange-700 p-6 rounded-lg shadow-md max-w-md">
           <h3 className="text-xl font-semibold mb-2">Akses Terbatas</h3>
           <p>Silakan login terlebih dahulu untuk melihat profil Anda.</p>
-          <button 
+          <button
             onClick={() => navigate("/login")}
             className="mt-4 bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
           >
@@ -59,170 +80,26 @@ const Profile = () => {
     return <ProfileSkeleton />;
   }
 
+  // Fungsi format tanggal
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("id-ID", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
   return (
     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8 min-h-screen">
-      <div className="max-w-3xl mx-auto">
-        {/* Profile Card */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
-          {/* Header Background with Pattern */}
-          <div className="relative h-48 bg-gradient-to-r from-blue-800 to-indigo-900 overflow-hidden">
-            <div className="absolute inset-0 opacity-20">
-              <svg className="h-full w-full" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h800v400H0z" fill="none" />
-                <path d="M800 400V0H0v400h800ZM90 310a50 50 0 0 0 0-100 50 50 0 0 0 0 100Zm290-30a50 50 0 0 0 0-100 50 50 0 0 0 0 100Zm290-40a50 50 0 0 0 0-100 50 50 0 0 0 0 100Z" fill="currentColor" fillOpacity=".1" />
-              </svg>
-            </div>
+      <div className="max-w-4xl mx-auto">
+        <ProfileHeader profile={profile} formatDate={formatDate} navigate={navigate} />
 
-            {/* Profile Avatar */}
-            <div className="absolute mt-8 left-1/2 transform -translate-x-1/2">
-              <div className="relative">
-                {profile.avatar ? (
-                  <img
-                    src={profile.avatar}
-                    alt="Avatar"
-                    className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
-                  />
-                ) : (
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-4xl font-bold border-4 border-white shadow-lg">
-                    {profile.name.charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <button className="absolute bottom-0 right-0 bg-blue-600 p-2 rounded-full text-white shadow-md hover:bg-blue-700 transition-all">
-                  <Camera className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* User Name & Role */}
-          <div className="pt-20 px-8 text-center">
-            <h2 className="text-3xl font-bold text-gray-800">{profile.name}</h2>
-            <div className="mt-1 inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-              <span className="capitalize">
-                {profile.role === "user" ? "Customer" : profile.role}
-              </span>
-            </div>
-          </div>
-
-          {/* Profile Details */}
-          <div className="px-8 py-8 mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Email */}
-              <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                <div className="bg-blue-100 p-3 rounded-lg">
-                  <Mail className="w-6 h-6 text-blue-700" />
-                </div>
-                <div className="truncate">
-                  <p className="text-sm font-medium text-blue-700">Email</p>
-                  <p className="text-gray-700 font-medium truncate max-w-[250px]">
-                    {profile.email}
-                  </p>
-                </div>
-              </div>
-
-              {/* Join Date */}
-              <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                <div className="bg-indigo-100 p-3 rounded-lg">
-                  <Clock className="w-6 h-6 text-indigo-700" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-indigo-700">Bergabung sejak</p>
-                  <p className="text-gray-700 font-medium">
-                    {new Date(profile.createdAt).toLocaleDateString("id-ID", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                </div>
-              </div>
-
-              {/* Saved Phone Numbers */}
-              {profile.phones && profile.phones.length > 0 && (
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md md:col-span-2">
-                  <div className="bg-purple-100 p-3 rounded-lg">
-                    <Phone className="w-6 h-6 text-purple-700" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-purple-700">Nomor HP Tersimpan</p>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {profile.phones.map((p, i) => (
-                        <span key={i} className="inline-flex items-center px-3 py-1 bg-purple-50 text-purple-800 rounded-full text-sm">
-                          {p}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Gender */}
-              {profile.gender && (
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                  <div className="bg-teal-100 p-3 rounded-lg">
-                    <Users className="w-6 h-6 text-teal-700" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-teal-700">Jenis Kelamin</p>
-                    <p className="text-gray-700 font-medium">{profile.gender}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Birthday */}
-              {profile.birthday && (
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-md">
-                  <div className="bg-pink-100 p-3 rounded-lg">
-                    <Cake className="w-6 h-6 text-pink-700" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-pink-700">Tanggal Lahir</p>
-                    <p className="text-gray-700 font-medium">
-                      {new Date(profile.birthday).toLocaleDateString("id-ID", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-10">
-              <button
-                onClick={() => navigate("/update-profile")}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-blue-900 transition-all duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-lg transform hover:-translate-y-1"
-              >
-                <Edit className="w-5 h-5" />
-                <span>Update Profile</span>
-              </button>
-              <button
-                onClick={() => {
-                  logout();
-                  navigate("/login");
-                }}
-                className="flex-1 bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md"
-              >
-                <LogOut className="w-5 h-5" />
-                <span>Logout</span>
-              </button>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <ProfilePersonalInfo profile={profile} formatDate={formatDate} navigate={navigate} />
+          <ProfileAccountInfo profile={profile} formatDate={formatDate} />
         </div>
 
-        {/* Additional Content or Stats (Optional) */}
-        {/* <div className="grid grid-cols-2 gap-6 mt-8">
-          <div className="bg-white rounded-xl shadow-md p-6 text-center transform transition-all duration-300 hover:shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-800">0</h3>
-            <p className="text-gray-500 mt-1">Pesanan Aktif</p>
-          </div>
-          <div className="bg-white rounded-xl shadow-md p-6 text-center transform transition-all duration-300 hover:shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-800">0</h3>
-            <p className="text-gray-500 mt-1">Riwayat Pesanan</p>
-          </div>
-        </div> */}
+        <ProfileActions navigate={navigate} />
       </div>
     </div>
   );
