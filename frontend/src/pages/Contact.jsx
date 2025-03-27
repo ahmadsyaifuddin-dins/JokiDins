@@ -78,7 +78,7 @@ const Contact = () => {
                   <h3 className="font-medium text-gray-900 mb-2">SeaBank</h3>
                   <p className="text-gray-600">AHMAD SYAIFUDDIN</p>
                   <div className="flex items-center justify-between mt-2">
-                    <p className="text-gray-600 font-mono">901139597160</p>
+                    <p className="text-gray-600 font-mono">Chat Admin</p>
                     <button
                       onClick={() => copyToClipboard('901139597160', 'Nomor rekening')}
                       className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
