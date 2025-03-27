@@ -20,7 +20,7 @@ const Profile = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const res = await axios.get(" https://jokidins-production.up.railway.app/api/user/profile", {
+        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(res.data);
@@ -37,11 +37,17 @@ const Profile = () => {
   }, [contextUser]);
 
   // Fungsi untuk update avatar
-  const updateAvatar = (newAvatarUrl) => {
-    setProfile(prev => ({ ...prev, avatar: `${newAvatarUrl}?t=${Date.now()}` }));
+  const updateAvatar = (newAvatarUrl, isImmediate = false) => {
+    // Jika isImmediate true, langsung update tanpa menambah timestamp
+    if (isImmediate) {
+      setProfile((prev) => ({ ...prev, avatar: newAvatarUrl }));
+    } else {
+      // Cara lama dengan menambah timestamp
+      const separator = newAvatarUrl.includes("?") ? "&" : "?";
+      setProfile((prev) => ({ ...prev, avatar: `${newAvatarUrl}${separator}t=${Date.now()}` }));
+    }
   };
   
-
   if (!contextUser) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center">
