@@ -12,6 +12,7 @@ const telegramWebhook = require("./routes/telegramWebhook");
 const activityRoutes = require("./routes/activity");
 const pendapatanRoutes = require("./routes/pendapatan");
 const adminRoutes = require("./routes/adminRoutes");
+const uploadRoute = require('./routes/uploadRoutes');
 
 const app = express();
 
@@ -38,6 +39,9 @@ app.use("/telegram", telegramWebhook);
 app.use("/api/user/activity", activityRoutes);
 
 app.use("/api/pendapatan", pendapatanRoutes);
+
+// Rute upload
+app.use('/avatar', uploadRoute);
 
 // Contoh route lain (misalnya route utama)
 app.get("/", (req, res) => {

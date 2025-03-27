@@ -14,28 +14,6 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Inject style animasi pulse
-  useEffect(() => {
-    const style = document.createElement("style");
-    style.innerHTML = `
-      @keyframes pulse-animation {
-        0% {
-          box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-        }
-        70% {
-          box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
-        }
-        100% {
-          box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-        }
-      }
-    `;
-    document.head.appendChild(style);
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
-
   // Fetch profile data
   useEffect(() => {
     const fetchProfile = async () => {
@@ -58,7 +36,11 @@ const Profile = () => {
     }
   }, [contextUser]);
 
-  // Jika belum login
+  // Fungsi untuk update avatar
+  const updateAvatar = (avatarUrl) => {
+    setProfile((prev) => ({ ...prev, avatar: avatarUrl }));
+  };
+
   if (!contextUser) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center">
@@ -80,7 +62,6 @@ const Profile = () => {
     return <ProfileSkeleton />;
   }
 
-  // Fungsi format tanggal
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("id-ID", {
       year: "numeric",
@@ -92,7 +73,13 @@ const Profile = () => {
   return (
     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8 min-h-screen">
       <div className="max-w-4xl mx-auto">
-        <ProfileHeader profile={profile} formatDate={formatDate} navigate={navigate} />
+        {/* Pass updateAvatar sebagai prop */}
+        <ProfileHeader
+          profile={profile}
+          formatDate={formatDate}
+          navigate={navigate}
+          updateAvatar={updateAvatar}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <ProfilePersonalInfo profile={profile} formatDate={formatDate} navigate={navigate} />
