@@ -1,13 +1,19 @@
 import React, { useRef, useState } from "react";
 import { Mail, MessageSquare, Phone, Key, Camera } from "lucide-react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
-const ProfileHeader = ({ profile, formatDate, navigate, updateAvatar = () => {} }) => {
+const ProfileHeader = ({
+  profile,
+  formatDate,
+  navigate,
+  updateAvatar = () => {},
+}) => {
   const fileInputRef = useRef(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
-  // Trigger file input ketika tombol kamera di klik
+  // Trigger file input ketika tombol kamera diklik
   const handleAvatarClick = () => {
     fileInputRef.current.click();
   };
@@ -17,33 +23,53 @@ const ProfileHeader = ({ profile, formatDate, navigate, updateAvatar = () => {} 
     const file = e.target.files[0];
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      alert("Bro, pilih file gambar ya!");
+      toast.error("Bro, pilih file gambar ya!");
       return;
     }
 
     const formData = new FormData();
-    formData.append("photo", file); // Pastikan field 'photo' sesuai di backend
+    formData.append("photo", file);
 
     try {
       setIsUploading(true);
-      // Panggil endpoint upload di backend dengan onUploadProgress
-      const res = await axios.post("https://jokidins-production.up.railway.app/avatar/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setUploadProgress(percentCompleted);
-        },
-      });
-      
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        "https://jokidins-production.up.railway.app/avatar/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(percentCompleted);
+          },
+        }
+      );
+
       if (res.data && res.data.url) {
         updateAvatar(res.data.url);
-        alert("Avatar berhasil diupload!");
+        toast.success("Avatar berhasil diupload!");
       }
     } catch (error) {
       console.error("Upload avatar gagal:", error);
-      alert("Upload avatar gagal!");
+      const errorMsg =
+        error.response?.data?.details ||
+        error.response?.data?.error ||
+        "Upload avatar gagal! Cek koneksi atau file yang diupload.";
+
+      if (
+        error.response?.status === 400 &&
+        (error.response?.data?.details?.includes("melebihi batas") ||
+          error.response?.data?.error?.includes("melebihi batas"))
+      ) {
+        toast.error("Ukuran file terlalu besar. Maksimal 1.5MB.");
+      } else {
+        toast.error(errorMsg);
+      }
     } finally {
       setIsUploading(false);
       setUploadProgress(0);
@@ -55,7 +81,11 @@ const ProfileHeader = ({ profile, formatDate, navigate, updateAvatar = () => {} 
       {/* Header Background */}
       <div className="relative h-56 bg-gradient-to-r from-blue-700 via-indigo-800 to-purple-800 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <svg className="h-full w-full" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            className="h-full w-full"
+            viewBox="0 0 800 400"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path d="M0 0h800v400H0z" fill="none" />
             <path
               d="M800 400V0H0v400h800ZM90 310a50 50 0 0 0 0-100 50 50 0 0 0 0 100Zm290-30a50 50 0 0 0 0-100 50 50 0 0 0 0 100Zm290-40a50 50 0 0 0 0-100 50 50 0 0 0 0 100Z"
@@ -106,7 +136,9 @@ const ProfileHeader = ({ profile, formatDate, navigate, updateAvatar = () => {} 
         <div className="absolute top-4 right-4 flex space-x-2">
           <div
             className={`px-3 py-1.5 rounded-full text-xs font-medium shadow-md ${
-              profile.isVerified ? "bg-green-500 text-white" : "bg-amber-400 text-white"
+              profile.isVerified
+                ? "bg-green-500 text-white"
+                : "bg-amber-400 text-white"
             }`}
           >
             {profile.isVerified ? "Terverifikasi" : "Belum Terverifikasi"}
@@ -117,7 +149,9 @@ const ProfileHeader = ({ profile, formatDate, navigate, updateAvatar = () => {} 
       {/* User Name & Info */}
       <div className="pt-8 pb-4 px-8 text-center">
         <h2 className="text-3xl font-bold text-gray-800">{profile.name}</h2>
-        <p className="mt-1 text-gray-500 text-sm">Bergabung {formatDate(profile.createdAt)}</p>
+        <p className="mt-1 text-gray-500 text-sm">
+          Bergabung {formatDate(profile.createdAt)}
+        </p>
         <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg">
             <Mail className="w-6 h-6 text-blue-600 mb-1" />
@@ -128,7 +162,9 @@ const ProfileHeader = ({ profile, formatDate, navigate, updateAvatar = () => {} 
           </div>
           <div className="flex flex-col items-center p-3 bg-purple-50 rounded-lg">
             <MessageSquare className="w-6 h-6 text-purple-600 mb-1" />
-            <span className="text-xs font-medium text-purple-600">Telegram</span>
+            <span className="text-xs font-medium text-purple-600">
+              Telegram
+            </span>
             <span className="text-gray-700 text-sm font-semibold">
               {profile.telegramChatId ? "Terhubung" : "Belum"}
             </span>
@@ -142,7 +178,9 @@ const ProfileHeader = ({ profile, formatDate, navigate, updateAvatar = () => {} 
           </div>
           <div className="flex flex-col items-center p-3 bg-emerald-50 rounded-lg">
             <Key className="w-6 h-6 text-emerald-600 mb-1" />
-            <span className="text-xs font-medium text-emerald-600">Login Via</span>
+            <span className="text-xs font-medium text-emerald-600">
+              Login Via
+            </span>
             <span className="text-gray-700 text-sm font-semibold capitalize">
               {profile.loginMethod}
             </span>
