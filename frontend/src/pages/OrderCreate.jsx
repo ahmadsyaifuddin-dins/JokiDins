@@ -49,7 +49,7 @@ const OrderCreate = () => {
       const token = localStorage.getItem("token");
       try {
         const res = await axios.get(
-          "https://jokidins-production.up.railway.app/api/user/profile",
+          " https://jokidins-production.up.railway.app/api/user/profile",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -74,7 +74,7 @@ const OrderCreate = () => {
       const token = localStorage.getItem("token");
       try {
         const res = await axios.get(
-          "https://jokidins-production.up.railway.app/api/user/phones",
+          " https://jokidins-production.up.railway.app/api/user/phones",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -124,7 +124,7 @@ const OrderCreate = () => {
     const token = localStorage.getItem("token");
     try {
       const res = await axios.get(
-        "https://jokidins-production.up.railway.app/api/user/profile",
+        " https://jokidins-production.up.railway.app/api/user/profile",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -214,7 +214,7 @@ const OrderCreate = () => {
     }
 
     try {
-      await axios.post("https://jokidins-production.up.railway.app/api/orders", formData, {
+      await axios.post(" https://jokidins-production.up.railway.app/api/orders", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

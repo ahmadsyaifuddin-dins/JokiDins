@@ -12,7 +12,7 @@ const useAccountStatusCheck = () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) return;
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/status", {
+        const res = await axios.get(" https://jokidins-production.up.railway.app/api/user/status", {
           headers: { Authorization: `Bearer ${token}` },
         });
         // Misalnya res.data.is_active adalah boolean status

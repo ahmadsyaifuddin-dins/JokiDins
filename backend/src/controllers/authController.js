@@ -6,7 +6,10 @@ const User = require("../models/User");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const getWelcomeMessage = require("../utils/welcomeMessage");
-const { generateVerificationCode, getVerificationCodeExpires } = require("../utils/verification");
+const {
+  generateVerificationCode,
+  getVerificationCodeExpires,
+} = require("../utils/verification");
 const Activity = require("../models/Activity");
 
 const VERIFICATION_CODE_EXPIRATION = 5; // dalam menit
@@ -14,6 +17,11 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.register = async (req, res) => {
   const { name, email, password, role } = req.body;
+  const { browser, os, platform } = req.useragent;
+  console.log(
+    `Register: Browser - ${browser}, OS - ${os}, Platform - ${platform}`
+  );
+
   try {
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -22,9 +30,11 @@ exports.register = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    
+
     const verificationCode = generateVerificationCode();
-    const verificationCodeExpires = getVerificationCodeExpires(VERIFICATION_CODE_EXPIRATION);
+    const verificationCodeExpires = getVerificationCodeExpires(
+      VERIFICATION_CODE_EXPIRATION
+    );
 
     const newUser = new User({
       name,
@@ -34,6 +44,12 @@ exports.register = async (req, res) => {
       isVerified: false,
       verificationCode,
       verificationCodeExpires,
+      // Opsional: simpan info device jika perlu
+      deviceInfo: {
+        browser,
+        os,
+        platform,
+      },
     });
     await newUser.save();
 
@@ -47,7 +63,8 @@ exports.register = async (req, res) => {
     await sendEmail(email, "Kode Verifikasi Email", verificationEmailMessage);
 
     res.status(201).json({
-      message: "Registrasi berhasil! Silakan periksa email Anda untuk kode verifikasi.",
+      message:
+        "Registrasi berhasil! Silakan periksa email Anda untuk kode verifikasi.",
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -58,13 +75,15 @@ exports.verifyEmail = async (req, res) => {
   const { email, verificationCode } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "User tidak ditemukan." });
-    if (user.isVerified) return res.status(400).json({ message: "Email sudah diverifikasi." });
+    if (!user)
+      return res.status(400).json({ message: "User tidak ditemukan." });
+    if (user.isVerified)
+      return res.status(400).json({ message: "Email sudah diverifikasi." });
     if (user.verificationCode !== verificationCode)
       return res.status(400).json({ message: "Kode verifikasi salah." });
-    
+
     if (new Date() > user.verificationCodeExpires) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: "Kode verifikasi sudah kedaluwarsa. Silakan minta kode baru.",
         expired: true,
       });
@@ -78,7 +97,9 @@ exports.verifyEmail = async (req, res) => {
     const welcomeMessage = getWelcomeMessage(user.name);
     await sendEmail(email, "Selamat Datang di JokiDins! 🚀", welcomeMessage);
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
     res.json({
       token,
       user: {
@@ -100,11 +121,15 @@ exports.resendVerification = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "User tidak ditemukan." });
-    if (user.isVerified) return res.status(400).json({ message: "Email sudah diverifikasi." });
+    if (!user)
+      return res.status(400).json({ message: "User tidak ditemukan." });
+    if (user.isVerified)
+      return res.status(400).json({ message: "Email sudah diverifikasi." });
 
     const verificationCode = generateVerificationCode();
-    const verificationCodeExpires = getVerificationCodeExpires(VERIFICATION_CODE_EXPIRATION);
+    const verificationCodeExpires = getVerificationCodeExpires(
+      VERIFICATION_CODE_EXPIRATION
+    );
 
     user.verificationCode = verificationCode;
     user.verificationCodeExpires = verificationCodeExpires;
@@ -117,8 +142,14 @@ exports.resendVerification = async (req, res) => {
       <p>Masukkan kode tersebut pada halaman verifikasi untuk mengaktifkan akun Anda.</p>
       <p>Kode verifikasi ini akan berlaku selama ${VERIFICATION_CODE_EXPIRATION} menit.</p>
     `;
-    await sendEmail(email, "Kode Verifikasi Email Baru", verificationEmailMessage);
-    res.status(200).json({ message: "Kode verifikasi baru telah dikirim ke email Anda." });
+    await sendEmail(
+      email,
+      "Kode Verifikasi Email Baru",
+      verificationEmailMessage
+    );
+    res
+      .status(200)
+      .json({ message: "Kode verifikasi baru telah dikirim ke email Anda." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -126,16 +157,23 @@ exports.resendVerification = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
+  const { browser, os, platform } = req.useragent;
+  console.log(`Login: Browser - ${browser}, OS - ${os}, Platform - ${platform}`);
+
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Email atau password salah." });
+    if (!user)
+      return res.status(400).json({ message: "Email atau password salah." });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Email atau password salah." });
+    if (!isMatch)
+      return res.status(400).json({ message: "Email atau password salah." });
 
     // Pengecekan akun aktif
     if (!user.is_active) {
-      return res.status(403).json({ message: "Akun dinonaktifkan. Hubungi Developer." });
+      return res
+        .status(403)
+        .json({ message: "Akun dinonaktifkan. Hubungi Developer." });
     }
 
     if (!user.isVerified) {
@@ -160,6 +198,10 @@ exports.login = async (req, res) => {
       });
     }
 
+    // Update deviceInfo setiap kali login, baik user lama maupun baru
+    user.deviceInfo = { browser, os, platform };
+    await user.save();
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
     res.json({
       token,
@@ -171,19 +213,24 @@ exports.login = async (req, res) => {
         birthday: user.birthday,
         gender: user.gender,
         role: user.role,
-        is_active : user.is_active,
+        is_active: user.is_active,
+        // Flatten deviceInfo agar FE bisa akses secara langsung
+        browser: user.deviceInfo?.browser,
+        os: user.deviceInfo?.os,
+        platform: user.deviceInfo?.platform,
       },
     });
 
     await Activity.create({
       user: user._id,
-      description: "User berhasil login"
+      description: "User berhasil login",
+      deviceInfo: { browser, os, platform },
     });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Fungsi untuk lupa password: generate token reset dan kirim email
 exports.forgotPassword = async (req, res) => {
@@ -192,13 +239,21 @@ exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email });
     // Untuk keamanan, kita tetap kirim response yang sama walaupun user tidak ditemukan
     if (!user) {
-      return res.status(200).json({ message: "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password." });
+      return res
+        .status(200)
+        .json({
+          message:
+            "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password.",
+        });
     }
 
     // Generate reset token
     const resetToken = crypto.randomBytes(20).toString("hex");
     // Hash token sebelum disimpan (untuk keamanan)
-    user.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    user.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
     // Set token berlaku selama 1 jam
     user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
@@ -214,9 +269,18 @@ exports.forgotPassword = async (req, res) => {
       <p>Link ini akan kadaluwarsa dalam 1 jam.</p>
       <p>Jika Anda tidak meminta reset password, abaikan email ini.</p>
     `;
-    await sendEmail(user.email, "Reset Password Instructions", resetEmailMessage);
+    await sendEmail(
+      user.email,
+      "Reset Password Instructions",
+      resetEmailMessage
+    );
 
-    res.status(200).json({ message: "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password." });
+    res
+      .status(200)
+      .json({
+        message:
+          "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password.",
+      });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -231,12 +295,16 @@ exports.resetPassword = async (req, res) => {
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     // Cari user dengan token yang cocok dan belum kadaluwarsa
-    const user = await User.findOne({ 
-      resetPasswordToken: hashedToken, 
-      resetPasswordExpires: { $gt: Date.now() }
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: Date.now() },
     });
     if (!user) {
-      return res.status(400).json({ message: "Token reset password tidak valid atau sudah kadaluwarsa." });
+      return res
+        .status(400)
+        .json({
+          message: "Token reset password tidak valid atau sudah kadaluwarsa.",
+        });
     }
 
     // Hash new password dan update user
@@ -259,12 +327,14 @@ exports.verifyResetToken = async (req, res) => {
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
     const user = await User.findOne({
       resetPasswordToken: hashedToken,
-      resetPasswordExpires: { $gt: Date.now() }
+      resetPasswordExpires: { $gt: Date.now() },
     });
     if (!user) {
-      return res.status(404).json({ message: "Token tidak valid atau sudah kadaluwarsa." });
+      return res
+        .status(404)
+        .json({ message: "Token tidak valid atau sudah kadaluwarsa." });
     }
-     // Pengecekan akun aktif
+    // Pengecekan akun aktif
     //  if (!user.is_active) {
     //   return res.status(403).json({ message: "Akun dinonaktifkan. Hubungi Developer." });
     // }
@@ -276,6 +346,12 @@ exports.verifyResetToken = async (req, res) => {
 
 exports.googleLogin = async (req, res) => {
   const { token: googleToken } = req.body;
+  // Tangkap device info dari user-agent
+  const { browser, os, platform } = req.useragent;
+  console.log(
+    `Google Login: Browser - ${browser}, OS - ${os}, Platform - ${platform}`
+  );
+
   try {
     const ticket = await client.verifyIdToken({
       idToken: googleToken,
@@ -287,16 +363,17 @@ exports.googleLogin = async (req, res) => {
 
     let user = await User.findOne({ email });
     let isNewUser = false;
-    
+
     // Jika user ditemukan, cek status aktifnya
     if (user) {
-      // Cek apakah akun aktif
       if (!user.is_active) {
-        return res.status(403).json({ message: "Akun dinonaktifkan. Hubungi admin." });
+        return res
+          .status(403)
+          .json({ message: "Akun dinonaktifkan. Hubungi admin." });
       }
     }
 
-    // Jika user belum ada, buat akun baru (secara default akun baru aktif)
+    // Jika user belum ada, buat akun baru dengan deviceInfo
     if (!user) {
       isNewUser = true;
       const defaultPassword = await bcrypt.hash("defaultGooglePassword", 10);
@@ -307,19 +384,24 @@ exports.googleLogin = async (req, res) => {
         avatar: picture,
         isVerified: true,
         role: "user",
-        loginMethod: "google", 
+        loginMethod: "google",
         googleId: picture ? googleId : null,
-        // Pastikan akun baru otomatis aktif (default true)
         is_active: true,
+        // Simpan deviceInfo saat akun dibuat
+        deviceInfo: { browser, os, platform },
       });
       await user.save();
 
       const welcomeMessage = getWelcomeMessage(name);
       await sendEmail(email, "Selamat Datang di JokiDins! 🚀", welcomeMessage);
     } else {
+      // Update deviceInfo saat login via Google
+      user.deviceInfo = { browser, os, platform };
+      await user.save();
+
       await Activity.create({
         user: user._id,
-        description: "User berhasil login dengan Google"
+        description: "User berhasil login dengan Google",
       });
       if (!user.isVerified) {
         user.isVerified = true;
@@ -328,7 +410,9 @@ exports.googleLogin = async (req, res) => {
         await user.save();
       }
     }
-    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
     res.json({
       token: jwtToken,
       user: {
@@ -344,12 +428,16 @@ exports.googleLogin = async (req, res) => {
         loginMethod: user.loginMethod,
         googleId: user.googleId,
         isNewUser,
-        is_active: user.is_active
+        is_active: user.is_active,
+        // Flatten deviceInfo agar FE bisa akses secara langsung
+        browser: user.deviceInfo?.browser,
+        os: user.deviceInfo?.os,
+        platform: user.deviceInfo?.platform,
       },
     });
     await Activity.create({
       user: user._id,
-      description: "User berhasil login dengan Google"
+      description: "User berhasil login dengan Google",
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

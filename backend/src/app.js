@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const useragent = require("express-useragent");
 require("dotenv").config();
 const connectDB = require("./config/db");
 
@@ -19,6 +20,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(useragent.express()); // Posisikan middleware useragent di sini, sebelum routes
 
 // Koneksi ke MongoDB
 connectDB();

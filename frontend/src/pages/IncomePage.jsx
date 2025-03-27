@@ -50,7 +50,7 @@ const IncomePage = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "https://jokidins-production.up.railway.app/api/pendapatan/history",
+        " https://jokidins-production.up.railway.app/api/pendapatan/history",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -118,7 +118,7 @@ const IncomePage = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "https://jokidins-production.up.railway.app/api/pendapatan",
+        " https://jokidins-production.up.railway.app/api/pendapatan",
         { nominal: Number(formattedNominal) },
         {
           headers: {
@@ -151,7 +151,7 @@ const IncomePage = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        `https://jokidins-production.up.railway.app/api/pendapatan/${id}`,
+        ` https://jokidins-production.up.railway.app/api/pendapatan/${id}`,
         { nominal: Number(formattedNominal) },
         {
           headers: {
@@ -189,7 +189,7 @@ const IncomePage = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `https://jokidins-production.up.railway.app/api/pendapatan/${id}`,
+        ` https://jokidins-production.up.railway.app/api/pendapatan/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

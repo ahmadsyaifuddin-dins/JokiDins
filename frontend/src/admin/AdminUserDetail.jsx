@@ -16,6 +16,7 @@ import {
   SendIcon,
   Cake,
   VenusAndMars,
+  Monitor,
 } from "lucide-react";
 
 const AdminUserDetail = () => {
@@ -30,7 +31,7 @@ const AdminUserDetail = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          `https://jokidins-production.up.railway.app/api/user/users/${id}`,
+          ` https://jokidins-production.up.railway.app/api/user/users/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -61,7 +62,7 @@ const AdminUserDetail = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`https://jokidins-production.up.railway.app/api/user/users/${id}`, {
+      await axios.delete(` https://jokidins-production.up.railway.app/api/user/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       Swal.fire("Berhasil!", "Akun pengguna berhasil dihapus.", "success");
@@ -89,7 +90,7 @@ const AdminUserDetail = () => {
       const token = localStorage.getItem("token");
       // Pastikan endpoint disable sesuai dengan backend-mu
       await axios.post(
-        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/disable`,
+        ` https://jokidins-production.up.railway.app/api/admin/users/${userId}/disable`,
         {},
         {
           headers: {
@@ -128,7 +129,7 @@ const AdminUserDetail = () => {
       const token = localStorage.getItem("token");
       // Pastikan endpoint enable sesuai dengan backend-mu
       await axios.post(
-        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/enable`,
+        ` https://jokidins-production.up.railway.app/api/admin/users/${userId}/enable`,
         {},
         {
           headers: {
@@ -419,6 +420,30 @@ const AdminUserDetail = () => {
                   </p>
                 </div>
               )}
+
+              {/* Device Info */}
+              <div className="bg-gray-50 p-5 rounded-xl">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="p-2 bg-indigo-100 rounded-lg">
+                    <Monitor className="w-5 h-5 text-indigo-600" />
+                  </div>
+                  <span className="font-medium text-gray-700">Device Info</span>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-gray-800">
+                    <span className="font-semibold">Browser:</span>{" "}
+                    {userDetail.deviceInfo?.browser || "Tidak diketahui"}
+                  </p>
+                  <p className="text-gray-800">
+                    <span className="font-semibold">OS:</span>{" "}
+                    {userDetail.deviceInfo?.os || "Tidak diketahui"}
+                  </p>
+                  <p className="text-gray-800">
+                    <span className="font-semibold">Platform:</span>{" "}
+                    {userDetail.deviceInfo?.platform || "Tidak diketahui"}
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-8"></div>
@@ -432,9 +457,7 @@ const AdminUserDetail = () => {
                 Edit Profil Pengguna
               </button>
               <Link to={`/admin/userActivity/${id}`}>
-                <button
-                  className="w-full sm:w-auto border border-blue-200 text-blue-600 px-6 py-3 rounded-lg"
-                >
+                <button className="w-full sm:w-auto border border-blue-200 text-blue-600 px-6 py-3 rounded-lg">
                   Lihat Aktivitas Pengguna
                 </button>
               </Link>

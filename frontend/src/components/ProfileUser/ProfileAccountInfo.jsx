@@ -1,5 +1,5 @@
 import React from "react";
-import { Shield, ChevronRight, Calendar, RefreshCw } from "lucide-react";
+import { Shield, ChevronRight, Calendar, RefreshCw, Monitor } from "lucide-react";
 
 const ProfileAccountInfo = ({ profile, formatDate }) => {
   return (
@@ -14,7 +14,9 @@ const ProfileAccountInfo = ({ profile, formatDate }) => {
         <div className="flex justify-between items-center py-3 border-b border-gray-100">
           <div>
             <p className="text-sm text-gray-500">Tipe Akun</p>
-            <p className="font-medium capitalize">{profile.role === "user" ? "Kostumer" : profile.role}</p>
+            <p className="font-medium capitalize">
+              {profile.role === "user" ? "Kostumer" : profile.role}
+            </p>
           </div>
           <div className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-1 rounded-full">
             Aktif
@@ -48,10 +50,14 @@ const ProfileAccountInfo = ({ profile, formatDate }) => {
             </p>
             <div className="flex items-center">
               {profile.telegramChatId && (
-                <span className="text-xs text-green-600 mr-2 font-medium">Terkoneksi</span>
+                <span className="text-xs text-green-600 mr-2 font-medium">
+                  Terkoneksi
+                </span>
               )}
               <div
-                className={`rounded-full h-4 w-4 ${profile.telegramChatId ? "bg-green-500" : "bg-gray-300"}`}
+                className={`rounded-full h-4 w-4 ${
+                  profile.telegramChatId ? "bg-green-500" : "bg-gray-300"
+                }`}
                 style={
                   profile.telegramChatId
                     ? {
@@ -62,6 +68,37 @@ const ProfileAccountInfo = ({ profile, formatDate }) => {
                 }
               ></div>
             </div>
+          </div>
+        </div>
+
+        {/* Device Info */}
+        <div className="space-y-2">
+          <div className="flex justify-between items-center py-3 border-b border-gray-100">
+            <div>
+              <p className="text-sm text-gray-500">Browser</p>
+              <p className="font-medium">
+                {profile.deviceInfo?.browser || "Tidak diketahui"}
+              </p>
+            </div>
+            <Monitor className="w-5 h-5 text-gray-400" />
+          </div>
+          <div className="flex justify-between items-center py-3 border-b border-gray-100">
+            <div>
+              <p className="text-sm text-gray-500">Sistem Operasi</p>
+              <p className="font-medium">
+                {profile.deviceInfo?.os || "Tidak diketahui"}
+              </p>
+            </div>
+            <Monitor className="w-5 h-5 text-gray-400" />
+          </div>
+          <div className="flex justify-between items-center py-3 border-b border-gray-100">
+            <div>
+              <p className="text-sm text-gray-500">Platform</p>
+              <p className="font-medium">
+                {profile.deviceInfo?.platform || "Tidak diketahui"}
+              </p>
+            </div>
+            <Monitor className="w-5 h-5 text-gray-400" />
           </div>
         </div>
       </div>

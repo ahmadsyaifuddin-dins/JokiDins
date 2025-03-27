@@ -59,6 +59,15 @@ const UserSchema = new mongoose.Schema({
   
   is_active: { type: Boolean, default: true },
 
+  deviceInfo: {
+    type: {
+      browser: String,
+      os: String,
+      platform: String,
+    },
+    default: null,
+  },
+
 }, 
 { timestamps: true });
 

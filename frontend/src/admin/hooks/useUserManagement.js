@@ -26,7 +26,7 @@ export const useUserManagement = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await axios.get("https://jokidins-production.up.railway.app/api/user/users", {
+      const res = await axios.get(" https://jokidins-production.up.railway.app/api/user/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -88,7 +88,7 @@ export const useUserManagement = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`https://jokidins-production.up.railway.app/api/user/users/${userId}`, {
+      await axios.delete(` https://jokidins-production.up.railway.app/api/user/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -117,7 +117,7 @@ export const useUserManagement = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/disable`,
+        ` https://jokidins-production.up.railway.app/api/admin/users/${userId}/disable`,
         {},
         {
           headers: {
@@ -155,7 +155,7 @@ export const useUserManagement = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/enable`,
+        ` https://jokidins-production.up.railway.app/api/admin/users/${userId}/enable`,
         {},
         {
           headers: {

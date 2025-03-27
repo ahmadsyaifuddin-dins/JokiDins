@@ -23,7 +23,7 @@ const TelegramLinkButton = () => {
     setError("");
     try {
       const response = await axios.post(
-        "https://jokidins-production.up.railway.app/api/telegram/regenerate-token",
+        " https://jokidins-production.up.railway.app/api/telegram/regenerate-token",
         {},
         {
           headers: {

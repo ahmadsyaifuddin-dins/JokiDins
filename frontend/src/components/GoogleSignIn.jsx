@@ -47,7 +47,7 @@ const GoogleSignIn = () => {
       loadingToast = toast.loading("Menghubungkan dengan Google...");
       
       // Kirim ID token ke backend
-      const res = await axios.post("https://jokidins-production.up.railway.app/api/auth/google", {
+      const res = await axios.post(" https://jokidins-production.up.railway.app/api/auth/google", {
         token: credentialResponse.credential,
       });
       

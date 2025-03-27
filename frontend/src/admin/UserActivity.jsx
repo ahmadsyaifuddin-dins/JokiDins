@@ -19,7 +19,7 @@ const UserActivity = () => {
         const token = localStorage.getItem("token");
         // Fetch user activities
         const res = await axios.get(
-          `https://jokidins-production.up.railway.app/api/user/activity/${id}`,
+          ` https://jokidins-production.up.railway.app/api/user/activity/${id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         
@@ -32,7 +32,7 @@ const UserActivity = () => {
         // Fetch user details to display name
         try {
           const userRes = await axios.get(
-            `https://jokidins-production.up.railway.app/api/user/users/${id}`,
+            ` https://jokidins-production.up.railway.app/api/user/users/${id}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           setUserName(userRes.data.name || "Pengguna");

@@ -41,7 +41,7 @@ const Dashboard = () => {
     }
     setLoading(true);
     try {
-      const res = await axios.get("https://jokidins-production.up.railway.app/api/orders", {
+      const res = await axios.get(" https://jokidins-production.up.railway.app/api/orders", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
@@ -68,7 +68,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     try {
       await axios.put(
-        `https://jokidins-production.up.railway.app/api/orders/${orderId}`,
+        ` https://jokidins-production.up.railway.app/api/orders/${orderId}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -96,7 +96,7 @@ const Dashboard = () => {
     if (!confirmDelete.isConfirmed) return;
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
+      await axios.delete(` https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Order berhasil dihapus");
@@ -122,7 +122,7 @@ const Dashboard = () => {
 
     const token = localStorage.getItem("token");
     try {
-      await axios.delete("https://jokidins-production.up.railway.app/api/orders/all", {
+      await axios.delete(" https://jokidins-production.up.railway.app/api/orders/all", {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Semua order berhasil dihapus");

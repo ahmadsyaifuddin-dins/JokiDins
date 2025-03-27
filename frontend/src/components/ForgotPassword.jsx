@@ -12,7 +12,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post("https://jokidins-production.up.railway.app/api/auth/forgot-password", { email });
+      await axios.post(" https://jokidins-production.up.railway.app/api/auth/forgot-password", { email });
       showSuccess("Jika email tersebut terdaftar, Anda akan menerima instruksi reset password.");
     } catch (error) {
       showError(error.response?.data?.message || "Gagal mengirim email reset password.");

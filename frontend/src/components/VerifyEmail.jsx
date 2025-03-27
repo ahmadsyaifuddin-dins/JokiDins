@@ -67,7 +67,7 @@ const VerifyEmail = () => {
     setIsLoading(true);
     try {
       const res = await axios.post(
-        "https://jokidins-production.up.railway.app/api/auth/verify-email",
+        " https://jokidins-production.up.railway.app/api/auth/verify-email",
         {
           email,
           verificationCode,
@@ -104,7 +104,7 @@ const VerifyEmail = () => {
     try {
       setIsLoading(true);
       await axios.post(
-        "https://jokidins-production.up.railway.app/api/auth/resend-verification",
+        " https://jokidins-production.up.railway.app/api/auth/resend-verification",
         { email }
       );
 

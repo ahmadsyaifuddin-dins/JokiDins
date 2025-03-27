@@ -1,6 +1,6 @@
 // src/controllers/uploadController.js
 const { formidable } = require("formidable");
-const { put } = require("@vercel/blob");
+const { put, del } = require("@vercel/blob");
 const fs = require("fs");
 const path = require("path");
 const User = require("../models/User");
@@ -93,8 +93,23 @@ const uploadAvatar = async (req) => {
   return { blob };
 };
 
-const updateUserAvatar = async (userId, avatarUrl) => {
-  await User.findByIdAndUpdate(userId, { avatar: avatarUrl });
+const updateUserAvatar = async (userId, newAvatarUrl) => {
+  // Ambil user untuk cek avatar lama
+  const user = await User.findById(userId);
+  if (user && user.avatar) {
+    // Misal URL avatar berbentuk: https://vercel.blob/your-bucket/photo_profile/profile-123456789.jpg
+    const oldFileName = path.basename(user.avatar);
+    try {
+      // Hapus file lama di Vercel Blob
+      await del(oldFileName, { path: "photo_profile" });
+      console.log("File lama dihapus:", oldFileName);
+    } catch (error) {
+      console.error("Gagal menghapus file lama:", error);
+      // Opsional: kamu bisa lanjutkan proses meski gagal hapus file lama
+    }
+  }
+  // Update avatar di MongoDB dengan URL baru
+  await User.findByIdAndUpdate(userId, { avatar: newAvatarUrl });
 };
 
 module.exports = { uploadAvatar, updateUserAvatar };

@@ -20,7 +20,7 @@ const Profile = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
+        const res = await axios.get(" https://jokidins-production.up.railway.app/api/user/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(res.data);
