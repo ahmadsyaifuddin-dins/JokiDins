@@ -97,14 +97,15 @@ const Login = () => {
             </div>
             
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
+              <div className="flex items-center opacity-50 cursor-not-allowed">
                 <input
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-blue-900 focus:ring-blue-900 border-gray-300 rounded"
+                  className="h-4 w-4 text-blue-900 focus:ring-blue-900 border-gray-300 rounded cursor-not-allowed"
+                  disabled
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 cursor-not-allowed">
                   Ingat saya
                 </label>
               </div>
