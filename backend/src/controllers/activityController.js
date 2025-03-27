@@ -1,3 +1,5 @@
+const Activity = require("../models/Activity");
+
 const getUserActivity = async (req, res) => {
   try {
     // Ambil limit dan page dari query, default limit = 10 dan page = 1
