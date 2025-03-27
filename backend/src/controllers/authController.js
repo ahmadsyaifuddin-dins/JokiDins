@@ -17,7 +17,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.register = async (req, res) => {
   const { name, email, password, role } = req.body;
-  const { browser, os, platform } = req.useragent;
+  const { browser, os, platform, version, ua, isMobile, isTablet } = req.useragent;
   console.log(
     `Register: Browser - ${browser}, OS - ${os}, Platform - ${platform}`
   );
@@ -49,6 +49,10 @@ exports.register = async (req, res) => {
         browser,
         os,
         platform,
+        version,
+        ua,
+        isMobile,
+        isTablet
       },
     });
     await newUser.save();
@@ -157,7 +161,7 @@ exports.resendVerification = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  const { browser, os, platform } = req.useragent;
+  const { browser, os, platform, version, ua, isMobile, isTablet } = req.useragent;
   console.log(`Login: Browser - ${browser}, OS - ${os}, Platform - ${platform}`);
 
   try {
@@ -199,7 +203,7 @@ exports.login = async (req, res) => {
     }
 
     // Update deviceInfo setiap kali login, baik user lama maupun baru
-    user.deviceInfo = { browser, version, os, platform, ua: source, isMobile: req.useragent.isMobile, isTablet: req.useragent.isTablet };
+    user.deviceInfo = { browser, version, os, platform, ua, isMobile, isTablet };
     await user.save();
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
@@ -351,7 +355,7 @@ exports.verifyResetToken = async (req, res) => {
 exports.googleLogin = async (req, res) => {
   const { token: googleToken } = req.body;
   // Tangkap device info dari user-agent
-  const { browser, os, platform } = req.useragent;
+  const { browser, os, platform, version, ua, isMobile, isTablet } = req.useragent;
   console.log(
     `Google Login: Browser - ${browser}, OS - ${os}, Platform - ${platform}`
   );
@@ -392,7 +396,7 @@ exports.googleLogin = async (req, res) => {
         googleId: picture ? googleId : null,
         is_active: true,
         // Simpan deviceInfo saat akun dibuat
-        deviceInfo: { browser, os, platform },
+        deviceInfo: { browser, os, platform, version, ua, isMobile, isTablet },
       });
       await user.save();
 
@@ -400,7 +404,7 @@ exports.googleLogin = async (req, res) => {
       await sendEmail(email, "Selamat Datang di JokiDins! 🚀", welcomeMessage);
     } else {
       // Update deviceInfo saat login via Google
-      user.deviceInfo = { browser, version, os, platform, ua: source, isMobile: req.useragent.isMobile, isTablet: req.useragent.isTablet };
+      user.deviceInfo = { browser, version, os, platform, ua, isMobile, isTablet };
       await user.save();
 
       await Activity.create({

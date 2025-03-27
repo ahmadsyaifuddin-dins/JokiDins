@@ -148,15 +148,6 @@ const ProfileAccountInfo = ({ profile, formatDate }) => {
               </div>
               <Monitor className="w-5 h-5 text-gray-400" />
             </div>
-            <div className="flex justify-between items-center py-3">
-              <div>
-                <p className="text-sm text-gray-500">User Agent</p>
-                <p className="font-medium">
-                  {profile.deviceInfo?.ua || "Tidak diketahui"}
-                </p>
-              </div>
-              <Monitor className="w-5 h-5 text-gray-400" />
-            </div>
           </div>
         </div>
 

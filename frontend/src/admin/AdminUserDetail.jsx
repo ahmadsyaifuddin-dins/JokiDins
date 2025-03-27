@@ -442,6 +442,22 @@ const AdminUserDetail = () => {
                     <span className="font-semibold">Platform:</span>{" "}
                     {userDetail.deviceInfo?.platform || "Tidak diketahui"}
                   </p>
+                  <p className="text-gray-800">
+                    <span className="font-semibold">Version:</span>{" "}
+                    {userDetail.deviceInfo?.version || "Tidak diketahui"}
+                  </p>
+                  <p className="text-gray-800">
+                    <span className="font-semibold">User Agent:</span>{" "}
+                    {userDetail.deviceInfo?.ua || "Tidak diketahui"}
+                  </p>
+                  <p className="text-gray-800">
+                    <span className="font-semibold">Mobile:</span>{" "}
+                    {userDetail.deviceInfo?.isMobile ? "Ya" : "Tidak"}
+                  </p>
+                  <p className="text-gray-800">
+                    <span className="font-semibold">Tablet:</span>{" "}
+                    {userDetail.deviceInfo?.isTablet ? "Ya" : "Tidak"}
+                  </p>
                 </div>
               </div>
             </div>
