@@ -169,7 +169,60 @@ const ProfileHeader = ({
           </div>
         </div>
 
-        {/* Bagian lain tetap sama */}
+        {/* Quick Status Badge */}
+        <div className="absolute top-4 right-4 flex space-x-2">
+          <div
+            className={`px-3 py-1.5 rounded-full text-xs font-medium shadow-md ${
+              profile.isVerified
+                ? "bg-green-500 text-white"
+                : "bg-amber-400 text-white"
+            }`}
+          >
+            {profile.isVerified ? "Terverifikasi" : "Belum Terverifikasi"}
+          </div>
+        </div>
+      </div>
+
+      {/* User Name & Info */}
+      <div className="pt-8 pb-4 px-8 text-center">
+        <h2 className="text-3xl font-bold text-gray-800">{profile.name}</h2>
+        <p className="mt-1 text-gray-500 text-sm">
+          Bergabung {formatDate(profile.createdAt)}
+        </p>
+        <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg">
+            <Mail className="w-6 h-6 text-blue-600 mb-1" />
+            <span className="text-xs font-medium text-blue-600">Email</span>
+            <span className="text-gray-700 text-sm font-semibold">
+              {profile.isVerified ? "Terverifikasi" : "Belum"}
+            </span>
+          </div>
+          <div className="flex flex-col items-center p-3 bg-purple-50 rounded-lg">
+            <MessageSquare className="w-6 h-6 text-purple-600 mb-1" />
+            <span className="text-xs font-medium text-purple-600">
+              Telegram
+            </span>
+            <span className="text-gray-700 text-sm font-semibold">
+              {profile.telegramChatId ? "Terhubung" : "Belum"}
+            </span>
+          </div>
+          <div className="flex flex-col items-center p-3 bg-amber-50 rounded-lg">
+            <Phone className="w-6 h-6 text-amber-600 mb-1" />
+            <span className="text-xs font-medium text-amber-600">Nomor HP</span>
+            <span className="text-gray-700 text-sm font-semibold">
+              {profile.phones?.length || 0} Tersimpan
+            </span>
+          </div>
+          <div className="flex flex-col items-center p-3 bg-emerald-50 rounded-lg">
+            <Key className="w-6 h-6 text-emerald-600 mb-1" />
+            <span className="text-xs font-medium text-emerald-600">
+              Login Via
+            </span>
+            <span className="text-gray-700 text-sm font-semibold capitalize">
+              {profile.loginMethod}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
