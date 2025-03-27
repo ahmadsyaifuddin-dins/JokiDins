@@ -97,7 +97,7 @@ const TelegramLinkButton = () => {
           ) : (
             <>
              <CheckCircle className="w-5 h-5 mr-3" />
-              Link Telegram
+              Generate Token
             </>
           )}
         </span>
