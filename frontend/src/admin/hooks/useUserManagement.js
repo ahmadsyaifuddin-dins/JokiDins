@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router-dom';
 export const useUserManagement = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
@@ -26,7 +27,7 @@ export const useUserManagement = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await axios.get(" https://jokidins-production.up.railway.app/api/user/users", {
+      const res = await axios.get("https://jokidins-production.up.railway.app/api/user/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,6 +39,7 @@ export const useUserManagement = () => {
       setError("Tidak dapat memuat data pengguna.");
     } finally {
       setLoading(false);
+      setIsInitialLoad(false); // Set false setelah load pertama
     }
   };
 
@@ -88,7 +90,7 @@ export const useUserManagement = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(` https://jokidins-production.up.railway.app/api/user/users/${userId}`, {
+      await axios.delete(`https://jokidins-production.up.railway.app/api/user/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -117,7 +119,7 @@ export const useUserManagement = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        ` https://jokidins-production.up.railway.app/api/admin/users/${userId}/disable`,
+        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/disable`,
         {},
         {
           headers: {
@@ -155,7 +157,7 @@ export const useUserManagement = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        ` https://jokidins-production.up.railway.app/api/admin/users/${userId}/enable`,
+        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/enable`,
         {},
         {
           headers: {
@@ -198,6 +200,7 @@ export const useUserManagement = () => {
     handleDelete,
     handleDisable,
     handleEnable,
-    handleDetail
+    handleDetail,
+    isInitialLoad // optional: return isInitialLoad kalau dibutuhkan di parent
   };
 };

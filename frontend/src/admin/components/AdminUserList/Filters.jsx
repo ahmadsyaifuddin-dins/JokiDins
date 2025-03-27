@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faSync, faUsers } from "@fortawesome/free-solid-svg-icons";
 
@@ -8,7 +8,8 @@ const Filters = ({
   roleFilter,
   setRoleFilter,
   fetchUsers,
-  totalUsers
+  totalUsers,
+  loading,
 }) => {
   return (
     <div className="p-4 bg-gray-50 border-b flex flex-col md:flex-row justify-between space-y-4 md:space-y-0">
@@ -22,9 +23,9 @@ const Filters = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <FontAwesomeIcon 
-            icon={faSearch} 
-            className="absolute left-3 top-3 text-gray-500" 
+          <FontAwesomeIcon
+            icon={faSearch}
+            className="absolute left-3 top-3 text-gray-500"
           />
         </div>
 
@@ -47,10 +48,18 @@ const Filters = ({
           Total: {totalUsers}
         </span>
         <button
-          onClick={fetchUsers}
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            fetchUsers();
+          }}
           className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 transition flex items-center"
         >
-          <FontAwesomeIcon icon={faSync} className="mr-1" />
+          {loading ? (
+            <FontAwesomeIcon icon={faSync} spin className="mr-1" />
+          ) : (
+            <FontAwesomeIcon icon={faSync} className="mr-1" />
+          )}
           Refresh
         </button>
       </div>

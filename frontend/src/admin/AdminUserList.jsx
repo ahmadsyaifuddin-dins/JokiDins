@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
@@ -23,7 +22,6 @@ const AdminUserList = () => {
   const {
     users,
     filteredUsers,
-    loading,
     error,
     searchTerm,
     roleFilter,
@@ -35,10 +33,12 @@ const AdminUserList = () => {
     handleDelete,
     handleDisable,
     handleEnable,
-    handleDetail
+    handleDetail,
+    isInitialLoad // diambil dari hook
   } = useUserManagement();
 
-  if (loading) {
+  // Hanya tampilkan spinner saat initial load
+  if (isInitialLoad) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
