@@ -199,7 +199,7 @@ exports.login = async (req, res) => {
     }
 
     // Update deviceInfo setiap kali login, baik user lama maupun baru
-    user.deviceInfo = { browser, os, platform };
+    user.deviceInfo = { browser, version, os, platform, ua: source, isMobile: req.useragent.isMobile, isTablet: req.useragent.isTablet };
     await user.save();
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
@@ -218,6 +218,10 @@ exports.login = async (req, res) => {
         browser: user.deviceInfo?.browser,
         os: user.deviceInfo?.os,
         platform: user.deviceInfo?.platform,
+        version: user.deviceInfo?.version,
+        ua: user.deviceInfo?.ua,
+        isMobile: user.deviceInfo?.isMobile,
+        isTablet: user.deviceInfo?.isTablet,
       },
     });
 
@@ -396,7 +400,7 @@ exports.googleLogin = async (req, res) => {
       await sendEmail(email, "Selamat Datang di JokiDins! 🚀", welcomeMessage);
     } else {
       // Update deviceInfo saat login via Google
-      user.deviceInfo = { browser, os, platform };
+      user.deviceInfo = { browser, version, os, platform, ua: source, isMobile: req.useragent.isMobile, isTablet: req.useragent.isTablet };
       await user.save();
 
       await Activity.create({
@@ -433,6 +437,10 @@ exports.googleLogin = async (req, res) => {
         browser: user.deviceInfo?.browser,
         os: user.deviceInfo?.os,
         platform: user.deviceInfo?.platform,
+        version: user.deviceInfo?.version,
+        ua: user.deviceInfo?.ua,
+        isMobile: user.deviceInfo?.isMobile,
+        isTablet: user.deviceInfo?.isTablet,
       },
     });
     await Activity.create({

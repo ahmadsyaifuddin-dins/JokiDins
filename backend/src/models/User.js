@@ -62,8 +62,12 @@ const UserSchema = new mongoose.Schema({
   deviceInfo: {
     type: {
       browser: String,
+      version: String,
       os: String,
       platform: String,
+      ua: String,
+      isMobile: Boolean,
+      isTablet: Boolean
     },
     default: null,
   },
