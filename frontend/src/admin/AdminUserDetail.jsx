@@ -447,10 +447,6 @@ const AdminUserDetail = () => {
                     {userDetail.deviceInfo?.version || "Tidak diketahui"}
                   </p>
                   <p className="text-gray-800">
-                    <span className="font-semibold">User Agent:</span>{" "}
-                    {userDetail.deviceInfo?.ua || "Tidak diketahui"}
-                  </p>
-                  <p className="text-gray-800">
                     <span className="font-semibold">Mobile:</span>{" "}
                     {userDetail.deviceInfo?.isMobile ? "Ya" : "Tidak"}
                   </p>
