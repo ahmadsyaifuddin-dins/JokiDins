@@ -9,19 +9,19 @@ const MAP_STYLES = [
   {
     value: 'dark',
     label: 'Dark Mode',
-    url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
-    attribution: '© Stadia Maps (Dark)'
+    url: `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png?api_key=${import.meta.env.VITE_STADIA_API_KEY}`,
+    attribution: "© Stadia Maps, © OpenMapTiles © OpenStreetMap contributors"
   },
   {
     value: 'satellite',
     label: 'Satellite View',
-    url: 'https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.png',
+    url: `https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}.png?api_key=${import.meta.env.VITE_STADIA_API_KEY}`,
     attribution: '© Stadia Maps (Satellite)'
   },
   {
     value: 'default',
     label: 'Standard Map',
-    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    url: `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`,
     attribution: '© OpenStreetMap contributors'
   }
 ];
