@@ -117,37 +117,6 @@ const ProfileAccountInfo = ({ profile, formatDate }) => {
               </div>
               <Monitor className="w-5 h-5 text-gray-400" />
             </div>
-            <div className="flex justify-between items-center py-3 border-b border-gray-100">
-              <div>
-                <p className="text-sm text-gray-500">Sistem Operasi</p>
-                <p className="font-medium">
-                  {profile.deviceInfo?.os || "Tidak diketahui"}
-                </p>
-              </div>
-              <Monitor className="w-5 h-5 text-gray-400" />
-            </div>
-            <div className="flex justify-between items-center py-3 border-b border-gray-100">
-              <div>
-                <p className="text-sm text-gray-500">Platform</p>
-                <p className="font-medium">
-                  {profile.deviceInfo?.platform || "Tidak diketahui"}
-                </p>
-              </div>
-              <Monitor className="w-5 h-5 text-gray-400" />
-            </div>
-            <div className="flex justify-between items-center py-3 border-b border-gray-100">
-              <div>
-                <p className="text-sm text-gray-500">Tipe Perangkat</p>
-                <p className="font-medium">
-                  {profile.deviceInfo?.isMobile
-                    ? "Mobile"
-                    : profile.deviceInfo?.isTablet
-                    ? "Tablet"
-                    : "Desktop"}
-                </p>
-              </div>
-              <Monitor className="w-5 h-5 text-gray-400" />
-            </div>
           </div>
         </div>
 
