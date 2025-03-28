@@ -72,23 +72,32 @@ const OrderCreate = () => {
   useEffect(() => {
     const fetchPhones = async () => {
       const token = localStorage.getItem("token");
+      // Kalau ga ada token, skip aja
+      if (!token) return;
+  
       try {
         const res = await axios.get(
-          " https://jokidins-production.up.railway.app/api/user/phones",
+          "https://jokidins-production.up.railway.app/api/user/phones",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
         setSavedPhones(res.data);
       } catch (error) {
-        console.error("Gagal ambil nomor HP tersimpan:", error);
-        toast.error("Gagal memuat nomor HP tersimpan", {
-          icon: <AlertCircle className="h-5 w-5 text-red-500" />,
-        });
+        // Kalau error 401/403, berarti user sudah di-redirect ke /login oleh interceptor
+        if (error.response && [401, 403].includes(error.response.status)) {
+          console.log("Token invalid atau akun dinonaktifkan. Skip toast error.");
+        } else {
+          console.error("Gagal ambil nomor HP tersimpan:", error);
+          toast.error("Gagal memuat nomor HP tersimpan", {
+            // ikon lucu-lucuan
+          });
+        }
       }
     };
     fetchPhones();
   }, []);
+  
 
   useEffect(() => {
     if (selectedPhoneOption !== "new") {
