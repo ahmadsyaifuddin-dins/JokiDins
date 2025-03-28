@@ -88,9 +88,17 @@ const Home = () => {
       {/* Mini Map Section */}
       <div className="my-12 px-4 md:px-8 lg:px-16 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6 text-center text-cyan-300">
+        <div className="text-center mb-16">
+        <span className="px-4 py-2 bg-gray-800/80 backdrop-blur-sm rounded-full text-blue-400 text-sm font-medium mb-4 inline-block shadow-lg shadow-blue-900/10">
+            Mitra & Cabang
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500 py-2 leading-tight">
             Explore JokiDins Network
           </h2>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Lihat dan temukan cabang dan mitra JokiDins yang tersedia di Seluruh Indonesia
+          </p>
+          </div>
           <div className="border-2 border-cyan-500/30 rounded-2xl overflow-hidden shadow-2xl">
             <MapComponent />
           </div>
