@@ -27,7 +27,7 @@ const ProfileHeader = ({
     }
     // Reset file input
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -38,15 +38,17 @@ const ProfileHeader = ({
 
     // Validasi ukuran file (misalnya 1.5MB)
     const maxSizeInBytes = 1.5 * 1024 * 1024; // 1.5MB
-    if (file.size > maxSizeInBytes) {
-      toast.error("Ukuran file terlalu besar. Maksimal 1.5MB.");
-      clearAvatarPreview();
-      return;
-    }
+    const isFileTypeValid = file.type.startsWith("image/");
 
-    // Validasi tipe file
-    if (!file.type.startsWith("image/")) {
-      toast.error("Bro, pilih file gambar ya!");
+    if (!isFileTypeValid || file.size > maxSizeInBytes) {
+      if (!isFileTypeValid) {
+        toast.error("Bro, pilih file gambar ya!\nHanya file gambar (JPG, PNG, GIF, SVG, WebP, AVIF) yang diperbolehkan.", {
+          duration: 7000,
+        });
+      } else {
+        toast.error("Ukuran file terlalu besar. Maksimal 1.5MB.");
+      }
+
       clearAvatarPreview();
       return;
     }
@@ -82,29 +84,29 @@ const ProfileHeader = ({
         // Panggil updateAvatar dengan parameter tambahan
         updateAvatar(res.data.url, true);
         toast.success("Avatar berhasil diupload!");
-        
+
         // Bersihkan preview lokal
         clearAvatarPreview();
       }
     } catch (error) {
       console.error("Upload avatar gagal:", error);
       
-      // Kembalikan tampilan avatar asli dan hapus preview
       clearAvatarPreview();
-
-      const errorMsg =
-        error.response?.data?.details ||
-        error.response?.data?.error ||
-        "Upload avatar gagal! Cek koneksi atau file yang diupload.";
-
-      if (
-        error.response?.status === 400 &&
-        (error.response?.data?.details?.includes("melebihi batas") ||
-          error.response?.data?.error?.includes("melebihi batas"))
-      ) {
-        toast.error("Ukuran file terlalu besar. Maksimal 1.5MB.");
+    
+      if (error.response?.status === 400) {
+        // Cek berbagai kondisi error
+        if (error.response?.data?.message?.includes("Jenis file tidak valid")) {
+          toast.error("Bro, pilih file gambar ya!\nGunakan format: JPG, PNG, GIF, SVG, WebP, atau AVIF.")
+        } else if (
+          error.response?.data?.message?.includes("Ukuran file melebihi batas") || 
+          error.response?.data?.details?.includes("terlalu besar")
+        ) {
+          toast.error("Ukuran file terlalu besar\nMaksimal unggah file 1.5MB.")
+        } else {
+          toast.error(error.response.data.message || "Upload gagal!\nCoba lagi nanti.")
+        }
       } else {
-        toast.error(errorMsg);
+        toast.error("Upload avatar gagal!\nPeriksa koneksi internet Anda.")
       }
     } finally {
       setIsUploading(false);

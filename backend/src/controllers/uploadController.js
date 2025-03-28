@@ -13,7 +13,7 @@ const processUpload = (req) => {
   return new Promise((resolve, reject) => {
     const form = formidable({
       multiples: false,
-      maxFileSize: 2 * 1024 * 1024, // 2MB
+      maxFileSize: 1.5 * 1024 * 1024, // 1.5MB
       keepExtensions: true,
     });
 
@@ -27,7 +27,7 @@ const processUpload = (req) => {
         ) {
           return reject({
             status: 400,
-            message: "Ukuran file melebihi batas 1.5MB",
+            message: "Ukuran file melebihi batas",
             details: "File yang diunggah terlalu besar. Maksimal 1.5MB.",
           });
         }
@@ -46,30 +46,34 @@ const uploadAvatar = async (req) => {
   // Parse form dengan promise
   const { fields, files } = await processUpload(req);
 
-  // Logging untuk debugging
-  console.log("Parsed files:", JSON.stringify(files, null, 2));
-  console.log("Parsed fields:", JSON.stringify(fields, null, 2));
-
   // Ambil file yang diupload
   const file = files.photo?.[0] || files.photo;
   if (!file) {
     throw { status: 400, message: "Tidak ada file yang dikirim" };
   }
 
+  // Daftar MIME type yang diizinkan
+  const allowedImageTypes = [
+    'image/jpeg', 
+    'image/png', 
+    'image/gif', 
+    'image/svg+xml', 
+    'image/webp', 
+    'image/avif'
+  ];
+
   // Validasi tipe file
   const mimeType = file.mimetype || file.type;
-  if (!mimeType || !mimeType.startsWith("image/")) {
-    throw { status: 400, message: "Hanya file gambar yang diperbolehkan" };
-  }
-
-  // Dapatkan path file
-  const filePath = file.filepath || file.path;
-  if (!filePath) {
-    throw { status: 400, message: "Gagal menemukan file yang di-upload" };
+  if (!mimeType || !allowedImageTypes.includes(mimeType)) {
+    throw { 
+      status: 400, 
+      message: "Jenis file tidak valid", 
+      details: "Hanya file gambar yang diperbolehkan. Gunakan format: JPG, PNG, GIF, SVG, WebP, atau AVIF."
+    };
   }
 
   // Baca file content
-  const fileContent = await fs.promises.readFile(filePath);
+  const fileContent = await fs.promises.readFile(file.filepath || file.path);
 
   // Buat nama file unik
   const originalFileName = file.originalFilename || file.name || "profile";
@@ -85,7 +89,7 @@ const uploadAvatar = async (req) => {
 
   // Bersihkan file sementara
   try {
-    await fs.promises.unlink(filePath);
+    await fs.promises.unlink(file.filepath || file.path);
   } catch (cleanupError) {
     console.error("Error cleaning up file:", cleanupError);
   }
