@@ -29,6 +29,7 @@ import ResetPassword from "./components/ResetPassword";
 import { Toaster } from "react-hot-toast";
 // import AutoLogoutWrapper from "./hooks/AutoLogoutWrapper";
 import AxiosInterceptorWrapper from "./hooks/AxiosInterceptorWrapper";
+import MapComponent from "./components/home/MapComponent";
 // import UseAccountStatusCheck from "./hooks/useAccountCheckStatus";
 
 const App = () => {
@@ -59,6 +60,7 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/full-map" element={<MapComponent />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route
               path="/admin/dashboard"

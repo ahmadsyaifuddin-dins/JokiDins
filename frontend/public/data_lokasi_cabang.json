@@ -1,0 +1,65 @@
+[
+  {
+    "No.": 1,
+    "Address": "Banjarmasin, Kalimantan Selatan",
+    "Latitude": "-3,3168684",
+    "Longitude": "114,5901835",
+    "Keterangan Lokasi": "Cabang JokiDins"
+  },
+  {
+    "No.": 2,
+    "Address": "Anjir Muara, Kalimantan Selatan",
+    "Latitude": "-3,2011805",
+    "Longitude": "114,5472845",
+    "Keterangan Lokasi": "Pusat JokiDins"
+  },
+  {
+    "No.": 3,
+    "Address": "Gambut, Kalimantan Selatan",
+    "Latitude": "-3,44564",
+    "Longitude": "114,6999847",
+    "Keterangan Lokasi": "Cabang JokiDins"
+  },
+  {
+    "No.": 4,
+    "Address": "Pal 7 (Pemurus Dalam), Kalimantan Selatan",
+    "Latitude": "-3,3555581",
+    "Longitude": "114,628605",
+    "Keterangan Lokasi": "Cabang JokiDins"
+  },
+  {
+    "No.": 5,
+    "Address": "Garut, Jawa Barat",
+    "Latitude": "-7,2157251",
+    "Longitude": "107,901989",
+    "Keterangan Lokasi": "Cabang JokiDins"
+  },
+  {
+    "No.": 6,
+    "Address": "Lhokseumawe, Aceh",
+    "Latitude": "5,1811638",
+    "Longitude": "97,1413222",
+    "Keterangan Lokasi": "Mitra JokiDins"
+  },
+  {
+    "No.": 7,
+    "Address": "Jakarta Timur, DKI Jakarta",
+    "Latitude": "-6,2250138",
+    "Longitude": "106,9004472",
+    "Keterangan Lokasi": "Cabang JokiDins"
+  },
+  {
+    "No.": 8,
+    "Address": "Tasikmalaya, Jawa Barat",
+    "Latitude": "-7,3505808",
+    "Longitude": "108,2171633",
+    "Keterangan Lokasi": "Cabang JokiDins"
+  },
+  {
+    "No.": 9,
+    "Address": "Makassar, Sulawesi Selatan",
+    "Latitude": "-5,1615828",
+    "Longitude": "119,4359281",
+    "Keterangan Lokasi": "Cabang JokiDins"
+  }
+]
