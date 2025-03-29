@@ -10,7 +10,7 @@ const MAP_STYLES = [
     value: 'dark',
     label: 'Dark Mode',
     url: `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png?api_key=${import.meta.env.VITE_STADIA_API_KEY}`,
-    attribution: "© Stadia Maps, © OpenMapTiles © OpenStreetMap contributors"
+    attribution: "© Stadia Maps"
   },
   {
     value: 'satellite',
@@ -45,7 +45,7 @@ const createCustomIcon = (iconPath, color = '#00ffff') => {
         <img 
           src="${iconPath}" 
           alt="marker" 
-          style="width: 24px; height: 24px; filter: brightness(0) invert(1);"
+          style="width: 24px; height: 24px;"
         />
       </div>
     `,
