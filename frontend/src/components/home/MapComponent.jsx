@@ -60,9 +60,12 @@ const MapComponent = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    fetch('/data_lokasi_cabang.json')
+    fetch('https://sheetdb.io/api/v1/xliyvy0wgp02j')
       .then((res) => res.json())
-      .then((data) => setMarkers(data))
+      .then((data) => {
+        console.log('SheetDB response:', data);
+        setMarkers(data); // atau data.data, tergantung struktur
+      })
       .catch((err) => console.error('Error fetching markers:', err));
   }, []);
 
@@ -154,19 +157,20 @@ const MapComponent = () => {
           attribution={mapStyle.attribution}
         />
         {markers.map((item, index) => {
+          // Gunakan header dari SheetDB (asumsi: "B: Latitude" dan "C: Longitude")
           const lat = Number(item["Latitude"].replace(',', '.'));
           const lng = Number(item["Longitude"].replace(',', '.'));
 
-          // Determine marker color and icon
+          // Tentukan warna dan icon marker berdasarkan "Keterangan Lokasi"
           const keterangan = item["Keterangan Lokasi"].toLowerCase();
-          let markerColor = '#ff00ff'; // magenta
+          let markerColor = '#ff00ff'; // default untuk Mitra
           let markerIcon = '/marker_icon/iconMitra.png';
 
           if (keterangan.includes('pusat')) {
-            markerColor = '#ff0000'; // merah for pusat
+            markerColor = '#ff0000'; // merah untuk pusat
             markerIcon = '/marker_icon/iconPusat.png';
           } else if (keterangan.includes('cabang')) {
-            markerColor = '#0891b2'; // biru malam for cabang
+            markerColor = '#0891b2'; // biru malam untuk cabang
             markerIcon = '/marker_icon/iconCabang.png';
           }
 
