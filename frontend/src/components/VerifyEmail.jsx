@@ -151,7 +151,8 @@ const VerifyEmail = () => {
             Verifikasi Email
           </h2>
           <p className="text-blue-100 text-center mt-2">
-            Kami telah mengirimkan kode verifikasi ke email Anda
+            Kami telah mengirimkan kode verifikasi ke email Anda. Jika Anda
+            tidak menerima email, cek folder spam atau junk mail Anda.
           </p>
         </div>
 
