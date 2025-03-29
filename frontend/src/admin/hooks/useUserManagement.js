@@ -98,8 +98,14 @@ export const useUserManagement = () => {
       toast.success("Akun pengguna berhasil dihapus.");
       fetchUsers();
     } catch (err) {
-      console.error("Gagal menghapus user:", err);
-      toast.error("Gagal menghapus user.");
+      if (err.response && err.response.status === 404) {
+        toast.error("Akun pengguna tidak ditemukan.");
+      } else if (err.response && err.response.status === 400) {
+        toast.error("Admin tidak dapat menghapus akun sendiri.");
+      } else {
+        console.error("Gagal menghapus Akun:", err);
+        toast.error("Gagal menghapus Akun. Silakan coba lagi.");
+      }
     }
   };
 
