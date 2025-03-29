@@ -1,6 +1,6 @@
 // AxiosInterceptorWrapper.jsx
 import { useEffect } from "react";
-import useAxiosInterceptor from "./useAxiosInterceptor";
+import useAxiosInterceptor from "../hooks/useAxiosInterceptor";
 
 const AxiosInterceptorWrapper = () => {
   useAxiosInterceptor();
