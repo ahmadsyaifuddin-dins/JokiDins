@@ -33,6 +33,8 @@ const AdminUserList = () => {
     handleDelete,
     handleDisable,
     handleEnable,
+    handleBlock,
+    handleUnblock,
     handleDetail,
     isInitialLoad // diambil dari hook
   } = useUserManagement();
@@ -79,6 +81,8 @@ const AdminUserList = () => {
           handleDisable={handleDisable}
           handleEnable={handleEnable}
           handleDelete={handleDelete}
+          handleBlock={handleBlock}
+          handleUnblock={handleUnblock}
         />
 
         <UserListPagination

@@ -173,6 +173,70 @@ export const useUserManagement = () => {
     }
   };
 
+  const handleBlock = async (userId) => {
+    // Tampilkan konfirmasi misalnya pakai Swal
+    const confirmBlock = await Swal.fire({
+      title: "Blokir akun pengguna?",
+      text: "Pengguna akan diblokir dan tidak bisa login lagi sampai admin membuka blokirnya.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Blokir",
+    });
+    if (!confirmBlock.isConfirmed) return;
+  
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/block`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("Akun pengguna berhasil diblokir.");
+      fetchUsers();
+    } catch (err) {
+      console.error("Gagal memblokir user:", err);
+      toast.error("Gagal memblokir user. Silakan coba lagi.");
+    }
+  };
+  
+  const handleUnblock = async (userId) => {
+    const confirmUnblock = await Swal.fire({
+      title: "Buka blokir akun pengguna?",
+      text: "Pengguna akan bisa login kembali setelah blokir dibuka.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Buka Blokir",
+    });
+    if (!confirmUnblock.isConfirmed) return;
+  
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/unblock`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("Blokir akun berhasil dibuka.");
+      fetchUsers();
+    } catch (err) {
+      console.error("Gagal membuka blokir user:", err);
+      toast.error("Gagal membuka blokir akun. Silakan coba lagi.");
+    }
+  };
+  
+
   const handleDetail = (userId) => {
     navigate(`/admin/userDetail/${userId}`);
   };
@@ -200,6 +264,8 @@ export const useUserManagement = () => {
     handleDelete,
     handleDisable,
     handleEnable,
+    handleBlock,
+    handleUnblock,
     handleDetail,
     isInitialLoad // optional: return isInitialLoad kalau dibutuhkan di parent
   };

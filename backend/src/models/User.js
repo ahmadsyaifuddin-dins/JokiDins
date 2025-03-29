@@ -58,7 +58,9 @@ const UserSchema = new mongoose.Schema({
   gender: { type: String },
   
   is_active: { type: Boolean, default: true },
-  
+
+  isBlocked: { type: Boolean, default: false },
+
   suspendedUntil: { type: Date, default: null },
 
   deviceInfo: {

@@ -22,7 +22,7 @@ const enableAccountMessage = (userName) => {
             <div class="content">
               <p>Kepada ${userName},</p>
               
-              <p>Kami ingin memberitahukan bahwa akun Anda telah diaktifkan kembali pada ${new Date().toLocaleDateString()}.</p>
+              <p>Kami ingin memberitahukan bahwa akun Anda telah diaktifkan kembali pada ${new Date().toLocaleString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}.</p>
               
               <p>Anda kini dapat kembali mengakses layanan kami seperti biasa. Jika Anda memiliki pertanyaan atau mengalami kendala, silakan hubungi tim dukungan kami.</p>
               

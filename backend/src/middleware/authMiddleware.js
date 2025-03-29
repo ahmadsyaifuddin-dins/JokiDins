@@ -3,7 +3,6 @@ const User = require("../models/User");
 
 const protect = async (req, res, next) => {
   let token;
-
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -16,9 +15,21 @@ const protect = async (req, res, next) => {
       if (!user) {
         return res.status(401).json({ message: "User tidak ditemukan" });
       }
-      // Cek apakah user aktif
-      if (!user.is_active) {
-        return res.status(403).json({ message: "Akun dinonaktifkan. Hubungi admin." });
+      // Cek apakah user sedang disuspend
+      if (user.suspendedUntil && new Date() < user.suspendedUntil) {
+        return res.status(403).json({ 
+          message: `Akun disuspend hingga ${user.suspendedUntil.toLocaleString()}. Hubungi admin untuk info lebih lanjut.` 
+        });
+      }
+      // Cek apakah user diblokir
+      if (user.isBlocked) {
+        return res.status(403).json({ message: "Akun Anda telah diblokir 😈" });
+      }
+      // Opsional: kalau suspendedUntil sudah lewat, aktifkan kembali akun
+      if (user.suspendedUntil && new Date() >= user.suspendedUntil) {
+        user.is_active = true;
+        user.suspendedUntil = null;
+        await user.save();
       }
       
       req.user = user;
@@ -28,7 +39,7 @@ const protect = async (req, res, next) => {
       return res.status(401).json({ message: "Not authorized, token failed" });
     }
   }
-
+  
   if (!token) {
     return res.status(401).json({ message: "Dilarang liat cuy, no token no data 🤪" });
   }

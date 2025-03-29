@@ -173,11 +173,16 @@ exports.login = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Email atau password salah." });
 
-    // Pengecekan akun aktif
-    if (!user.is_active) {
-      return res
-        .status(403)
-        .json({ message: "Akun dinonaktifkan. Hubungi Developer." });
+    // Pengecekan akun suspend
+    if (user.suspendedUntil && new Date() < user.suspendedUntil) {
+      return res.status(403).json({
+        message: `Akun disuspend hingga ${user.suspendedUntil.toLocaleString()}. Hubungi Dev untuk info lebih lanjut.`,
+      });
+    }
+
+    // Pengecekan akun diblokir
+    if (user.isBlocked) {
+      return res.status(403).json({ message: "Akun Anda telah diblokir 😈" });
     }
 
     if (!user.isVerified) {
@@ -342,10 +347,7 @@ exports.verifyResetToken = async (req, res) => {
         .status(404)
         .json({ message: "Token tidak valid atau sudah kadaluwarsa." });
     }
-    // Pengecekan akun aktif
-    //  if (!user.is_active) {
-    //   return res.status(403).json({ message: "Akun dinonaktifkan. Hubungi Developer." });
-    // }
+   
     res.status(200).json({ message: "Token valid." });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -372,13 +374,16 @@ exports.googleLogin = async (req, res) => {
     let user = await User.findOne({ email });
     let isNewUser = false;
 
-    // Jika user ditemukan, cek status aktifnya
-    if (user) {
-      if (!user.is_active) {
-        return res
-          .status(403)
-          .json({ message: "Akun dinonaktifkan. Hubungi admin." });
-      }
+    // Pengecekan akun suspend
+    if (user.suspendedUntil && new Date() < user.suspendedUntil) {
+      return res.status(403).json({
+        message: `Akun disuspend hingga ${user.suspendedUntil.toLocaleString()}. Hubungi Dev untuk info lebih lanjut.`,
+      });
+    }
+
+    // Pengecekan akun diblokir
+    if (user.isBlocked) {
+      return res.status(403).json({ message: "Akun Anda telah diblokir 😈" });
     }
 
     // Jika user belum ada, buat akun baru dengan deviceInfo

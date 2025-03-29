@@ -5,7 +5,9 @@ import {
   faToggleOn, 
   faToggleOff, 
   faTrash, 
-  faPhone 
+  faPhone,
+  faBan,
+  faUnlock
 } from "@fortawesome/free-solid-svg-icons";
 
 const Table = ({
@@ -15,7 +17,9 @@ const Table = ({
   handleDetail,
   handleDisable,
   handleEnable,
-  handleDelete
+  handleDelete,
+  handleBlock,     // baru
+  handleUnblock    // baru
 }) => {
   const renderSortIcon = (key) => {
     const isSorted = sortConfig.key === key;
@@ -164,7 +168,7 @@ const Table = ({
                     <button
                       onClick={() => handleDisable(user._id)}
                       className="bg-transparent text-green-600 hover:bg-green-100 p-2 rounded-full transition-colors"
-                      title="Nonaktifkan Akun"
+                      title="Nonaktifkan Akun (Suspend)"
                     >
                       <FontAwesomeIcon icon={faToggleOn} className="w-5 h-5" />
                     </button>
@@ -172,9 +176,27 @@ const Table = ({
                     <button
                       onClick={() => handleEnable(user._id)}
                       className="bg-transparent text-yellow-600 hover:bg-yellow-100 p-2 rounded-full transition-colors"
-                      title="Aktifkan Akun"
+                      title="Aktifkan Akun (Suspend)"
                     >
                       <FontAwesomeIcon icon={faToggleOff} className="w-5 h-5" />
+                    </button>
+                  )}
+                  {/* Tombol blokir/unblokir */}
+                  {user.isBlocked ? (
+                    <button
+                      onClick={() => handleUnblock(user._id)}
+                      className="bg-transparent text-blue-600 hover:bg-blue-100 p-2 rounded-full transition-colors"
+                      title="Buka Blokir Akun"
+                    >
+                      <FontAwesomeIcon icon={faUnlock} className="w-5 h-5" />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleBlock(user._id)}
+                      className="bg-transparent text-red-600 hover:bg-red-100 p-2 rounded-full transition-colors"
+                      title="Blokir Akun"
+                    >
+                      <FontAwesomeIcon icon={faBan} className="w-5 h-5" />
                     </button>
                   )}
                   <button

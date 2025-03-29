@@ -1,4 +1,4 @@
-const disableAccountMessage = (userName) => {
+const disableAccountMessage = (userName, suspendedUntil) => {
     return {
       subject: "Akun anda di Suspent",
       html: `
@@ -22,7 +22,7 @@ const disableAccountMessage = (userName) => {
             <div class="content">
               <p>Kepada ${userName},</p>
               
-              <p>Kami ingin menginformasikan bahwa status akun Anda telah dinonaktifkan pada ${new Date().toLocaleDateString()}.</p>
+              <p>Kami ingin menginformasikan bahwa status Akun Anda telah disuspend hingga ${new Date(suspendedUntil).toLocaleString()}.</p>
               
               <p>Jika Anda merasa ini bukan merupakan tindakan yang Anda kehendaki, atau memiliki pertanyaan lebih lanjut, silakan hubungi tim dukungan kami.</p>
               
