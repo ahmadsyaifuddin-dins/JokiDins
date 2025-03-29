@@ -22,7 +22,7 @@ const disableAccountMessage = (userName, suspendedUntil) => {
             <div class="content">
               <p>Kepada ${userName},</p>
               
-              <p>Kami ingin menginformasikan bahwa status Akun Anda telah disuspend hingga ${new Date(suspendedUntil).toLocaleString()}.</p>
+              <p>Kami ingin menginformasikan bahwa status Akun Anda telah disuspend hingga ${new Date(suspendedUntil).toLocaleString("id-ID", { timeZone: "Asia/Makassar" })}.</p>
               
               <p>Jika Anda merasa ini bukan merupakan tindakan yang Anda kehendaki, atau memiliki pertanyaan lebih lanjut, silakan hubungi tim dukungan kami.</p>
               

@@ -176,7 +176,7 @@ exports.login = async (req, res) => {
     // Pengecekan akun suspend
     if (user.suspendedUntil && new Date() < user.suspendedUntil) {
       return res.status(403).json({
-        message: `Akun disuspend hingga ${user.suspendedUntil.toLocaleString()}. Hubungi Dev untuk info lebih lanjut.`,
+        message: `Akun disuspend hingga ${new Date(user.suspendedUntil).toLocaleString("id-ID", { timeZone: "Asia/Makassar" })}. Hubungi Dev untuk info lebih lanjut.`,
       });
     }
 
@@ -377,7 +377,7 @@ exports.googleLogin = async (req, res) => {
     // Pengecekan akun suspend
     if (user.suspendedUntil && new Date() < user.suspendedUntil) {
       return res.status(403).json({
-        message: `Akun disuspend hingga ${user.suspendedUntil.toLocaleString()}. Hubungi Dev untuk info lebih lanjut.`,
+        message: `Akun disuspend hingga ${new Date(user.suspendedUntil).toLocaleString("id-ID", { timeZone: "Asia/Makassar" })}. Hubungi Dev untuk info lebih lanjut.`,
       });
     }
 
