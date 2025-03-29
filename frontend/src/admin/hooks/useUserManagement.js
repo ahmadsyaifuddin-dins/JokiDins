@@ -124,7 +124,7 @@ export const useUserManagement = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.post(
+      const res = await axios.post(
         `https://jokidins-production.up.railway.app/api/admin/users/${userId}/disable`,
         {},
         {
@@ -133,7 +133,8 @@ export const useUserManagement = () => {
           },
         }
       );
-      toast.success("Akun pengguna berhasil dinonaktifkan.");
+      const dynamicSuspendTime = res.data.suspendDuration; 
+      toast.success(`Akun pengguna dinonaktifkan selama ${dynamicSuspendTime} hari.`); 
       fetchUsers();
     } catch (err) {
       if (err.response && err.response.status === 404) {

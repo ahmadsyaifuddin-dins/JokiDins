@@ -28,7 +28,12 @@ exports.disableUser = async (req, res) => {
     const emailTemplate = disableAccountMessage(user.name, user.suspendedUntil);
     await sendEmail(user.email, emailTemplate.subject, emailTemplate.html);
   
-    res.json({ message: `User dinonaktifkan selama ${suspensionDuration} hari dan email pemberitahuan telah dikirim.` });
+    res.json({ 
+      message: `User dinonaktifkan selama ${suspensionDuration} hari dan email pemberitahuan telah dikirim.`,
+      suspendDuration: suspensionDuration, 
+      suspendedUntil: user.suspendedUntil
+    });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
