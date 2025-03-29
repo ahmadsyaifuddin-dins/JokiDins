@@ -200,8 +200,14 @@ export const useUserManagement = () => {
       toast.success("Akun pengguna berhasil diblokir.");
       fetchUsers();
     } catch (err) {
-      console.error("Gagal memblokir user:", err);
-      toast.error("Gagal memblokir user. Silakan coba lagi.");
+      if (err.response && err.response.status === 404) {
+        toast.error("Akun pengguna tidak ditemukan.");
+      } else if (err.response && err.response.status === 400) {
+        toast.error("Anda tidak dapat memblokir diri sendiri.");
+      } else {
+        console.error("Gagal memblokir user:", err);
+        toast.error("Gagal memblokir user. Silakan coba lagi.");
+      }
     }
   };
   
