@@ -96,7 +96,7 @@ const Home = () => {
             Explore JokiDins Network
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Lihat dan temukan cabang dan mitra JokiDins yang tersedia di Seluruh Indonesia
+            Lihat dan temukan cabang dan mitra JokiDins yang tersebar di Seluruh Indonesia
           </p>
           </div>
           <div className="border-2 border-cyan-500/30 rounded-2xl overflow-hidden shadow-2xl">
