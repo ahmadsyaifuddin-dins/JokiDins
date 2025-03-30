@@ -156,3 +156,36 @@ export const getCompletionTimeDifference = (order) => {
     }
   }
 };
+
+
+/**
+ * Cek status Telegram berdasarkan profile user.
+ * @param {string} token - JWT token.
+ * @returns {Promise<boolean>}
+ */
+export const checkTelegramStatus = async (token) => {
+  try {
+    const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return !!res.data.telegramChatId;
+  } catch (error) {
+    console.error("Gagal mengecek status Telegram:", error);
+    return false;
+  }
+};
+
+/**
+ * Kirim order dengan data FormData.
+ * @param {FormData} formData - Data order.
+ * @param {string} token - JWT token.
+ * @returns {Promise}
+ */
+export const submitOrder = async (formData, token) => {
+  return axios.post("https://jokidins-production.up.railway.app/api/orders", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};

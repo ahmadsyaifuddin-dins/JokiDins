@@ -156,7 +156,7 @@ const OrderList = () => {
             <p className="text-gray-500 mt-1">Kelola semua pesanan Anda di satu tempat</p>
           </div>
           <button
-            onClick={() => navigate("/create-order")}
+            onClick={() => navigate("/orderCreate")}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm flex items-center"
           >
             <FilePlus2 className="h-5 w-5 mr-2" />
@@ -182,7 +182,7 @@ const OrderList = () => {
               Belum ada pesanan {searchTerm && "yang sesuai dengan pencarian"}
             </p>
             <button
-              onClick={() => navigate("/create-order")}
+              onClick={() => navigate("/orderCreate")}
               className="text-blue-600 hover:text-blue-800 flex items-center mx-auto"
             >
               <PlusCircle className="h-4 w-4 mr-2" />

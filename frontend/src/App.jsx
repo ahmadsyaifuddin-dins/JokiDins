@@ -183,7 +183,7 @@ const App = () => {
               }
             />
             <Route
-              path="/create-order"
+              path="/orderCreate"
               element={
                 <PrivateRoute>
                   <OrderCreate />
