@@ -91,7 +91,7 @@ const PricingPage = () => {
         </div>
         {plan.priceNote && (
           <div className="mb-4">
-            <span className="text-sm text-blue-400 italic">{plan.priceNote}</span>
+            <span className="text-sm text-red-500 italic">{plan.priceNote}</span>
           </div>
         )}
         <ul className="mb-8 space-y-4 flex-grow">
