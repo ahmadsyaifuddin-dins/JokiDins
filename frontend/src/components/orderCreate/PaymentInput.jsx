@@ -41,6 +41,7 @@ const PaymentInput = ({
         <input
           id="payment"
           type="text"
+          inputMode="numeric"
           value={formattedPaymentDisplay}
           onChange={(e) => {
             // Get the input value and remove non-numeric characters

@@ -30,7 +30,7 @@ const PhoneInput = ({
                    focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
                    outline-none transition-colors appearance-none"
           >
-            <option value="new">-- Input Nomor Baru --</option>
+            <option value="new"> Input Nomor Baru </option>
             {savedPhones.map((num, idx) => (
               <option key={idx} value={num}>
                 {num} ({detectProvider(num)})
