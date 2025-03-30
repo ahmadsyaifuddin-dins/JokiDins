@@ -347,19 +347,7 @@ exports.googleLogin = async (req, res) => {
     let user = await User.findOne({ email });
     let isNewUser = false;
 
-    // Pengecekan akun suspend
-    if (user.suspendedUntil && new Date() < user.suspendedUntil) {
-      return res.status(403).json({
-        message: `Akun disuspend hingga ${new Date(user.suspendedUntil).toLocaleString("id-ID", { timeZone: "Asia/Makassar" })}. Hubungi Dev untuk info lebih lanjut.`,
-      });
-    }
-
-    // Pengecekan akun diblokir
-    if (user.isBlocked) {
-      return res.status(403).json({ message: "Akun Anda telah diblokir 😈" });
-    }
-
-    // Jika user belum ada, buat akun baru dengan deviceInfo
+    // Kalau user belum ada, buat akun baru
     if (!user) {
       isNewUser = true;
       const defaultPassword = await bcrypt.hash("defaultGooglePassword", 10);
@@ -373,7 +361,7 @@ exports.googleLogin = async (req, res) => {
         loginMethod: "google",
         googleId: picture ? googleId : null,
         is_active: true,
-        // Simpan deviceInfo saat akun dibuat
+        // Pastikan suspendedUntil defaultnya null sudah ditetapkan oleh schema
         deviceInfo: { browser, os, platform, version, ua, isMobile, isTablet },
       });
       await user.save();
@@ -381,6 +369,16 @@ exports.googleLogin = async (req, res) => {
       const welcomeMessage = getWelcomeMessage(name);
       await sendEmail(email, "Selamat Datang di JokiDins! 🚀", welcomeMessage);
     } else {
+      // Kalau user sudah ada, lakukan pengecekan suspend dan blokir
+      if (user.suspendedUntil && new Date() < user.suspendedUntil) {
+        return res.status(403).json({
+          message: `Akun disuspend hingga ${new Date(user.suspendedUntil).toLocaleString("id-ID", { timeZone: "Asia/Makassar" })}. Hubungi Dev untuk info lebih lanjut.`,
+        });
+      }
+      if (user.isBlocked) {
+        return res.status(403).json({ message: "Akun Anda telah diblokir 😈" });
+      }
+
       // Update deviceInfo saat login via Google
       user.deviceInfo = { browser, version, os, platform, ua, isMobile, isTablet };
       await user.save();
@@ -396,6 +394,7 @@ exports.googleLogin = async (req, res) => {
         await user.save();
       }
     }
+
     const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
@@ -415,7 +414,6 @@ exports.googleLogin = async (req, res) => {
         googleId: user.googleId,
         isNewUser,
         is_active: user.is_active,
-        // Flatten deviceInfo agar FE bisa akses secara langsung
         browser: user.deviceInfo?.browser,
         os: user.deviceInfo?.os,
         platform: user.deviceInfo?.platform,
