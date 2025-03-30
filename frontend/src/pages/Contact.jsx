@@ -120,6 +120,7 @@ const Contact = () => {
                 
                 <div className="text-sm text-gray-500 space-y-2">
                   <p>• Nomor rekening sebagian disembunyikan untuk keamanan</p>
+                  <p>• Silakan Chat Admin kami untuk mendapatkan No. Rek</p>
                   <p>• Konfirmasi pembayaran via chat admin</p>
                 </div>
               </div>
