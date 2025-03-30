@@ -9,7 +9,7 @@ const PricingPage = () => {
       priceStartSmall: ".000",
       priceEnd: "120",
       priceEndSmall: ".000",
-      priceNote: "(bisa nego)",
+      priceNote: "",
       features: [
         "Pengerjaan tugas ringan",
         "1 kali revisi",
@@ -40,7 +40,7 @@ const PricingPage = () => {
       priceStartSmall: ".000",
       priceEnd: "750",
       priceEndSmall: ".000",
-      priceNote: "",
+      priceNote: "(bisa nego)",
       features: [
         "Pengerjaan tugas kompleks (mini project)",
         "3 kali revisi",
@@ -55,7 +55,7 @@ const PricingPage = () => {
       priceStartSmall: ".000",
       priceEnd: "3,5",
       priceEndSmall: " Juta",
-      priceNote: "",
+      priceNote: "(bisa nego)",
       features: [
         "Pengerjaan project besar (web app/portfolio)",
         "Revisi bebas",
