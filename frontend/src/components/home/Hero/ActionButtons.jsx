@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 const ActionButtons = () => {
   return (
     <div className="flex gap-2 md:gap-4 justify-center">
-      <Link to="/create-order">
+      <Link to="/pricing">
         <motion.button
           className="bg-gradient-to-r from-blue-500 via-pink-600 to-blue-600 text-white px-4 py-4 rounded-lg font-bold flex items-center justify-center gap-2 border border-white/10 relative overflow-hidden shadow-lg"
           initial={{ y: 0 }}
