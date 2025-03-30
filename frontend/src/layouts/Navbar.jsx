@@ -62,7 +62,7 @@ const Navbar = () => {
         name: 'Layanan Joki',
         href: '#',
         children: [
-          { name: 'Pesan Joki', href: '/create-order' },
+          { name: 'Pesan Joki Langsung', href: '/create-order' },
           { name: 'Pesanan Saya', href: '/OrderList' },
           { name: 'Syaifuddin Progress', href: 'https://dins-sphere.vercel.app' } 
         ]
