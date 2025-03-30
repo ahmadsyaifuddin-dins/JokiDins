@@ -2,7 +2,7 @@
 exports.blockAccountMessage = (name) => ({
     subject: "⚠️ Akun Kamu Telah Diblokir",
     html: `<div style="text-align: center;">
-             <img src="https://www.joki-dins.my.id/images/JokiDins-new.png" alt="JokiDins Logo" style="max-width: 200px; margin-bottom: 20px;">
+             <img src="https://www.joki-dins.my.id/images/JokiDins-new_tiny.jpg" alt="JokiDins Logo" style="max-width: 150px; margin-bottom: 20px;">
            </div>
            <p>Hey ${name},</p>
            <p>Mohon maaf, akun kamu saat ini telah diblokir oleh Developer kami.</p>
