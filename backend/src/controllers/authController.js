@@ -6,6 +6,10 @@ const User = require("../models/User");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const getWelcomeMessage = require("../messages/welcomeMessage");
+const { getVerificationMessage } = require("../messages/verificationMessage");
+const { getResendVerificationMessage } = require("../messages/resendVerificationMessage");
+const { getUnverifiedLoginMessage } = require("../messages/unverifiedLoginMessage");
+const { getResetPasswordMessage } = require("../messages/resetPasswordMessage");
 const {
   generateVerificationCode,
   getVerificationCodeExpires,
@@ -57,13 +61,7 @@ exports.register = async (req, res) => {
     });
     await newUser.save();
 
-    const verificationEmailMessage = `
-      <p>Halo ${name},</p>
-      <p>Terima kasih telah mendaftar di JokiDins. Berikut adalah kode verifikasi email Anda:</p>
-      <h2>${verificationCode}</h2>
-      <p>Masukkan kode tersebut pada halaman verifikasi untuk mengaktifkan akun Anda.</p>
-      <p>Kode verifikasi ini akan berlaku selama ${VERIFICATION_CODE_EXPIRATION} menit.</p>
-    `;
+    const verificationEmailMessage = getVerificationMessage(name, verificationCode, VERIFICATION_CODE_EXPIRATION);
     await sendEmail(email, "Kode Verifikasi Email", verificationEmailMessage);
 
     res.status(201).json({
@@ -139,13 +137,7 @@ exports.resendVerification = async (req, res) => {
     user.verificationCodeExpires = verificationCodeExpires;
     await user.save();
 
-    const verificationEmailMessage = `
-      <p>Halo ${user.name},</p>
-      <p>Berikut adalah kode verifikasi email baru Anda:</p>
-      <h2>${verificationCode}</h2>
-      <p>Masukkan kode tersebut pada halaman verifikasi untuk mengaktifkan akun Anda.</p>
-      <p>Kode verifikasi ini akan berlaku selama ${VERIFICATION_CODE_EXPIRATION} menit.</p>
-    `;
+    const verificationEmailMessage = getResendVerificationMessage(user.name, verificationCode, VERIFICATION_CODE_EXPIRATION);
     await sendEmail(
       email,
       "Kode Verifikasi Email Baru",
@@ -192,13 +184,7 @@ exports.login = async (req, res) => {
       user.verificationCodeExpires = verificationCodeExpires;
       await user.save();
 
-      const verificationEmailMessage = `
-        <p>Halo ${user.name},</p>
-        <p>Anda belum memverifikasi akun Anda. Berikut adalah kode verifikasi email baru:</p>
-        <h2>${verificationCode}</h2>
-        <p>Masukkan kode tersebut pada halaman verifikasi untuk mengaktifkan akun Anda.</p>
-        <p>Kode verifikasi ini akan berlaku selama ${VERIFICATION_CODE_EXPIRATION} menit.</p>
-      `;
+      const verificationEmailMessage = getUnverifiedLoginMessage(user.name, verificationCode, VERIFICATION_CODE_EXPIRATION);
       await sendEmail(email, "Kode Verifikasi Email", verificationEmailMessage);
       return res.status(401).json({
         message: "Akun belum terverifikasi. Kode verifikasi baru telah dikirim ke email Anda.",
@@ -244,7 +230,6 @@ exports.login = async (req, res) => {
   }
 };
 
-
 // Fungsi untuk lupa password: generate token reset dan kirim email
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
@@ -252,12 +237,9 @@ exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email });
     // Untuk keamanan, kita tetap kirim response yang sama walaupun user tidak ditemukan
     if (!user) {
-      return res
-        .status(200)
-        .json({
-          message:
-            "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password.",
-        });
+      return res.status(200).json({
+        message: "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password.",
+      });
     }
 
     // Generate reset token
@@ -274,61 +256,16 @@ exports.forgotPassword = async (req, res) => {
     // Buat URL reset password (pastikan CLIENT_URL sudah diset di environment)
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
     // Gunakan email template untuk reset password
-    const resetEmailMessage = `
-      <p>Halo ${user.name},</p>
-      <p>Kami menerima permintaan untuk mereset password akun Anda.</p>
-      <p>Silakan klik link berikut untuk mengatur ulang password Anda:</p>
-      <p><a href="${resetUrl}" target="_blank">${resetUrl}</a></p>
-      <p>Link ini akan kadaluwarsa dalam 1 jam.</p>
-      <p>Jika Anda tidak meminta reset password, abaikan email ini.</p>
-    `;
+    const resetEmailMessage = getResetPasswordMessage(user.name, resetUrl);
     await sendEmail(
       user.email,
       "Reset Password Instructions",
       resetEmailMessage
     );
 
-    res
-      .status(200)
-      .json({
-        message:
-          "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password.",
-      });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Fungsi untuk reset password menggunakan token yang dikirim via email
-exports.resetPassword = async (req, res) => {
-  const { token } = req.params; // token dari URL
-  const { newPassword } = req.body;
-  try {
-    // Hash token dari URL untuk dicocokkan dengan yang tersimpan
-    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-
-    // Cari user dengan token yang cocok dan belum kadaluwarsa
-    const user = await User.findOne({
-      resetPasswordToken: hashedToken,
-      resetPasswordExpires: { $gt: Date.now() },
+    res.status(200).json({
+      message: "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password.",
     });
-    if (!user) {
-      return res
-        .status(400)
-        .json({
-          message: "Token reset password tidak valid atau sudah kadaluwarsa.",
-        });
-    }
-
-    // Hash new password dan update user
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
-    // Hapus token reset dan expiration-nya
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-    await user.save();
-
-    res.status(200).json({ message: "Password berhasil direset." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
