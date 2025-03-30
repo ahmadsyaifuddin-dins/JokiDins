@@ -1,8 +1,8 @@
 const User = require("../models/User");
-const { disableAccountMessage } = require("../utils/disableAccountMessage");
-const { enableAccountMessage } = require("../utils/enableAccountMessage");
-const { blockAccountMessage } = require("../utils/blockAccountMessage");
-const { unblockAccountMessage } = require("../utils/unblockAccountMessage");
+const { disableAccountMessage } = require("../messages/disableAccountMessage");
+const { enableAccountMessage } = require("../messages/enableAccountMessage");
+const { blockAccountMessage } = require("../messages/blockAccountMessage");
+const { unblockAccountMessage } = require("../messages/unblockAccountMessage");
 const sendEmail = require("../utils/sendEmail"); // pastikan sudah import fungsi sendEmail
 
 exports.disableUser = async (req, res) => {

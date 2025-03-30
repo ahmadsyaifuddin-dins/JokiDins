@@ -5,7 +5,7 @@ const { OAuth2Client } = require("google-auth-library");
 const User = require("../models/User");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
-const getWelcomeMessage = require("../utils/welcomeMessage");
+const getWelcomeMessage = require("../messages/welcomeMessage");
 const {
   generateVerificationCode,
   getVerificationCodeExpires,

@@ -1,4 +1,4 @@
-// utils/blockAccountMessage.js
+// messages/blockAccountMessage.js
 exports.blockAccountMessage = (name) => ({
     subject: "⚠️ Akun Kamu Telah Diblokir",
     html: `<div style="text-align: center;">

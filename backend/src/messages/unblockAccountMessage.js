@@ -1,4 +1,4 @@
-// utils/unblockAccountMessage.js
+// messages/unblockAccountMessage.js
 exports.unblockAccountMessage = (name) => ({
     subject: "🎉 Akun Kamu Sudah Dibuka Blokirnya!",
     html: `<div style="text-align: center;">
