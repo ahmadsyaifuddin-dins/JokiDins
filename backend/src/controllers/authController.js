@@ -10,6 +10,7 @@ const { getVerificationMessage } = require("../messages/verificationMessage");
 const { getResendVerificationMessage } = require("../messages/resendVerificationMessage");
 const { getUnverifiedLoginMessage } = require("../messages/unverifiedLoginMessage");
 const { getResetPasswordMessage } = require("../messages/resetPasswordMessage");
+
 const {
   generateVerificationCode,
   getVerificationCodeExpires,
@@ -266,6 +267,41 @@ exports.forgotPassword = async (req, res) => {
     res.status(200).json({
       message: "Jika email tersebut terdaftar, Anda akan menerima instruksi reset password.",
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Fungsi untuk reset password menggunakan token yang dikirim via email
+exports.resetPassword = async (req, res) => {
+  const { token } = req.params; // token dari URL
+  const { newPassword } = req.body;
+  try {
+    // Hash token dari URL untuk dicocokkan dengan yang tersimpan
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    // Cari user dengan token yang cocok dan belum kadaluwarsa
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+    if (!user) {
+      return res
+        .status(400)
+        .json({
+          message: "Token reset password tidak valid atau sudah kadaluwarsa.",
+        });
+    }
+
+    // Hash new password dan update user
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    // Hapus token reset dan expiration-nya
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Password berhasil direset." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

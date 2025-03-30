@@ -129,7 +129,7 @@ const AdminUserDetail = () => {
       const token = localStorage.getItem("token");
       // Pastikan endpoint enable sesuai dengan backend-mu
       await axios.post(
-        ` https://jokidins-production.up.railway.app/api/admin/users/${userId}/enable`,
+        ` http://localhost:5000/api/admin/users/${userId}/enable`,
         {},
         {
           headers: {
