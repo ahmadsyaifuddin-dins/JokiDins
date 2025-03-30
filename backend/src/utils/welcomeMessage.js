@@ -3,7 +3,7 @@ function getWelcomeMessage(name) {
     return `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
     <div style="text-align: center; margin-bottom: 20px;">
-      <img src="https://www.joki-dins.my.id/images/dinsy.jpg" alt="JokiDins Logo" style="max-width: 150px; height: auto;">
+      <img src="https://www.joki-dins.my.id/images/JokiDins-new.png" alt="JokiDins Icon" style="max-width: 150px; height: auto;">
     </div>
     
     <h2 style="color: #4a154b; text-align: center;">Selamat Datang di JokiDins, ${name}! 🎉</h2>
