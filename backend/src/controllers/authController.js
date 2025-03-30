@@ -17,7 +17,7 @@ const {
 } = require("../utils/verification");
 const Activity = require("../models/Activity");
 
-const VERIFICATION_CODE_EXPIRATION = 5; // dalam menit
+const VERIFICATION_CODE_EXPIRATION = 3; // dalam menit
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.register = async (req, res) => {
