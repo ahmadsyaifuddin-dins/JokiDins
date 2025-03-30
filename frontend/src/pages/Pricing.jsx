@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check, Star } from 'lucide-react';
 
 const PricingPage = () => {
   const pricingPlans = [
@@ -75,8 +75,8 @@ const PricingPage = () => {
           : 'bg-gray-900 border border-gray-700'
       }`}>
         {plan.popular && (
-          <div className="py-1 px-4 bg-blue-500 text-white text-sm font-bold tracking-wide rounded-full self-start mb-4">
-            TERPOPULER
+          <div className="py-1 px-2 bg-blue-500 text-white text-sm font-bold tracking-wide rounded-full self-start mb-4 flex items-center">
+            TERPOPULER <Star className="ml-2" />
           </div>
         )}
         <h3 className="text-xl font-bold text-white mb-2">Paket {plan.name}</h3>
