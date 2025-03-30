@@ -27,6 +27,7 @@ const Navbar = () => {
     if (!user) {
       return [
         { name: 'Home', href: '/' },
+        { name: 'Harga Joki', href: '/pricing' },
         { name: 'Kontak', href: '/contact' },
         { name: 'Tentang Kami', href: '/about' },
         { name: `Syaifuddin's Project Progress`, href: 'https://dins-sphere.vercel.app' }
@@ -46,6 +47,10 @@ const Navbar = () => {
           ]
         },
         { name: 'Dashboard', href: '/admin/dashboard' },
+        { name: 'Harga Joki', href: '/pricing' },
+        { name: 'Kontak', href: '/contact' },
+        { name: 'Tentang Kami', href: '/about' },
+        { name: `Syaifuddin's Project Progress`, href: 'https://dins-sphere.vercel.app' },
         { name: 'Profile', href: '/admin/profile' }
       ];
     }
@@ -62,6 +67,7 @@ const Navbar = () => {
           { name: 'Syaifuddin Progress', href: 'https://dins-sphere.vercel.app' } 
         ]
       },
+      { name: 'Harga Joki', href: '/pricing' },
       { name: 'Kontak', href: '/contact' },
       { name: 'Tentang Kami', href: '/about' },
       { name: 'Profile', href: '/profile' }

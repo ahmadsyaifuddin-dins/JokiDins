@@ -30,6 +30,7 @@ import { Toaster } from "react-hot-toast";
 import AxiosInterceptorWrapper from "./wrappers/AxiosInterceptorWrapper";
 import TokenAutoLogoutWrapper from "./wrappers/TokenAutoLogoutWrapper";
 import MapComponent from "./components/home/MapComponent";
+import PricingPage from "./pages/Pricing";
 
 const App = () => {
   return (
@@ -54,6 +55,7 @@ const App = () => {
         <main className="flex-grow mt-5">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/pricing" element={<PricingPage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<TermsOfService />} />
