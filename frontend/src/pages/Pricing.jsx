@@ -14,7 +14,7 @@ const PricingPage = () => {
         "Pengerjaan tugas ringan",
         "1 kali revisi",
         "Estimasi selesai 2-3 hari",
-        "Sesuai kesepakatan kesulitan"
+        "Harga Sesuai kesulitan"
       ],
       buttonText: "Pesan Sekarang",
       popular: false
