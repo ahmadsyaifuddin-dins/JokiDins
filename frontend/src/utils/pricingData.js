@@ -1,6 +1,6 @@
 export const pricingPlans = [
     {
-      name: "Basic",
+      name: "Terra Novice",
       priceStart: "Rp50",
       priceStartSmall: ".000",
       priceEnd: "120",
@@ -10,13 +10,12 @@ export const pricingPlans = [
         "Pengerjaan tugas ringan",
         "1 kali revisi",
         "Estimasi selesai 2-3 hari",
-        "Harga Sesuai kesulitan",
       ],
       buttonText: "Pesan Sekarang",
       popular: false,
     },
     {
-      name: "Standard",
+      name: "Geo Force",
       priceStart: "Rp120",
       priceStartSmall: ".000",
       priceEnd: "450",
@@ -31,7 +30,7 @@ export const pricingPlans = [
       popular: true,
     },
     {
-      name: "Premium",
+      name: "Elemental Prime",
       priceStart: "Rp500",
       priceStartSmall: ".000",
       priceEnd: "750",
@@ -46,7 +45,7 @@ export const pricingPlans = [
       popular: false,
     },
     {
-      name: "Ultimate",
+      name: "Gaia Sovereign",
       priceStart: "Rp750",
       priceStartSmall: ".000",
       priceEnd: "3,5",
@@ -61,7 +60,7 @@ export const pricingPlans = [
       popular: false,
     },
     {
-        name: "Exclusive",
+        name: "Cosmic Elite",
         priceStart: "Rp150",
         priceStartSmall: ".000",
         priceEnd: "5",
@@ -70,7 +69,7 @@ export const pricingPlans = [
         features: [
           "Pengerjaan waktu mepet (web app/portfolio)",
           "Deadline Mepet 3 hari atau 2 hari",
-          "Estimasi bisa selesai 1 hari atau kurang dari 12 jam",
+          "Estimasi bisa selesai 1-2 hari atau kurang dari 12 jam",
         ],
         buttonText: "Pesan Sekarang",
         popular: false,
