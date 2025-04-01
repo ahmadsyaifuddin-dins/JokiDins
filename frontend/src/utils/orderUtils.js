@@ -2,6 +2,7 @@
 import { format, addHours } from "date-fns";
 import { id } from "date-fns/locale";
 import axios from "axios";
+import { API_BASE_URL } from '../config';
 
 // Untuk createdAt & updatedAt: Tampilkan dengan timezone WITA menggunakan Intl.DateTimeFormat
 export const formatDateDisplay = (dateString) => {
@@ -166,7 +167,7 @@ export const getCompletionTimeDifference = (order) => {
  */
 export const checkTelegramStatus = async (token) => {
   try {
-    const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
+    const res = await axios.get(`${API_BASE_URL}/api/user/profile`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return !!res.data.telegramChatId;
@@ -183,7 +184,7 @@ export const checkTelegramStatus = async (token) => {
  * @returns {Promise}
  */
 export const submitOrder = async (formData, token) => {
-  return axios.post("https://jokidins-production.up.railway.app/api/orders", formData, {
+  return axios.post(`${API_BASE_URL}/api/orders`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "multipart/form-data",

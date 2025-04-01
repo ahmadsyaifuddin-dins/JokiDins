@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { ArrowLeft, Save } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
+import { API_BASE_URL } from '../config';
 
 // Import komponen terpisah
 import TabButtons from "../components/UpdateProfile/TabButtons";
@@ -72,7 +73,7 @@ const UpdateProfile = () => {
 
       const token = localStorage.getItem("token");
       const res = await axios.put(
-        " https://jokidins-production.up.railway.app/api/user/profile",
+        `${API_BASE_URL}/api/user/profile`,
         { phones: updatedPhones },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -113,7 +114,7 @@ const UpdateProfile = () => {
       }
 
       const res = await axios.put(
-        " https://jokidins-production.up.railway.app/api/user/profile",
+        `${API_BASE_URL}/api/user/profile`,
         { name, email, phones: updatedPhones, password, birthday, gender },
         { headers: { Authorization: `Bearer ${token}` } }
       );

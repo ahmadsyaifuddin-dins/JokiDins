@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useToast from "../hooks/useToastCustomize";
+import { API_BASE_URL } from '../config';
 
 const VerifyEmail = () => {
   const [verificationCode, setVerificationCode] = useState("");
@@ -67,7 +68,7 @@ const VerifyEmail = () => {
     setIsLoading(true);
     try {
       const res = await axios.post(
-        " https://jokidins-production.up.railway.app/api/auth/verify-email",
+        `${API_BASE_URL}/api/auth/verify-email`,
         {
           email,
           verificationCode,
@@ -104,7 +105,7 @@ const VerifyEmail = () => {
     try {
       setIsLoading(true);
       await axios.post(
-        " https://jokidins-production.up.railway.app/api/auth/resend-verification",
+        `${API_BASE_URL}/api/auth/resend-verification`,
         { email }
       );
 

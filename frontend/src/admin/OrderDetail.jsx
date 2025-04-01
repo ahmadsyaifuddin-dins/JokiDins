@@ -18,6 +18,7 @@ import {
 import { formatDateDisplay, formatDeadlineDisplay } from "../utils/orderUtils";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from '../config';
 
 const OrderDetail = () => {
   const { id: orderId } = useParams();
@@ -36,7 +37,7 @@ const OrderDetail = () => {
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get(` https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
+      const res = await axios.get(`${API_BASE_URL}/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrder(res.data);
@@ -54,7 +55,7 @@ const OrderDetail = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(
-        ` https://jokidins-production.up.railway.app/api/orders/${orderId}/file`,
+        `${API_BASE_URL}/api/orders/${orderId}/file`,
         {
           headers: { Authorization: `Bearer ${token}` },
           responseType: "blob",
@@ -78,7 +79,7 @@ const OrderDetail = () => {
     const token = localStorage.getItem("token");
     try {
       await axios.put(
-        ` https://jokidins-production.up.railway.app/api/orders/${orderId}`,
+        `${API_BASE_URL}/api/orders/${orderId}`,
         { status: selectedStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -105,7 +106,7 @@ const OrderDetail = () => {
 
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(` https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
+      await axios.delete(`${API_BASE_URL}/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Pesanan berhasil dihapus.");

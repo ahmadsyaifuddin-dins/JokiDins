@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../config';
 
 export const useUserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -27,7 +28,7 @@ export const useUserManagement = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await axios.get("https://jokidins-production.up.railway.app/api/user/users", {
+      const res = await axios.get(`${API_BASE_URL}/api/user/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,7 +91,7 @@ export const useUserManagement = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`https://jokidins-production.up.railway.app/api/user/users/${userId}`, {
+      await axios.delete(`${API_BASE_URL}/api/user/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -125,7 +126,7 @@ export const useUserManagement = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/disable`,
+        `${API_BASE_URL}/api/admin/users/${userId}/disable`,
         {},
         {
           headers: {
@@ -164,7 +165,7 @@ export const useUserManagement = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/enable`,
+        `${API_BASE_URL}/api/admin/users/${userId}/enable`,
         {},
         {
           headers: {
@@ -196,7 +197,7 @@ export const useUserManagement = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/block`,
+        `${API_BASE_URL}/api/admin/users/${userId}/block`,
         {},
         {
           headers: {
@@ -233,7 +234,7 @@ export const useUserManagement = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `https://jokidins-production.up.railway.app/api/admin/users/${userId}/unblock`,
+        `${API_BASE_URL}/api/admin/users/${userId}/unblock`,
         {},
         {
           headers: {

@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import OrderEditSkeleton from '../loader/OrderEditSkeleton';
+import { API_BASE_URL } from '../config';
 
 const OrderEdit = () => {
   const { id } = useParams();
@@ -20,7 +21,7 @@ const OrderEdit = () => {
     const fetchOrder = async () => {
       const token = localStorage.getItem('token');
       try {
-        const res = await axios.get(` https://jokidins-production.up.railway.app/api/orders/${id}`, {
+        const res = await axios.get(`${API_BASE_URL}/api/orders/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const order = res.data;
@@ -49,7 +50,7 @@ const OrderEdit = () => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      await axios.put(` https://jokidins-production.up.railway.app/api/orders/${id}`, {
+      await axios.put(`${API_BASE_URL}/api/orders/${id}`, {
         service,
         description,
         deadline
@@ -73,7 +74,7 @@ const OrderEdit = () => {
     if (!window.confirm("Apakah kamu yakin ingin membatalkan order ini?")) return;
     const token = localStorage.getItem('token');
     try {
-      await axios.put(` https://jokidins-production.up.railway.app/api/orders/${id}`, {
+      await axios.put(`${API_BASE_URL}/api/orders/${id}`, {
         status: "cancelled"
       }, {
         headers: { Authorization: `Bearer ${token}` }
