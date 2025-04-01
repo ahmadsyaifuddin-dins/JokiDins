@@ -7,7 +7,7 @@ import { API_BASE_URL } from '../config';
 const VerifyEmail = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 menit dalam detik
+  const [timeLeft, setTimeLeft] = useState(0); // Initialize to 0 and update after fetching from BE
   const [resendDisabled, setResendDisabled] = useState(true);
   const { showSuccess, showError } = useToast();
   const navigate = useNavigate();
@@ -15,29 +15,53 @@ const VerifyEmail = () => {
   // Ambil email pending dari localStorage
   const email = localStorage.getItem("pendingEmail");
 
+  // Fetch expiration time from backend
+  const fetchExpirationTime = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/auth/verification-expiry`);
+      // Assuming the API returns expirationMinutes
+      const expirationSeconds = response.data.expirationMinutes * 60;
+      return expirationSeconds;
+    } catch (error) {
+      console.error("Failed to fetch expiration time:", error);
+      // Fallback to 2 minutes (120 seconds) if API call fails
+      return 120;
+    }
+  };
+
   useEffect(() => {
     if (!email) {
       navigate("/login");
       return;
     }
 
-    // Cek apakah ada timer yang tersimpan
-    const savedExpiry = localStorage.getItem("verificationExpiry");
-    if (savedExpiry) {
-      const expiryTime = parseInt(savedExpiry);
-      const now = new Date().getTime();
-      const difference = expiryTime - now;
+    const initializeTimer = async () => {
+      // Cek apakah ada timer yang tersimpan
+      const savedExpiry = localStorage.getItem("verificationExpiry");
+      if (savedExpiry) {
+        const expiryTime = parseInt(savedExpiry);
+        const now = new Date().getTime();
+        const difference = expiryTime - now;
 
-      if (difference > 0) {
-        // Masih ada waktu tersisa
-        setTimeLeft(Math.floor(difference / 1000));
+        if (difference > 0) {
+          // Masih ada waktu tersisa
+          setTimeLeft(Math.floor(difference / 1000));
+        } else {
+          // Timer sudah habis
+          setTimeLeft(0);
+          setResendDisabled(false);
+          localStorage.removeItem("verificationExpiry");
+        }
       } else {
-        // Timer sudah habis
-        setTimeLeft(0);
-        setResendDisabled(false);
-        localStorage.removeItem("verificationExpiry");
+        // If no saved expiry, get default value from backend
+        const expirationSeconds = await fetchExpirationTime();
+        setTimeLeft(expirationSeconds);
+        const expiryTime = new Date().getTime() + expirationSeconds * 1000;
+        localStorage.setItem("verificationExpiry", expiryTime.toString());
       }
-    }
+    };
+
+    initializeTimer();
   }, [email, navigate]);
 
   // Timer untuk kode verifikasi
@@ -109,10 +133,13 @@ const VerifyEmail = () => {
         { email }
       );
 
+      // Get fresh expiration time from backend
+      const expirationSeconds = await fetchExpirationTime();
+      
       // Reset timer dan simpan waktu kedaluwarsa baru
-      setTimeLeft(300);
+      setTimeLeft(expirationSeconds);
       setResendDisabled(true);
-      const expiryTime = new Date().getTime() + 300 * 1000; // 5 menit
+      const expiryTime = new Date().getTime() + expirationSeconds * 1000;
       localStorage.setItem("verificationExpiry", expiryTime.toString());
 
       showSuccess("Kode verifikasi baru telah dikirim ke email Anda");

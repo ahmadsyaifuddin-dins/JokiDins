@@ -6,6 +6,7 @@ const { getUserDetail } = require("../controllers/userController");
 const { protect, admin } = require("../middleware/authMiddleware");
 
 router.post("/register", authController.register);
+router.get("/verification-expiry", authController.getVerificationExpiry);
 router.post("/verify-email", authController.verifyEmail);
 router.post("/resend-verification", authController.resendVerification);
 router.post("/login", authController.login);

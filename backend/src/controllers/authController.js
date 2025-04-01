@@ -17,7 +17,7 @@ const {
 } = require("../utils/verification");
 const Activity = require("../models/Activity");
 
-const VERIFICATION_CODE_EXPIRATION = 3; // dalam menit
+const VERIFICATION_CODE_EXPIRATION = 2; // dalam menit
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.register = async (req, res) => {
@@ -68,6 +68,18 @@ exports.register = async (req, res) => {
     res.status(201).json({
       message:
         "Registrasi berhasil! Silakan periksa email Anda untuk kode verifikasi.",
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getVerificationExpiry = async (req, res) => {
+  try {
+    // Return the verification code expiration time in minutes
+    res.status(200).json({
+      expirationMinutes: VERIFICATION_CODE_EXPIRATION,
+      message: "Verification expiration time retrieved successfully"
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
