@@ -87,6 +87,7 @@ export const FixedAmountModal = ({ isOpen, onClose, onSubmit }) => {
                   <input
                     ref={inputRef}
                     type="text"
+                    inputMode="numeric"
                     value={amount}
                     onChange={handleAmountChange}
                     className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-12 sm:text-sm border-gray-300 rounded-md py-3"

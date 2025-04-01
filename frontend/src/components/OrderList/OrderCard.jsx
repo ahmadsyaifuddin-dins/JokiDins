@@ -1,20 +1,36 @@
 import React from "react";
-import { Calendar, ExternalLink, Edit, RefreshCw, Download, FileText, Clock } from "lucide-react";
+import {
+  Calendar,
+  ExternalLink,
+  Edit,
+  RefreshCw,
+  Download,
+  FileText,
+  Clock,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { formatDeadlineDisplay } from "../../utils/orderUtils";
 
-const OrderCard = ({ order, getStatusConfig, timeInfo, downloadingId, handleDownloadFile }) => {
+const OrderCard = ({
+  order,
+  getStatusConfig,
+  timeInfo,
+  downloadingId,
+  handleDownloadFile,
+}) => {
   const navigate = useNavigate();
   const statusConfig = getStatusConfig(order.status);
-  
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group">
-      <div className={`${statusConfig.bgColor} px-4 py-3 border-b border-gray-200`}>
+      <div
+        className={`${statusConfig.bgColor} px-4 py-3 border-b border-gray-200`}
+      >
         <div className="flex justify-between items-center">
           <div className="line-clamp-1 font-semibold text-gray-900">
             {order.service || "Pesanan Tanpa Judul"}
           </div>
-          <div 
+          <div
             className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 transition-colors ${statusConfig.color}`}
           >
             {statusConfig.icon}
@@ -39,11 +55,49 @@ const OrderCard = ({ order, getStatusConfig, timeInfo, downloadingId, handleDown
               <span className="font-semibold text-gray-800">
                 {formatDeadlineDisplay(order.deadline)}
               </span>
-              <div className={`mt-1 flex items-center text-xs ${timeInfo.color}`}>
+              <div
+                className={`mt-1 flex items-center text-xs ${timeInfo.color}`}
+              >
                 <Clock className="h-3 w-3 mr-1" />
                 {timeInfo.text}
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 my-3">
+          <h3 className="text-sm font-semibold text-gray-700 mb-2">
+            Informasi Pembayaran
+          </h3>
+          <div className="space-y-1">
+            <p className="text-xs text-gray-600">
+              <span className="font-medium">Paket:</span>{" "}
+              {order.packageName || "-"}
+            </p>
+            <p className="text-xs text-gray-600">
+              <span className="font-medium">Nominal Pembayaran:</span>{" "}
+              {order.paymentAmount
+                ? new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    minimumFractionDigits: 0,
+                  }).format(order.paymentAmount)
+                : "Rp0"}
+            </p>
+            <p className="text-xs text-gray-600">
+              <span className="font-medium">Fixed Amount:</span>{" "}
+              {order.fixedAmount
+                ? new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    minimumFractionDigits: 0,
+                  }).format(order.fixedAmount)
+                : "Belum di-set"}
+            </p>
+            <p className="text-xs text-gray-600">
+              <span className="font-medium">Status Pembayaran:</span>{" "}
+              {order.paymentStatus || "belum dibayar"}
+            </p>
           </div>
         </div>
 
@@ -62,7 +116,9 @@ const OrderCard = ({ order, getStatusConfig, timeInfo, downloadingId, handleDown
                 onClick={() => handleDownloadFile(order._id)}
                 disabled={downloadingId === order._id}
                 className={`p-2 text-purple-600 hover:bg-purple-50 rounded-lg flex items-center transition-colors ${
-                  downloadingId === order._id ? "opacity-50 cursor-not-allowed" : ""
+                  downloadingId === order._id
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
                 }`}
                 title="Unduh Berkas"
               >
@@ -73,7 +129,10 @@ const OrderCard = ({ order, getStatusConfig, timeInfo, downloadingId, handleDown
                 )}
               </button>
             ) : (
-              <div className="p-2 text-gray-400 flex items-center" title="Tidak ada berkas">
+              <div
+                className="p-2 text-gray-400 flex items-center"
+                title="Tidak ada berkas"
+              >
                 <FileText className="h-4 w-4" />
               </div>
             )}

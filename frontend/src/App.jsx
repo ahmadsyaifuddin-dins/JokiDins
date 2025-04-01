@@ -32,6 +32,8 @@ import TokenAutoLogoutWrapper from "./wrappers/TokenAutoLogoutWrapper";
 import MapComponent from "./components/home/MapComponent";
 import PricingPage from "./pages/Pricing";
 import DashboardPayment from "./admin/DashboardPayment";
+import PaymentList from "./pages/PaymentList";
+
 
 const App = () => {
   return (
@@ -191,6 +193,14 @@ const App = () => {
                 </PrivateRoute>
               }
             />
+              <Route
+                path="/payment"
+                element={
+                  <PrivateRoute>
+                    <PaymentList />
+                  </PrivateRoute>
+                }
+              />
             <Route
               path="/orderCreate"
               element={

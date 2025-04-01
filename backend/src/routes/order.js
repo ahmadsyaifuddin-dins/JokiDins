@@ -11,6 +11,7 @@ const {
   downloadFile,
   updateOrder,
   fixedAmount,
+  updatePayment,
   deleteOrder,
   deleteAllOrders,
 } = require("../controllers/orderController");
@@ -43,6 +44,7 @@ router.get("/", protect, getOrders);
 router.get("/:id", protect, getOrderById);
 router.get("/:id/file", protect, downloadFile);
 router.put("/:orderId/fixed-amount", protect, fixedAmount);
+router.put("/:orderId/payment", protect, updatePayment);
 router.delete("/all", protect, deleteAllOrders);
 router.delete("/:id", protect, deleteOrder);
 

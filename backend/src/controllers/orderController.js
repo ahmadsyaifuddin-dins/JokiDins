@@ -3,7 +3,9 @@ const Order = require("../models/Order");
 const User = require("../models/User");
 const fs = require("fs");
 const { sendTelegramNotification } = require("../services/telegramNotifier");
-const { sendFixedAmountNotification } = require("../messages/fixedAmountMessage");
+const {
+  sendFixedAmountNotification,
+} = require("../messages/fixedAmountMessage");
 const Activity = require("../models/Activity");
 
 // CREATE ORDER
@@ -11,7 +13,11 @@ const createOrder = async (req, res) => {
   try {
     // Cek status akun user
     if (!req.user.is_active) {
-      return res.status(403).json({ message: "Akun kamu dinonaktifkan. Kamu tidak dapat membuat order." });
+      return res
+        .status(403)
+        .json({
+          message: "Akun kamu dinonaktifkan. Kamu tidak dapat membuat order.",
+        });
     }
 
     // Ambil field dari request body
@@ -21,12 +27,14 @@ const createOrder = async (req, res) => {
       deadline,
       phone,
       provider,
-      paymentAmount,   // nominal pembayaran yang diinput user
-      packageName,     // nama paket yang dipilih
+      paymentAmount, // nominal pembayaran yang diinput user
+      packageName, // nama paket yang dipilih
     } = req.body;
 
     if (!phone || !provider || !packageName) {
-      return res.status(400).json({ message: "Nomor HP, provider, dan nama paket wajib diisi" });
+      return res
+        .status(400)
+        .json({ message: "Nomor HP, provider, dan nama paket wajib diisi" });
     }
 
     // Siapkan data order, set paymentStatus default sebagai "belum dibayar"
@@ -97,16 +105,20 @@ Halo ${req.user.name}, order Joki *${service}* kamu baru saja kami terima!
 Kami sedang memproses order tersebut dan akan segera mengabari kamu.
 Terima kasih telah menggunakan JokiDins!
       `.trim();
-      await sendTelegramNotification(req.user.telegramChatId, userNotifMessage, "Markdown");
+      await sendTelegramNotification(
+        req.user.telegramChatId,
+        userNotifMessage,
+        "Markdown"
+      );
     } else {
       console.log("User belum menghubungkan akun Telegram.");
     }
 
     // Catat aktivitas order
-    Activity.create({ 
-      user: order.user, 
-      description: "User memesan order joki" 
-    }).catch(err => console.error("Error logging order:", err));
+    Activity.create({
+      user: order.user,
+      description: "User memesan order joki",
+    }).catch((err) => console.error("Error logging order:", err));
 
     res.status(201).json(order);
   } catch (error) {
@@ -121,7 +133,10 @@ const getOrders = async (req, res) => {
       const orders = await Order.find({}).populate("user", "name email");
       return res.json(orders);
     } else {
-      const orders = await Order.find({ user: req.user._id }).populate("user", "email");
+      const orders = await Order.find({ user: req.user._id }).populate(
+        "user",
+        "email"
+      );
       return res.json(orders);
     }
   } catch (error) {
@@ -132,11 +147,17 @@ const getOrders = async (req, res) => {
 // GET SINGLE ORDER
 const getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id).populate("user", "name email");
+    const order = await Order.findById(req.params.id).populate(
+      "user",
+      "name email"
+    );
     if (!order)
       return res.status(404).json({ message: "Order tidak ditemukan" });
 
-    if (req.user.role !== "admin" && order.user._id.toString() !== req.user._id.toString()) {
+    if (
+      req.user.role !== "admin" &&
+      order.user._id.toString() !== req.user._id.toString()
+    ) {
       return res.status(401).json({ message: "Tidak diizinkan" });
     }
 
@@ -155,7 +176,10 @@ const downloadFile = async (req, res) => {
     if (!order.file)
       return res.status(404).json({ message: "File tidak ditemukan" });
 
-    if (req.user.role !== "admin" && order.user.toString() !== req.user._id.toString()) {
+    if (
+      req.user.role !== "admin" &&
+      order.user.toString() !== req.user._id.toString()
+    ) {
       return res.status(401).json({ message: "Tidak diizinkan" });
     }
 
@@ -172,7 +196,10 @@ const updateOrder = async (req, res) => {
     if (!order)
       return res.status(404).json({ message: "Order tidak ditemukan" });
 
-    if (req.user.role !== "admin" && order.user.toString() !== req.user._id.toString()) {
+    if (
+      req.user.role !== "admin" &&
+      order.user.toString() !== req.user._id.toString()
+    ) {
       return res.status(401).json({ message: "Tidak diizinkan" });
     }
 
@@ -211,8 +238,8 @@ const updateOrder = async (req, res) => {
 
     const updatedOrder = await order.save();
 
-    // Kirim notifikasi ke user jika admin yang melakukan update
-    if (req.user.role === "admin") {
+    // Kirim notifikasi ke user jika admin yang melakukan update dan hanya jika status order berubah
+    if (req.user.role === "admin" && newStatus !== order.status) {
       let orderOwner = await User.findById(order.user);
       if (orderOwner && orderOwner.telegramChatId) {
         let statusMessage = "";
@@ -225,7 +252,11 @@ const updateOrder = async (req, res) => {
         }
 
         if (statusMessage) {
-          await sendTelegramNotification(orderOwner.telegramChatId, statusMessage, "Markdown");
+          await sendTelegramNotification(
+            orderOwner.telegramChatId,
+            statusMessage,
+            "Markdown"
+          );
         }
       } else {
         console.log("User belum menghubungkan akun Telegram.");
@@ -258,6 +289,45 @@ const fixedAmount = async (req, res) => {
   }
 };
 
+const updatePayment = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.orderId);
+    if (!order) {
+      return res.status(404).json({ error: "Order tidak ditemukan" });
+    }
+
+    const additionalPayment = Number(req.body.payment);
+    if (isNaN(additionalPayment) || additionalPayment <= 0) {
+      return res.status(400).json({ error: "Input pembayaran tidak valid" });
+    }
+
+    // Cek apakah pembayaran tambahan melebihi sisa pembayaran
+    const remaining = order.fixedAmount - order.paymentAmount;
+    if (additionalPayment > remaining) {
+      return res
+        .status(400)
+        .json({ error: `Pembayaran melebihi sisa pembayaran: ${remaining}` });
+    }
+
+    // Update paymentAmount
+    order.paymentAmount += additionalPayment;
+
+    // Update status payment
+    if (order.paymentAmount >= order.fixedAmount) {
+      order.paymentStatus = "lunas";
+    } else {
+      order.paymentStatus = "dicicil";
+    }
+
+    await order.save();
+
+    res.json(order);
+  } catch (error) {
+    console.error("Error update payment:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 // DELETE ORDER
 const deleteOrder = async (req, res) => {
   try {
@@ -265,7 +335,10 @@ const deleteOrder = async (req, res) => {
     if (!order)
       return res.status(404).json({ message: "Order tidak ditemukan" });
 
-    if (req.user.role !== "admin" && order.user.toString() !== req.user._id.toString()) {
+    if (
+      req.user.role !== "admin" &&
+      order.user.toString() !== req.user._id.toString()
+    ) {
       return res.status(401).json({ message: "Tidak diizinkan" });
     }
 
@@ -280,7 +353,11 @@ const deleteOrder = async (req, res) => {
 const deleteAllOrders = async (req, res) => {
   try {
     if (req.user.role !== "admin") {
-      return res.status(401).json({ message: "Tidak diizinkan, hanya admin yang bisa hapus semua order" });
+      return res
+        .status(401)
+        .json({
+          message: "Tidak diizinkan, hanya admin yang bisa hapus semua order",
+        });
     }
     await Order.deleteMany({});
     res.json({ message: "Semua order berhasil dihapus" });
@@ -296,6 +373,7 @@ module.exports = {
   downloadFile,
   updateOrder,
   fixedAmount,
+  updatePayment,
   deleteOrder,
   deleteAllOrders,
 };

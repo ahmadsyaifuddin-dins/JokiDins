@@ -70,6 +70,7 @@ const Navbar = () => {
         children: [
           { name: 'Pesan Joki Langsung', href: '/orderCreate' },
           { name: 'Pesanan Saya', href: '/OrderList' },
+          { name: 'Status Pembayaran', href: '/payment' },
           { name: 'Syaifuddin Progress', href: 'https://dins-sphere.vercel.app' } 
         ]
       },
