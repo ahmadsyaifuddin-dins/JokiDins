@@ -31,6 +31,7 @@ import AxiosInterceptorWrapper from "./wrappers/AxiosInterceptorWrapper";
 import TokenAutoLogoutWrapper from "./wrappers/TokenAutoLogoutWrapper";
 import MapComponent from "./components/home/MapComponent";
 import PricingPage from "./pages/Pricing";
+import DashboardPayment from "./admin/DashboardPayment";
 
 const App = () => {
   return (
@@ -67,6 +68,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/DashboardPayment"
+              element={
+                <PrivateRoute>
+                  <DashboardPayment />
                 </PrivateRoute>
               }
             />

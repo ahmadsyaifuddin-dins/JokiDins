@@ -3,21 +3,33 @@ const Order = require("../models/Order");
 const User = require("../models/User");
 const fs = require("fs");
 const { sendTelegramNotification } = require("../services/telegramNotifier");
+const { sendFixedAmountNotification } = require("../messages/fixedAmountMessage");
 const Activity = require("../models/Activity");
 
 // CREATE ORDER
 const createOrder = async (req, res) => {
   try {
-    
-     // Cek dulu status akun user
-     if (!req.user.is_active) {
+    // Cek status akun user
+    if (!req.user.is_active) {
       return res.status(403).json({ message: "Akun kamu dinonaktifkan. Kamu tidak dapat membuat order." });
     }
 
-    const { service, description, deadline, phone, provider } = req.body;
-    if (!phone || !provider) {
-      return res.status(400).json({ message: "Nomor HP dan provider wajib diisi" });
+    // Ambil field dari request body
+    const {
+      service,
+      description,
+      deadline,
+      phone,
+      provider,
+      paymentAmount,   // nominal pembayaran yang diinput user
+      packageName,     // nama paket yang dipilih
+    } = req.body;
+
+    if (!phone || !provider || !packageName) {
+      return res.status(400).json({ message: "Nomor HP, provider, dan nama paket wajib diisi" });
     }
+
+    // Siapkan data order, set paymentStatus default sebagai "belum dibayar"
     const orderData = {
       user: req.user._id,
       service,
@@ -25,8 +37,12 @@ const createOrder = async (req, res) => {
       deadline,
       phone,
       provider,
+      paymentAmount: paymentAmount ? Number(paymentAmount) : 0,
+      packageName,
+      paymentStatus: "belum dibayar", // default, admin nantinya bisa mengubahnya
     };
 
+    // Jika ada file upload, sertakan informasi file
     if (req.file) {
       orderData.file = {
         filename: req.file.filename,
@@ -58,7 +74,7 @@ const createOrder = async (req, res) => {
       
       👤 *Klien:* ${req.user.name}
       
-      🛠️ *Layanan:* ${service}
+      🛠️ *Joki:* ${service}
       
       📝 *Deskripsi:* ${description}
       
@@ -67,6 +83,10 @@ const createOrder = async (req, res) => {
       📱 *Kontak:* ${phone}
       
       🔌 *Provider:* ${provider}
+      
+      📦 *Paket:* ${packageName}
+      
+      💵 *Nominal Pembayaran:* ${paymentAmount ? paymentAmount : "0"}
     `.trim();
 
     await sendTelegramNotification(process.env.TELEGRAM_CHAT_ID, notifMessage);
@@ -82,6 +102,7 @@ Terima kasih telah menggunakan JokiDins!
       console.log("User belum menghubungkan akun Telegram.");
     }
 
+    // Catat aktivitas order
     Activity.create({ 
       user: order.user, 
       description: "User memesan order joki" 
@@ -155,10 +176,12 @@ const updateOrder = async (req, res) => {
       return res.status(401).json({ message: "Tidak diizinkan" });
     }
 
+    // Update field-field order
     order.service = req.body.service ?? order.service;
     order.description = req.body.description ?? order.description;
     order.deadline = req.body.deadline ?? order.deadline;
 
+    // Jika ada perubahan status
     const newStatus = req.body.status ?? order.status;
     if (newStatus === "completed" && order.status !== "completed") {
       order.completedAt = new Date();
@@ -166,6 +189,17 @@ const updateOrder = async (req, res) => {
       order.completedAt = null;
     }
     order.status = newStatus;
+
+    // Update field baru jika dikirim oleh admin
+    if (req.body.paymentStatus) {
+      order.paymentStatus = req.body.paymentStatus;
+    }
+    if (req.body.paymentAmount) {
+      order.paymentAmount = Number(req.body.paymentAmount);
+    }
+    if (req.body.packageName) {
+      order.packageName = req.body.packageName;
+    }
 
     if (req.file) {
       order.file = {
@@ -177,7 +211,7 @@ const updateOrder = async (req, res) => {
 
     const updatedOrder = await order.save();
 
-    // Hanya kirim notifikasi jika yang update adalah admin
+    // Kirim notifikasi ke user jika admin yang melakukan update
     if (req.user.role === "admin") {
       let orderOwner = await User.findById(order.user);
       if (orderOwner && orderOwner.telegramChatId) {
@@ -204,6 +238,26 @@ const updateOrder = async (req, res) => {
   }
 };
 
+const fixedAmount = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.orderId).populate("user");
+    if (!order) {
+      return res.status(404).json({ error: "Order tidak ditemukan" });
+    }
+    order.fixedAmount = Number(req.body.fixedAmount);
+    await order.save();
+
+    // Kirim notifikasi email ke user
+    if (order.user && order.user.email) {
+      sendFixedAmountNotification(order.user.email, order);
+    }
+    res.json(order);
+  } catch (error) {
+    console.error("Error update fixed amount:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 // DELETE ORDER
 const deleteOrder = async (req, res) => {
   try {
@@ -225,12 +279,9 @@ const deleteOrder = async (req, res) => {
 // DELETE ALL ORDERS (ADMIN ONLY)
 const deleteAllOrders = async (req, res) => {
   try {
-    // Cek role admin
     if (req.user.role !== "admin") {
       return res.status(401).json({ message: "Tidak diizinkan, hanya admin yang bisa hapus semua order" });
     }
-
-    // Hapus semua order
     await Order.deleteMany({});
     res.json({ message: "Semua order berhasil dihapus" });
   } catch (error) {
@@ -244,6 +295,7 @@ module.exports = {
   getOrderById,
   downloadFile,
   updateOrder,
+  fixedAmount,
   deleteOrder,
   deleteAllOrders,
 };

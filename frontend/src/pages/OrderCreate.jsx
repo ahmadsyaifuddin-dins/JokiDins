@@ -175,8 +175,10 @@ const OrderCreate = () => {
     formData.append("provider", provider);
     
     if (chosenPlan) {
+      formData.append("packageName", chosenPlan.name);
       formData.append("paymentAmount", paymentAmount);
     }
+    
     if (file) {
       formData.append("file", file);
     }

@@ -43,14 +43,20 @@ const Navbar = () => {
           children: [
             { name: 'Data Kostumer', href: '/admin/Users' },
             { name: 'Daftar Order', href: '/OrderList' },
-            { name: 'Pendapatan', href: '/pendapatan' }
+            { name: 'Status Pembayaran', href: '/admin/paymentStatusDashboard' },
+            { name: 'Pendapatan', href: '/pendapatan' },
           ]
         },
         { name: 'Dashboard', href: '/admin/dashboard' },
-        { name: 'Harga Joki', href: '/pricing' },
-        { name: 'Kontak', href: '/contact' },
-        { name: 'Tentang Kami', href: '/about' },
-        { name: `Syaifuddin's Project Progress`, href: 'https://dins-sphere.vercel.app' },
+        { name: 'Informasi untuk Klien',
+          href: '#',
+          children: [
+            { name: 'Harga Joki', href: '/pricing' },
+            { name: 'Kontak', href: '/contact' },
+            { name: 'Tentang Kami', href: '/about' },
+            { name: `Syaifuddin's Project Progress`, href: 'https://dins-sphere.vercel.app' },
+          ]
+        },
         { name: 'Profile', href: '/admin/profile' }
       ];
     }
