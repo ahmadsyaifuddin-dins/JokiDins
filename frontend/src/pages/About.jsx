@@ -126,7 +126,7 @@ const About = () => {
             <h3 className="text-xl font-semibold text-blue-950 mb-1">Fitriani</h3>
             <p className="text-gray-500 mb-4">Marketing Manager</p>
             <p className="text-gray-600">
-              Praktisi marketing berbakat dengan strategi inovatif dalam pengembangan brand dan akuisisi pelanggan
+              Praktisi marketing berbakat dengan strategi inovatif dalam pengembangan brand dan akuisisi Klien
             </p>
           </div>
         </div>

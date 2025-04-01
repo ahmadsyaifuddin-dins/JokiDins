@@ -1,14 +1,46 @@
-// src/admin/components/DashboardOrdersTable.jsx
 import React, { useState } from "react";
 import {
   Eye,
   Trash2,
   Calendar,
-  Clock,
   MoreVertical,
+  Package,
   AlertTriangle,
+  Clock,
+  Check,
 } from "lucide-react";
-import { formatDate, calculateTimeLeft, formatDeadline } from "../utils/timeUtils";
+import {
+  formatDate,
+  calculateTimeLeft,
+  formatDeadline,
+} from "../utils/timeUtils";
+
+// Fungsi util untuk mendapatkan badge color berdasarkan paymentStatus
+const getPaymentBadgeColor = (paymentStatus) => {
+  switch (paymentStatus) {
+    case "belum dibayar":
+      return "bg-yellow-100 text-yellow-900";
+    case "dicicil":
+      return "bg-blue-100 text-blue-900";
+    case "lunas":
+      return "bg-green-100 text-green-900";
+    default:
+      return "bg-gray-100 text-gray-900";
+  }
+};
+
+const getPaymentStatusIcon = (paymentStatus) => {
+  switch (paymentStatus) {
+    case "belum dibayar":
+      return AlertTriangle;
+    case "dicicil":
+      return Clock;
+    case "lunas":
+      return Check;
+    default:
+      return AlertTriangle;
+  }
+};
 
 const DashboardOrdersTable = ({
   filteredOrders,
@@ -18,6 +50,7 @@ const DashboardOrdersTable = ({
   handleViewDetail,
   handleStatusChange,
   handleDelete,
+  handlePaymentStatusChange, // handler baru untuk payment status
 }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
 
@@ -38,7 +71,7 @@ const DashboardOrdersTable = ({
               Order ID
             </th>
             <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Pelanggan
+              Klien
             </th>
             <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Deskripsi
@@ -47,7 +80,10 @@ const DashboardOrdersTable = ({
               Nomor HP
             </th>
             <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Status
+              Pembayaran
+            </th>
+            <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Status Order
             </th>
             <th className="py-4 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Deadline
@@ -59,11 +95,6 @@ const DashboardOrdersTable = ({
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {filteredOrders.map((order) => {
-            const timeLeft = calculateTimeLeft(
-              order.deadline,
-              order.completedAt,
-              order.status
-            );
             const StatusIcon = getStatusIcon(order.status);
             return (
               <tr
@@ -72,7 +103,7 @@ const DashboardOrdersTable = ({
               >
                 <td className="py-4 px-6 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">
-                    {order._id.slice(-8).toUpperCase()}
+                    {order._id.slice(-10).toUpperCase()}
                   </div>
                   <div className="text-xs text-gray-500">
                     {formatDate(order.createdAt)}
@@ -99,6 +130,29 @@ const DashboardOrdersTable = ({
                   </div>
                 </td>
                 <td className="py-4 px-6">
+                  <div className="flex items-center space-x-1">
+                    <div>
+                      {React.createElement(
+                        getPaymentStatusIcon(
+                          order.paymentStatus || "belum dibayar"
+                        ),
+                        {
+                          className: "w-4 h-4",
+                        }
+                      )}
+                    </div>
+                    <div className="text-sm text-gray-700">
+                      {order.paymentAmount
+                        ? new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                          }).format(order.paymentAmount)
+                        : "Rp0"}
+                    </div>
+                  </div>
+                </td>
+                <td className="py-4 px-6">
                   <span
                     className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(
                       order.status
@@ -116,6 +170,8 @@ const DashboardOrdersTable = ({
                     </span>
                   </div>
                 </td>
+
+                {/* Kolom Aksi */}
                 <td className="py-4 px-6 text-right relative">
                   <div className="flex items-center justify-end">
                     <button
@@ -140,10 +196,10 @@ const DashboardOrdersTable = ({
                         <MoreVertical className="w-5 h-5" />
                       </button>
                       {activeDropdown === order._id && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                        <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg z-10 border border-gray-200">
                           <div className="py-1">
                             <div className="px-4 py-2 text-sm text-gray-700 font-semibold border-b border-gray-200">
-                              Ubah Status
+                              Ubah Status Order
                             </div>
                             <button
                               onClick={(e) => {
@@ -176,7 +232,9 @@ const DashboardOrdersTable = ({
                             >
                               {React.createElement(
                                 getStatusIcon("processing"),
-                                { className: "w-3.5 h-3.5 mr-1" }
+                                {
+                                  className: "w-3.5 h-3.5 mr-1",
+                                }
                               )}
                               {getStatusLabel("processing")}
                             </button>
@@ -210,7 +268,7 @@ const DashboardOrdersTable = ({
                               }`}
                             >
                               {React.createElement(getStatusIcon("cancelled"), {
-                                className: " w-3.5 h-3.5 mr-1",
+                                className: "w-3.5 h-3.5 mr-1",
                               })}
                               {getStatusLabel("cancelled")}
                             </button>
@@ -240,7 +298,7 @@ const DashboardOrdersTable = ({
           })}
           {filteredOrders.length === 0 && (
             <tr>
-              <td colSpan="7" className="py-8 text-center text-gray-500">
+              <td colSpan="9" className="py-8 text-center text-gray-500">
                 Tidak ada data pesanan yang sesuai dengan filter
               </td>
             </tr>

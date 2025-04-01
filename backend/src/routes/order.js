@@ -10,6 +10,7 @@ const {
   getOrderById,
   downloadFile,
   updateOrder,
+  fixedAmount,
   deleteOrder,
   deleteAllOrders,
 } = require("../controllers/orderController");
@@ -41,6 +42,7 @@ router.put("/:id", protect, upload.single("file"), updateOrder);
 router.get("/", protect, getOrders);
 router.get("/:id", protect, getOrderById);
 router.get("/:id/file", protect, downloadFile);
+router.put("/:orderId/fixed-amount", protect, fixedAmount);
 router.delete("/all", protect, deleteAllOrders);
 router.delete("/:id", protect, deleteOrder);
 

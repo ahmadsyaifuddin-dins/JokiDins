@@ -20,7 +20,7 @@ const Services = ({ isVisible }) => {
           icon: <Book className="w-7 h-7 text-green-400" />,
           title: "Tugas Akademik",
           description:
-            "Dari coding, makalah, sampai presentasi, kami siap bantu dengan solusi yang tepat dan berkualitas. Fokus pada hasil, tanpa basa-basi biar tugas kamu kelar dengan hasil maksimal",
+            "Dari coding, makalah, sampai ppt, kami siap bantu dengan solusi yang tepat dan berkualitas. Fokus pada hasil, tanpa basa-basi biar tugas kamu kelar dengan hasil maksimal",
           tags: ["PPT", "Makalah", "Rapikan Word", "Rapikan Excel"],
           color: "green",
           bgFrom: "from-green-900/20",
