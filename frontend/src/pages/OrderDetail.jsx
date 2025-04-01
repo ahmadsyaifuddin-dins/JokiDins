@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, FileText, Package, Download, CheckCircle, AlertCircle, Loader, RefreshCw, ArrowLeft } from 'lucide-react';
 import { formatDateDisplay, formatDeadlineDisplay, getTimeDifference, getCompletionTimeDifference } from '../utils/orderUtils';
+import { API_BASE_URL } from '../config';
 
 const OrderDetail = () => {
   const { id: orderId } = useParams();
@@ -20,7 +21,7 @@ const OrderDetail = () => {
     const token = localStorage.getItem('token');
     setLoading(true);
     try {
-      const res = await axios.get(` https://jokidins-production.up.railway.app/api/orders/${orderId}`, {
+      const res = await axios.get(`${API_BASE_URL}/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrder(res.data);
@@ -38,7 +39,7 @@ const OrderDetail = () => {
     setIsDownloading(true);
     try {
       const response = await axios.get(
-        ` https://jokidins-production.up.railway.app/api/orders/${orderId}/file`,
+        `${API_BASE_URL}/api/orders/${orderId}/file`,
         {
           headers: { Authorization: `Bearer ${token}` },
           responseType: 'blob',

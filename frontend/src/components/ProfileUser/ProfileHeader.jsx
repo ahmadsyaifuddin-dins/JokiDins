@@ -64,7 +64,7 @@ const ProfileHeader = ({
       setIsUploading(true);
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "https://jokidins-production.up.railway.app/avatar/upload",
+        "${API_BASE_URL}/avatar/upload",
         formData,
         {
           headers: {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import useToast from "../hooks/useToastCustomize";
+import { API_BASE_URL } from '../config';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -19,7 +20,7 @@ const ResetPassword = () => {
     // Verifikasi token reset password
     const verifyToken = async () => {
       try {
-        await axios.get(` https://jokidins-production.up.railway.app/api/auth/verify-reset-token/${token}`);
+        await axios.get(`${API_BASE_URL}/api/auth/verify-reset-token/${token}`);
         setTokenValid(true);
       } catch (error) {
         setTokenValid(false);
@@ -46,7 +47,7 @@ const ResetPassword = () => {
 
     setIsLoading(true);
     try {
-      await axios.post(` https://jokidins-production.up.railway.app/api/auth/reset-password/${token}`, {
+      await axios.post(`${API_BASE_URL}/api/auth/reset-password/${token}`, {
         newPassword: password
       });
       

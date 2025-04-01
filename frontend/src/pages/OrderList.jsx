@@ -7,6 +7,7 @@ import OrderListError from "../error/OrderListError";
 import OrderListHeader from "../components/OrderList/OrderListHeader";
 import OrderCard from "../components/OrderList/OrderCard";
 import { getTimeDifference, getCompletionTimeDifference } from "../utils/orderUtils";
+import { API_BASE_URL } from '../config';
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -27,7 +28,7 @@ const OrderList = () => {
     const token = localStorage.getItem("token");
     setLoading(true);
     try {
-      const res = await axios.get(" https://jokidins-production.up.railway.app/api/orders", {
+      const res = await axios.get(`${API_BASE_URL}/api/orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
@@ -81,7 +82,7 @@ const OrderList = () => {
     const token = localStorage.getItem("token");
     setDownloadingId(orderId);
     try {
-      const response = await axios.get(` https://jokidins-production.up.railway.app/api/orders/${orderId}/file`, {
+      const response = await axios.get(`${API_BASE_URL}/api/orders/${orderId}/file`, {
         headers: { Authorization: `Bearer ${token}` },
         responseType: "blob",
       });

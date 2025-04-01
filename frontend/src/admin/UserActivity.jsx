@@ -11,6 +11,7 @@ import {
   Search,
 } from "lucide-react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { API_BASE_URL } from '../config';
 
 const UserActivity = () => {
   const { id } = useParams();
@@ -30,7 +31,7 @@ const UserActivity = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        `https://jokidins-production.up.railway.app/api/user/activity/${id}?page=${pageToFetch}&limit=10`,
+        `${API_BASE_URL}/api/user/activity/${id}?page=${pageToFetch}&limit=10`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -48,7 +49,7 @@ const UserActivity = () => {
       if (pageToFetch === 1) {
         try {
           const userRes = await axios.get(
-            `https://jokidins-production.up.railway.app/api/user/users/${id}`,
+            `${API_BASE_URL}/api/user/users/${id}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           setUserName(userRes.data.name || "Pengguna");

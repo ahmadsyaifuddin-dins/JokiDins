@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ArrowRight, Check, CheckCircle, Send } from "lucide-react";
-import api from "../../../backend/api";
+import { API_BASE_URL } from '../config';
 
 const TelegramLinkButton = () => {
   const [token, setToken] = useState("");
@@ -23,7 +23,7 @@ const TelegramLinkButton = () => {
     setError("");
     try {
       const response = await axios.post(
-        " https://jokidins-production.up.railway.app/api/telegram/regenerate-token",
+        `${API_BASE_URL}/api/telegram/regenerate-token`,
         {},
         {
           headers: {

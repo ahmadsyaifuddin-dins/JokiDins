@@ -6,6 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import GoogleSignIn from "../components/GoogleSignIn";
 import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa";
 import useToast from "../hooks/useToastCustomize";
+import { API_BASE_URL } from '../config';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -19,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.post(" https://jokidins-production.up.railway.app/api/auth/login", {
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         email,
         password,
       });

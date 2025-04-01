@@ -8,8 +8,7 @@ import { Header } from "./components/DashboardPayment/Header";
 import { ErrorAlert } from "./components/DashboardPayment/ErrorAlert";
 import { OrderTable } from "./components/DashboardPayment/OrderTable";
 import { FixedAmountModal } from "./components/DashboardPayment/FixedAmountModal";
-
-const API_BASE_URL = "https://jokidins-production.up.railway.app/api";
+import { API_BASE_URL } from '../config';
 
 const DashboardPayment = () => {
   const [orders, setOrders] = useState([]);
@@ -29,7 +28,7 @@ const DashboardPayment = () => {
     }
     setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE_URL}/orders`, {
+      const res = await axios.get(`${API_BASE_URL}/api/orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
@@ -64,7 +63,7 @@ const DashboardPayment = () => {
     const token = localStorage.getItem("token");
     try {
       await axios.put(
-        `${API_BASE_URL}/orders/${selectedOrderId}/fixed-amount`,
+        `${API_BASE_URL}/api/orders/${selectedOrderId}/fixed-amount`,
         { fixedAmount },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -82,7 +81,7 @@ const DashboardPayment = () => {
     const token = localStorage.getItem("token");
     try {
       await axios.put(
-        `${API_BASE_URL}/orders/${orderId}`,
+        `${API_BASE_URL}/api/orders/${orderId}`,
         { paymentStatus: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
