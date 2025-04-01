@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { API_BASE_URL } from '../../config';
 
 export const useSavedPhones = () => {
   const [savedPhones, setSavedPhones] = useState([]);
@@ -11,7 +12,7 @@ export const useSavedPhones = () => {
       const token = localStorage.getItem("token");
       if (!token) return;
       try {
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/phones", {
+        const res = await axios.get(`${API_BASE_URL}/api/user/phones`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setSavedPhones(res.data);

@@ -18,6 +18,7 @@ import {
   VenusAndMars,
   Monitor,
 } from "lucide-react";
+import { API_BASE_URL } from '../config';
 
 const AdminUserDetail = () => {
   const { id } = useParams();
@@ -31,7 +32,7 @@ const AdminUserDetail = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          ` https://jokidins-production.up.railway.app/api/user/users/${id}`,
+          `${API_BASE_URL}/api/user/users/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -62,7 +63,7 @@ const AdminUserDetail = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(` https://jokidins-production.up.railway.app/api/user/users/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/user/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       Swal.fire("Berhasil!", "Akun pengguna berhasil dihapus.", "success");
@@ -90,7 +91,7 @@ const AdminUserDetail = () => {
       const token = localStorage.getItem("token");
       // Pastikan endpoint disable sesuai dengan backend-mu
       await axios.post(
-        ` https://jokidins-production.up.railway.app/api/admin/users/${userId}/disable`,
+        `${API_BASE_URL}/api/admin/users/${userId}/disable`,
         {},
         {
           headers: {
@@ -129,7 +130,7 @@ const AdminUserDetail = () => {
       const token = localStorage.getItem("token");
       // Pastikan endpoint enable sesuai dengan backend-mu
       await axios.post(
-        ` https://jokidins-production.up.railway.app/api/admin/users/${userId}/enable`,
+        `${API_BASE_URL}/api/admin/users/${userId}/enable`,
         {},
         {
           headers: {

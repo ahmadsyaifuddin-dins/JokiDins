@@ -3,6 +3,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { API_BASE_URL } from '../config';
 
 const GoogleSignIn = () => {
   const { setUser } = useContext(AuthContext);
@@ -44,7 +45,7 @@ const GoogleSignIn = () => {
             const gender = additionalData?.genders?.[0]?.value;
 
             // 4. Kirim ID token + data tambahan ke backend
-            const res = await axios.post(" https://jokidins-production.up.railway.app/api/auth/google", {
+            const res = await axios.post(`${API_BASE_URL}/api/auth/google`, {
               token: idToken,
               birthday,
               gender

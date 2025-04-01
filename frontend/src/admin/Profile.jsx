@@ -7,6 +7,7 @@ import ProfileHeader from "../components/ProfileUser/ProfileHeader";
 import ProfilePersonalInfo from "../components/ProfileUser/ProfilePersonalInfo";
 import ProfileAccountInfo from "../components/ProfileUser/ProfileAccountInfo";
 import ProfileActions from "../components/ProfileUser/ProfileActions";
+import { API_BASE_URL } from '../config';
 
 const Profile = () => {
   const { user: contextUser } = useContext(AuthContext);
@@ -42,7 +43,7 @@ const Profile = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const res = await axios.get(" https://jokidins-production.up.railway.app/api/user/profile", {
+        const res = await axios.get(`${API_BASE_URL}/api/user/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(res.data);

@@ -2,6 +2,7 @@ import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
+import { API_BASE_URL } from '../config';
 
 const useAccountStatusCheck = () => {
   const { logout } = useContext(AuthContext);
@@ -12,7 +13,7 @@ const useAccountStatusCheck = () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) return;
-        const res = await axios.get(" https://jokidins-production.up.railway.app/api/user/status", {
+        const res = await axios.get(`${API_BASE_URL}/api/user/status`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         // Misalnya res.data.is_active adalah boolean status

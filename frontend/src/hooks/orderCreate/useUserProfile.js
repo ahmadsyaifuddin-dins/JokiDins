@@ -1,6 +1,7 @@
 // src/hooks/useUserProfile.js
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE_URL } from '../../config';
 
 export const useUserProfile = () => {
   const [isTelegramLinked, setIsTelegramLinked] = useState(false);
@@ -11,7 +12,7 @@ export const useUserProfile = () => {
       setIsCheckingTelegram(true);
       const token = localStorage.getItem("token");
       try {
-        const res = await axios.get("https://jokidins-production.up.railway.app/api/user/profile", {
+        const res = await axios.get(`${API_BASE_URL}/api/user/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setIsTelegramLinked(!!res.data.telegramChatId);

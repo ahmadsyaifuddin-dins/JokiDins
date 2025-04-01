@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { FcGoogle } from 'react-icons/fc';
 import { toast } from 'react-hot-toast';
+import { API_BASE_URL } from '../config';
 
 const GoogleSignIn = () => {
   const { setUser } = useContext(AuthContext);
@@ -47,7 +48,7 @@ const GoogleSignIn = () => {
       loadingToast = toast.loading("Menghubungkan dengan Google...");
       
       // Kirim ID token ke backend
-      const res = await axios.post(" https://jokidins-production.up.railway.app/api/auth/google", {
+      const res = await axios.post(`${API_BASE_URL}/api/auth/google`, {
         token: credentialResponse.credential,
       });
       

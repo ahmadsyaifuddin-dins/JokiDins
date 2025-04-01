@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import useToast from "../hooks/useToastCustomize";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from '../config';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post(" https://jokidins-production.up.railway.app/api/auth/forgot-password", { email });
+      await axios.post(`${API_BASE_URL}/api/auth/forgot-password`, { email });
       showSuccess("Jika email tersebut terdaftar, Anda akan menerima instruksi reset password.");
     } catch (error) {
       showError(error.response?.data?.message || "Gagal mengirim email reset password.");
