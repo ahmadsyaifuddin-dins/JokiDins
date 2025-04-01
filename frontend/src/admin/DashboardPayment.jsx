@@ -1,16 +1,18 @@
-// DashboardPayment.jsx
+// PaymentStatusDashboard.jsx
 import React, { useEffect, useState } from "react";
-import { ClipboardList, RefreshCw, AlertCircle } from "lucide-react";
+import { ClipboardList, RefreshCw, List, Grid } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Header } from "./components/DashboardPayment/Header";
 import { ErrorAlert } from "./components/DashboardPayment/ErrorAlert";
 import { OrderTable } from "./components/DashboardPayment/OrderTable";
+import { OrderGrid } from "./components/DashboardPayment/OrderGrid";
 import { FixedAmountModal } from "./components/DashboardPayment/FixedAmountModal";
-import { API_BASE_URL } from '../config';
+import { ViewToggle } from "./components/DashboardPayment/ViewToggle";
+import {API_BASE_URL} from '../config';
 
-const DashboardPayment = () => {
+const PaymentStatusDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -18,6 +20,7 @@ const DashboardPayment = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [viewMode, setViewMode] = useState("table"); // "table" or "grid"
 
   // Fetch semua order dari backend
   const fetchOrders = async () => {
@@ -93,6 +96,10 @@ const DashboardPayment = () => {
     }
   };
 
+  const toggleViewMode = () => {
+    setViewMode(viewMode === "table" ? "grid" : "table");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -101,15 +108,34 @@ const DashboardPayment = () => {
           onRefresh={handleRefresh} 
         />
 
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-medium text-gray-700">
+            {orders.length} Order Ditemukan
+          </h2>
+          <ViewToggle 
+            viewMode={viewMode} 
+            onToggle={toggleViewMode} 
+          />
+        </div>
+
         {error && <ErrorAlert message={error} />}
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <OrderTable 
-            orders={orders} 
-            onStatusChange={handlePaymentStatusChange}
-            onSetFixedAmount={handleSetFixedAmount}
-            loading={loading}
-          />
+          {viewMode === "table" ? (
+            <OrderTable 
+              orders={orders} 
+              onStatusChange={handlePaymentStatusChange}
+              onSetFixedAmount={handleSetFixedAmount}
+              loading={loading}
+            />
+          ) : (
+            <OrderGrid 
+              orders={orders} 
+              onStatusChange={handlePaymentStatusChange}
+              onSetFixedAmount={handleSetFixedAmount}
+              loading={loading}
+            />
+          )}
         </div>
       </div>
 
@@ -122,4 +148,4 @@ const DashboardPayment = () => {
   );
 };
 
-export default DashboardPayment;
+export default PaymentStatusDashboard;

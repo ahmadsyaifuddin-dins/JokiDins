@@ -1,7 +1,7 @@
 // components/OrderTable.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { Pencil, Clock, CheckCircle, AlertTriangle } from "lucide-react";
+import { Pencil, Clock, CheckCircle, AlertTriangle, ArrowRight, User, Package, DollarSign } from "lucide-react";
 
 export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }) => {
   const formatCurrency = (amount) => {
@@ -18,21 +18,21 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
     switch (status) {
       case "lunas":
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
             <CheckCircle className="w-3 h-3 mr-1" />
             Lunas
           </span>
         );
       case "dicicil":
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
             <Clock className="w-3 h-3 mr-1" />
             Dicicil
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
             <AlertTriangle className="w-3 h-3 mr-1" />
             Belum Dibayar
           </span>
@@ -51,22 +51,34 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full border-collapse">
-        <thead className="bg-gray-100">
+        <thead className="bg-gradient-to-r from-blue-50 to-indigo-50">
           <tr>
             <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">
               Order ID
             </th>
             <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">
-              Klien
+              <div className="flex items-center">
+                <User className="w-4 h-4 mr-1 text-gray-500" />
+                Klien
+              </div>
             </th>
             <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">
-              Jenis Paket
+              <div className="flex items-center">
+                <Package className="w-4 h-4 mr-1 text-gray-500" />
+                Jenis Paket
+              </div>
             </th>
             <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">
-              Nominal Diinput
+              <div className="flex items-center">
+                <DollarSign className="w-4 h-4 mr-1 text-gray-500" />
+                Nominal Diinput
+              </div>
             </th>
             <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">
-              Nominal Fixed
+              <div className="flex items-center">
+                <DollarSign className="w-4 h-4 mr-1 text-gray-500" />
+                Nominal Fixed
+              </div>
             </th>
             <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">
               Status Pembayaran
@@ -78,66 +90,77 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
         </thead>
         <tbody className="divide-y divide-gray-200">
           {orders.map((order) => (
-            <tr key={order._id} className="hover:bg-gray-50 transition-colors">
-              <td className="py-3 px-4">
-                <div className="text-sm font-medium text-gray-900">
+            <tr key={order._id} className="hover:bg-blue-50 transition-colors">
+              <td className="py-4 px-4">
+                <div className="font-mono text-sm font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded inline-block">
                   {order._id.slice(-8).toUpperCase()}
                 </div>
               </td>
-              <td className="py-3 px-4">
-                <div className="text-sm text-gray-900">
-                  {order.user?.name || "Not Available"}
+              <td className="py-4 px-4">
+                <div className="flex items-center">
+                  <div className="h-9 w-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-medium mr-3">
+                    {(order.user?.name || "NA").charAt(0)}
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {order.user?.name || "Not Available"}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      ID: {order.user?._id?.slice(-6) || "N/A"}
+                    </div>
+                  </div>
                 </div>
               </td>
-              <td className="py-3 px-4">
+              <td className="py-4 px-4">
                 <div className="text-sm text-gray-900">
                   {order.packageName ? (
-                    <Link to="/pricing" className="text-blue-600 hover:underline">
-                      {order.packageName}
+                    <Link to="/pricing" className="text-blue-600 hover:underline flex items-center group">
+                      <span>{order.packageName}</span>
+                      <ArrowRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </Link>
                   ) : (
                     "Not Available"
                   )}
                 </div>
               </td>
-              <td className="py-3 px-4">
-                <div className="text-sm text-gray-900">
+              <td className="py-4 px-4">
+                <div className="text-sm text-gray-900 font-medium">
                   {formatCurrency(order.paymentAmount)}
                 </div>
               </td>
-              <td className="py-3 px-4">
-                <div className={`text-sm ${order.fixedAmount ? 'font-medium text-blue-600' : 'text-gray-500'}`}>
-                  {formatCurrency(order.fixedAmount)}
+              <td className="py-4 px-4">
+                <div className={`text-sm font-medium ${order.fixedAmount ? 'text-blue-600 bg-blue-50 px-2 py-1 rounded' : 'text-gray-400 italic'}`}>
+                  {formatCurrency(order.fixedAmount) || "Belum diatur"}
                 </div>
               </td>
-              <td className="py-3 px-4">
+              <td className="py-4 px-4">
                 {getStatusBadge(order.paymentStatus)}
               </td>
-              <td className="py-3 px-4 text-right">
+              <td className="py-4 px-4 text-right">
                 <div className="flex justify-end space-x-2">
                   <div className="dropdown dropdown-top dropdown-end">
                     <div className="flex justify-end space-x-2">
                       <button
                         onClick={() => onStatusChange(order._id, "belum dibayar")}
-                        className="px-3 py-1 bg-yellow-100 text-yellow-900 rounded hover:bg-yellow-200 text-xs transition-colors"
+                        className="px-3 py-1 bg-yellow-100 text-yellow-900 rounded-full hover:bg-yellow-200 text-xs transition-colors"
                       >
                         Belum Dibayar
                       </button>
                       <button
                         onClick={() => onStatusChange(order._id, "dicicil")}
-                        className="px-3 py-1 bg-blue-100 text-blue-900 rounded hover:bg-blue-200 text-xs transition-colors"
+                        className="px-3 py-1 bg-blue-100 text-blue-900 rounded-full hover:bg-blue-200 text-xs transition-colors"
                       >
                         Dicicil
                       </button>
                       <button
                         onClick={() => onStatusChange(order._id, "lunas")}
-                        className="px-3 py-1 bg-green-100 text-green-900 rounded hover:bg-green-200 text-xs transition-colors"
+                        className="px-3 py-1 bg-green-100 text-green-900 rounded-full hover:bg-green-200 text-xs transition-colors"
                       >
                         Lunas
                       </button>
                       <button
                         onClick={() => onSetFixedAmount(order._id)}
-                        className="px-3 py-1 flex items-center space-x-1 bg-indigo-100 text-indigo-800 rounded hover:bg-indigo-200 text-xs transition-colors"
+                        className="px-3 py-1 flex items-center space-x-1 bg-indigo-100 text-indigo-800 rounded-full hover:bg-indigo-200 text-xs transition-colors"
                       >
                         <Pencil className="h-3 w-3" />
                         <span>Set Fixed</span>
