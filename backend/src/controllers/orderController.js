@@ -7,6 +7,10 @@ const { sendTelegramNotification } = require("../services/telegramNotifier");
 const getFixedAmountMessage = require("../messages/fixedAmountMessage");
 const Activity = require("../models/Activity");
 
+// Import the message modules
+const telegramAdminMessages = require("../messagesTelegram/telegramAdminMessages");
+const telegramUserMessages = require("../messagesTelegram/telegramUserMessages");
+
 // CREATE ORDER
 const createOrder = async (req, res) => {
   try {
@@ -74,34 +78,25 @@ const createOrder = async (req, res) => {
       minute: "2-digit",
     });
 
-    const notifMessage = `
-      Ada Order baru masuk Dins 😊!
-      
-      👤 *Klien:* ${req.user.name}
-      
-      🛠️ *Joki:* ${service}
-      
-      📝 *Deskripsi:* ${description}
-      
-      ⏰ *Deadline:* ${formattedDeadline}
-      
-      📱 *Kontak:* ${phone}
-      
-      🔌 *Provider:* ${provider}
-      
-      📦 *Paket:* ${packageName}
-      
-      💵 *Nominal Pembayaran:* ${paymentAmount ? paymentAmount : "0"}
-    `.trim();
+    // Use the imported admin message template
+    const notifMessage = telegramAdminMessages.newOrderNotification(
+      {
+        service,
+        description,
+        phone,
+        provider,
+        packageName,
+        paymentAmount
+      },
+      req.user,
+      formattedDeadline
+    );
 
     await sendTelegramNotification(process.env.TELEGRAM_CHAT_ID, notifMessage);
 
     if (req.user.telegramChatId) {
-      const userNotifMessage = `
-Halo ${req.user.name}, order Joki *${service}* kamu baru saja kami terima!
-Kami sedang memproses order tersebut dan akan segera mengabari kamu.
-Terima kasih telah menggunakan JokiDins!
-      `.trim();
+      // Use the enhanced user message template with complete order object
+      const userNotifMessage = telegramUserMessages.orderReceived(order, req.user);
       await sendTelegramNotification(
         req.user.telegramChatId,
         userNotifMessage,
@@ -200,6 +195,8 @@ const updateOrder = async (req, res) => {
       return res.status(401).json({ message: "Tidak diizinkan" });
     }
 
+    const originalStatus = order.status;
+
     // Update field-field order
     order.service = req.body.service ?? order.service;
     order.description = req.body.description ?? order.description;
@@ -235,18 +232,15 @@ const updateOrder = async (req, res) => {
 
     const updatedOrder = await order.save();
 
-    // Kirim notifikasi ke user jika admin yang melakukan update dan hanya jika status order berubah
-    if (req.user.role === "admin" && newStatus !== order.status) {
+    // Kirim notifikasi ke user jika admin yang melakukan update dan status order berubah
+    if (req.user.role === "admin" && newStatus !== originalStatus) {
       let orderOwner = await User.findById(order.user);
       if (orderOwner && orderOwner.telegramChatId) {
-        let statusMessage = "";
-        if (newStatus === "processing") {
-          statusMessage = `Halo ${orderOwner.name}, order Joki *${order.service}* kamu *sedang dikerjakan🚀*. Santai aja, kami lagi bekerja keras buat kamu!`;
-        } else if (newStatus === "completed") {
-          statusMessage = `Selamat ${orderOwner.name}, order Joki *${order.service}* kamu sudah *selesai!🥳* Silakan cek hasilnya.`;
-        } else if (newStatus === "cancelled") {
-          statusMessage = `Maaf ${orderOwner.name}, order Joki *${order.service}* kamu *dibatalkan😥*. Cek kembali order kamu ya!`;
-        }
+        // Use the enhanced status update message with complete order details
+        const statusMessage = telegramUserMessages.orderStatusUpdate(
+          orderOwner.name,
+          updatedOrder
+        );
 
         if (statusMessage) {
           await sendTelegramNotification(
@@ -280,16 +274,9 @@ const fixedAmount = async (req, res) => {
       // Gunakan fungsi sendEmail dengan template dari getFixedAmountMessage
       const emailContent = getFixedAmountMessage(order);
 
-      // Asumsi struktur function sendEmail adalah: sendEmail(to, subject, htmlContent, textContent)
-      const formattedAmount = new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        minimumFractionDigits: 0,
-      }).format(order.fixedAmount);
-
       const textContent = `Halo,
       
-Nominal fixed pembayaran untuk order kamu telah di-set menjadi ${formattedAmount}.
+Nominal fixed pembayaran untuk order kamu telah di-set menjadi ${telegramUserMessages.formatCurrency(order.fixedAmount)}.
 
 Silakan selesaikan pembayaran sesuai nominal tersebut.
 
@@ -301,13 +288,27 @@ Terima kasih.`;
         emailContent,
         textContent
       );
+      
+      // Kirim notifikasi Telegram jika user memiliki chatId
+      if (order.user.telegramChatId) {
+        const notifMessage = telegramUserMessages.fixedAmountSet(
+          order.user.name,
+          order
+        );
+        
+        await sendTelegramNotification(
+          order.user.telegramChatId,
+          notifMessage,
+          "Markdown"
+        );
+      }
 
       // Buat log aktivitas jika diperlukan
       await Activity.create({
         type: "ORDER_FIXED_AMOUNT",
         user: req.user._id,
         order: order._id,
-        description: `Fixed amount set to ${formattedAmount}`,
+        description: `Fixed amount set to ${telegramUserMessages.formatCurrency(order.fixedAmount)}`,
       });
     }
 
@@ -320,7 +321,7 @@ Terima kasih.`;
 
 const updatePayment = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.orderId);
+    const order = await Order.findById(req.params.orderId).populate("user");
     if (!order) {
       return res.status(404).json({ error: "Order tidak ditemukan" });
     }
@@ -339,6 +340,7 @@ const updatePayment = async (req, res) => {
     }
 
     // Update paymentAmount
+    const previousPaymentAmount = order.paymentAmount;
     order.paymentAmount += additionalPayment;
 
     // Update status payment
@@ -349,6 +351,29 @@ const updatePayment = async (req, res) => {
     }
 
     await order.save();
+    
+    // Kirim notifikasi Telegram ke user
+    if (order.user && order.user.telegramChatId) {
+      const notifMessage = telegramUserMessages.paymentUpdated(
+        order.user.name,
+        order,
+        additionalPayment
+      );
+      
+      await sendTelegramNotification(
+        order.user.telegramChatId,
+        notifMessage,
+        "Markdown"
+      );
+    }
+
+    // Buat log aktivitas
+    await Activity.create({
+      type: "PAYMENT_UPDATED",
+      user: req.user._id,
+      order: order._id,
+      description: `Payment updated from ${telegramUserMessages.formatCurrency(previousPaymentAmount)} to ${telegramUserMessages.formatCurrency(order.paymentAmount)}`,
+    });
 
     res.json(order);
   } catch (error) {
