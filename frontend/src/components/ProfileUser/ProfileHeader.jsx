@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Mail, MessageSquare, Phone, Key, Camera } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { API_BASE_URL } fron "../config";
 
 const ProfileHeader = ({
   profile,
@@ -64,7 +65,7 @@ const ProfileHeader = ({
       setIsUploading(true);
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "${API_BASE_URL}/avatar/upload",
+        `${API_BASE_URL}/avatar/upload`,
         formData,
         {
           headers: {
