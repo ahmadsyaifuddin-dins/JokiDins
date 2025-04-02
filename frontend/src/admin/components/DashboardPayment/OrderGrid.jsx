@@ -1,19 +1,24 @@
 // components/OrderGrid.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { 
-  Pencil, 
-  Clock, 
-  CheckCircle, 
-  AlertTriangle, 
-  ArrowRight, 
-  User, 
-  Package, 
+import {
+  Pencil,
+  Clock,
+  CheckCircle,
+  AlertTriangle,
+  ArrowRight,
+  User,
+  Package,
   DollarSign,
-  Calendar
+  Calendar,
 } from "lucide-react";
 
-export const OrderGrid = ({ orders, onStatusChange, onSetFixedAmount, loading }) => {
+export const OrderGrid = ({
+  orders,
+  onStatusChange,
+  onSetFixedAmount,
+  loading,
+}) => {
   const formatCurrency = (amount) => {
     return amount
       ? new Intl.NumberFormat("id-ID", {
@@ -22,6 +27,19 @@ export const OrderGrid = ({ orders, onStatusChange, onSetFixedAmount, loading })
           minimumFractionDigits: 0,
         }).format(amount)
       : "Rp0";
+  };
+
+  const getAvatar = (order) => {
+    // Jika ada avatar, kembalikan null agar kita bisa render image tag secara terpisah
+    if (order.user?.avatar) {
+      return null; // Kita akan handle rendering gambar di JSX
+    }
+    // Jika tidak ada avatar tapi ada nama, gunakan huruf pertama nama
+    else if (order.user?.name) {
+      return order.user.name[0].toUpperCase();
+    }
+    // Default fallback
+    return "😺";
   };
 
   const getStatusBadge = (status) => {
@@ -50,13 +68,13 @@ export const OrderGrid = ({ orders, onStatusChange, onSetFixedAmount, loading })
     }
   };
 
-  if (loading) {
-    return (
-      <div className="p-8 flex justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="p-8 flex justify-center">
+  //       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  //     </div>
+  //   );
+  // }
 
   if (orders.length === 0) {
     return (
@@ -88,8 +106,8 @@ export const OrderGrid = ({ orders, onStatusChange, onSetFixedAmount, loading })
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
       {orders.map((order) => (
-        <div 
-          key={order._id} 
+        <div
+          key={order._id}
           className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
         >
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
@@ -98,11 +116,19 @@ export const OrderGrid = ({ orders, onStatusChange, onSetFixedAmount, loading })
             </div>
             {getStatusBadge(order.paymentStatus)}
           </div>
-          
+
           <div className="px-4 py-3">
             <div className="flex items-center mb-3">
-              <div className="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-medium mr-3 shadow-sm">
-                {(order.user?.name || "NA").charAt(0)}
+              <div className="h-9 w-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-medium mr-3">
+                {order.user?.avatar ? (
+                  <img
+                    src={order.user.avatar}
+                    alt={order.user?.name || "User avatar"}
+                    className="h-full w-full object-cover rounded-full"
+                  />
+                ) : (
+                  getAvatar(order)
+                )}
               </div>
               <div>
                 <div className="text-sm font-medium text-gray-900">
@@ -113,14 +139,17 @@ export const OrderGrid = ({ orders, onStatusChange, onSetFixedAmount, loading })
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-2 mb-4">
               <div className="flex items-start text-sm">
                 <Package className="w-4 h-4 text-gray-500 mt-0.5 mr-2 flex-shrink-0" />
                 <div>
                   <span className="text-gray-600 mr-1">Paket:</span>
                   {order.packageName ? (
-                    <Link to="/pricing" className="text-blue-600 hover:underline">
+                    <Link
+                      to="/pricing"
+                      className="text-blue-600 hover:underline"
+                    >
                       {order.packageName}
                     </Link>
                   ) : (
@@ -128,35 +157,43 @@ export const OrderGrid = ({ orders, onStatusChange, onSetFixedAmount, loading })
                   )}
                 </div>
               </div>
-              
+
               <div className="flex items-start text-sm">
                 <DollarSign className="w-4 h-4 text-gray-500 mt-0.5 mr-2 flex-shrink-0" />
                 <div>
                   <span className="text-gray-600 mr-1">Nominal Input:</span>
-                  <span className="font-medium">{formatCurrency(order.paymentAmount)}</span>
+                  <span className="font-medium">
+                    {formatCurrency(order.paymentAmount)}
+                  </span>
                 </div>
               </div>
-              
+
               <div className="flex items-start text-sm">
                 <DollarSign className="w-4 h-4 text-gray-500 mt-0.5 mr-2 flex-shrink-0" />
                 <div>
                   <span className="text-gray-600 mr-1">Nominal Fixed:</span>
-                  <span className={`font-medium ${order.fixedAmount ? 'text-blue-600' : 'text-gray-400 italic'}`}>
+                  <span
+                    className={`font-medium ${
+                      order.fixedAmount
+                        ? "text-blue-600"
+                        : "text-gray-400 italic"
+                    }`}
+                  >
                     {formatCurrency(order.fixedAmount) || "Belum diatur"}
                   </span>
                 </div>
               </div>
-              
+
               {order.createdAt && (
                 <div className="flex items-start text-sm">
                   <Calendar className="w-4 h-4 text-gray-500 mt-0.5 mr-2 flex-shrink-0" />
                   <div>
                     <span className="text-gray-600 mr-1">Tanggal Order:</span>
                     <span className="text-gray-700">
-                      {new Date(order.createdAt).toLocaleDateString('id-ID', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric'
+                      {new Date(order.createdAt).toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
                       })}
                     </span>
                   </div>
@@ -164,7 +201,7 @@ export const OrderGrid = ({ orders, onStatusChange, onSetFixedAmount, loading })
               )}
             </div>
           </div>
-          
+
           <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 flex flex-wrap gap-2">
             <button
               onClick={() => onStatusChange(order._id, "belum dibayar")}
