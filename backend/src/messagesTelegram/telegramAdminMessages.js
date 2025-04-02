@@ -13,7 +13,7 @@ const newOrderNotification = (data, userData, formattedDeadline) => {
 
   return `
 🔔 *Pesanan Baru Masuk Dins 😺* 🔔
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━
 
 👤 *Detail Klien:*
    • Nama: ${userData.name}
