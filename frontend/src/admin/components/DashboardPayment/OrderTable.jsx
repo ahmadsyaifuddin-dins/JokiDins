@@ -1,9 +1,23 @@
 // components/OrderTable.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { Pencil, Clock, CheckCircle, AlertTriangle, ArrowRight, User, Package, DollarSign } from "lucide-react";
+import {
+  Pencil,
+  Clock,
+  CheckCircle,
+  AlertTriangle,
+  ArrowRight,
+  User,
+  Package,
+  DollarSign,
+} from "lucide-react";
 
-export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }) => {
+export const OrderTable = ({
+  orders,
+  onStatusChange,
+  onSetFixedAmount,
+  loading,
+}) => {
   const formatCurrency = (amount) => {
     return amount
       ? new Intl.NumberFormat("id-ID", {
@@ -12,6 +26,19 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
           minimumFractionDigits: 0,
         }).format(amount)
       : "Rp0";
+  };
+
+  const getAvatar = (order) => {
+    // Jika ada avatar, kembalikan null agar kita bisa render image tag secara terpisah
+    if (order.user?.avatar) {
+      return null; // Kita akan handle rendering gambar di JSX
+    }
+    // Jika tidak ada avatar tapi ada nama, gunakan huruf pertama nama
+    else if (order.user?.name) {
+      return order.user.name[0].toUpperCase();
+    }
+    // Default fallback
+    return "😺";
   };
 
   const getStatusBadge = (status) => {
@@ -40,13 +67,13 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
     }
   };
 
-  if (loading) {
-    return (
-      <div className="p-8 flex justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="p-8 flex justify-center">
+  //       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="overflow-x-auto">
@@ -63,25 +90,35 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
               </div>
             </th>
             <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">
-              <div className="flex items-center">
+              <div className="flex items-center ">
                 <Package className="w-4 h-4 mr-1 text-gray-500" />
-                Jenis Paket
+                <span className="truncate md:whitespace-normal">
+                  Jenis Paket
+                </span>
               </div>
             </th>
             <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">
               <div className="flex items-center">
                 <DollarSign className="w-4 h-4 mr-1 text-gray-500" />
-                Nominal Diinput
+                <span className="truncate md:whitespace-normal">
+                  Nominal Diinput
+                </span>
               </div>
             </th>
             <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">
               <div className="flex items-center">
                 <DollarSign className="w-4 h-4 mr-1 text-gray-500" />
-                Nominal Fixed
+                <span className="truncate md:whitespace-normal">
+                  Nominal Fixed
+                </span>
               </div>
             </th>
             <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">
-              Status Pembayaran
+              <div className="flex items-center">
+                <span className="truncate md:whitespace-normal">
+                  Status Pembayaran
+                </span>
+              </div>
             </th>
             <th className="py-3 px-4 text-right text-sm font-medium text-gray-600">
               Aksi
@@ -99,10 +136,18 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
               <td className="py-4 px-4">
                 <div className="flex items-center">
                   <div className="h-9 w-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-medium mr-3">
-                    {(order.user?.name || "NA").charAt(0)}
+                    {order.user?.avatar ? (
+                      <img
+                        src={order.user.avatar}
+                        alt={order.user?.name || "User avatar"}
+                        className="h-full w-full object-cover rounded-full"
+                      />
+                    ) : (
+                      getAvatar(order)
+                    )}
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-gray-900 max-w-xs truncate">
                       {order.user?.name || "Not Available"}
                     </div>
                     <div className="text-xs text-gray-500">
@@ -112,11 +157,14 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
                 </div>
               </td>
               <td className="py-4 px-4">
-                <div className="text-sm text-gray-900">
+                <div className="text-sm text-gray-900 max-w-xs truncate">
                   {order.packageName ? (
-                    <Link to="/pricing" className="text-blue-600 hover:underline flex items-center group">
-                      <span>{order.packageName}</span>
-                      <ArrowRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Link
+                      to="/pricing"
+                      className="text-blue-600 hover:underline flex items-center group"
+                    >
+                      <span className="truncate">{order.packageName}</span>
+                      <ArrowRight className="w-3 h-3 ml-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </Link>
                   ) : (
                     "Not Available"
@@ -129,7 +177,13 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
                 </div>
               </td>
               <td className="py-4 px-4">
-                <div className={`text-sm font-medium ${order.fixedAmount ? 'text-blue-600 bg-blue-50 px-2 py-1 rounded' : 'text-gray-400 italic'}`}>
+                <div
+                  className={`text-sm font-medium ${
+                    order.fixedAmount
+                      ? "text-blue-600 bg-blue-50 px-2 py-1 rounded"
+                      : "text-gray-400 italic"
+                  }`}
+                >
                   {formatCurrency(order.fixedAmount) || "Belum diatur"}
                 </div>
               </td>
@@ -141,7 +195,9 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
                   <div className="dropdown dropdown-top dropdown-end">
                     <div className="flex justify-end space-x-2">
                       <button
-                        onClick={() => onStatusChange(order._id, "belum dibayar")}
+                        onClick={() =>
+                          onStatusChange(order._id, "belum dibayar")
+                        }
                         className="px-3 py-1 bg-yellow-100 text-yellow-900 rounded-full hover:bg-yellow-200 text-xs transition-colors"
                       >
                         Belum Dibayar
@@ -189,7 +245,9 @@ export const OrderTable = ({ orders, onStatusChange, onSetFixedAmount, loading }
                       d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     ></path>
                   </svg>
-                  <p className="text-lg font-medium">Tidak ada order yang ditemukan</p>
+                  <p className="text-lg font-medium">
+                    Tidak ada order yang ditemukan
+                  </p>
                   <p className="text-sm text-gray-400 mt-1">
                     Silahkan refresh halaman atau periksa kembali nanti
                   </p>

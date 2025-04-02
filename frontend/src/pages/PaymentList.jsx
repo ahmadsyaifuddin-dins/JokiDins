@@ -3,12 +3,58 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config";
+import PaymentListHeader from "../components/PaymentList/PaymentListHeader";
+import PaymentListFilters from "../components/PaymentList/PaymentListFilters";
+import PaymentListOrders from "../components/PaymentList/PaymentListOrders";
+import PaymentListSummary from "../components/PaymentList/PaymentListSummary";
 
 const PaymentList = () => {
   const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [paymentInputs, setPaymentInputs] = useState({});
   const navigate = useNavigate();
+
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [dateRange, setDateRange] = useState({ from: "", to: "" });
+  const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy] = useState("newest");
+
+  // Helper: Format currency
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  // Helper: Get status badge element
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "lunas":
+        return (
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            Lunas
+          </span>
+        );
+      case "dicicil":
+        return (
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            Dicicil
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+            Belum Dibayar
+          </span>
+        );
+    }
+  };
 
   const fetchOrders = async () => {
     const token = localStorage.getItem("token");
@@ -18,6 +64,7 @@ const PaymentList = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
+      setFilteredOrders(res.data);
     } catch (err) {
       console.error("Error fetching orders:", err);
       toast.error("Gagal memuat data order");
@@ -30,15 +77,68 @@ const PaymentList = () => {
     fetchOrders();
   }, []);
 
-  // Handle perubahan input nominal pembayaran untuk tiap order
-  const handleInputChange = (orderId, value) => {
-    setPaymentInputs(prev => ({
-      ...prev,
-      [orderId]: value,
-    }));
+  // Refresh handler
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchOrders();
+    setTimeout(() => setRefreshing(false), 800);
   };
 
-  // Handle submit pembayaran per order
+  // Filter logic
+  useEffect(() => {
+    let result = [...orders];
+    if (searchTerm) {
+      result = result.filter(
+        (order) =>
+          order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          order.packageName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    if (statusFilter !== "all") {
+      result = result.filter((order) => order.paymentStatus === statusFilter);
+    }
+    if (dateRange.from || dateRange.to) {
+      result = result.filter((order) => {
+        const orderDate = new Date(order.createdAt);
+        if (dateRange.from && dateRange.to) {
+          const fromDate = new Date(dateRange.from);
+          const toDate = new Date(dateRange.to);
+          toDate.setHours(23, 59, 59);
+          return orderDate >= fromDate && orderDate <= toDate;
+        } else if (dateRange.from) {
+          return orderDate >= new Date(dateRange.from);
+        } else if (dateRange.to) {
+          const toDate = new Date(dateRange.to);
+          toDate.setHours(23, 59, 59);
+          return orderDate <= toDate;
+        }
+        return true;
+      });
+    }
+    if (sortBy === "newest") {
+      result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (sortBy === "oldest") {
+      result.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    } else if (sortBy === "highestAmount") {
+      result.sort((a, b) => b.fixedAmount - a.fixedAmount);
+    } else if (sortBy === "lowestAmount") {
+      result.sort((a, b) => a.fixedAmount - b.fixedAmount);
+    }
+    setFilteredOrders(result);
+  }, [orders, searchTerm, statusFilter, dateRange, sortBy]);
+
+  const resetFilters = () => {
+    setSearchTerm("");
+    setStatusFilter("all");
+    setDateRange({ from: "", to: "" });
+    setSortBy("newest");
+  };
+
+  // Handlers for payment input and update
+  const handleInputChange = (orderId, value) => {
+    setPaymentInputs((prev) => ({ ...prev, [orderId]: value }));
+  };
+
   const handlePaymentUpdate = async (orderId, fixedAmount, paymentAmount) => {
     const token = localStorage.getItem("token");
     const paymentValue = Number(paymentInputs[orderId]);
@@ -46,26 +146,19 @@ const PaymentList = () => {
       toast.error("Masukkan nominal pembayaran yang valid");
       return;
     }
-
     const remaining = fixedAmount - paymentAmount;
     if (paymentValue > remaining) {
-      toast.error(`Pembayaran melebihi sisa pembayaran: ${remaining}`);
+      toast.error(`Pembayaran melebihi sisa pembayaran: ${formatCurrency(remaining)}`);
       return;
     }
-
     try {
-      const res = await axios.put(
+      await axios.put(
         `${API_BASE_URL}/api/orders/${orderId}/payment`,
         { payment: paymentValue },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success("Pembayaran berhasil diupdate");
-      // Reset input payment untuk order ini
-      setPaymentInputs(prev => ({
-        ...prev,
-        [orderId]: "",
-      }));
-      // Refresh order list
+      setPaymentInputs((prev) => ({ ...prev, [orderId]: "" }));
       fetchOrders();
     } catch (err) {
       console.error("Error updating payment:", err);
@@ -74,98 +167,45 @@ const PaymentList = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Daftar Pembayaran Order Joki</h1>
-        {orders.length === 0 ? (
-          <p className="text-gray-600">Belum ada order joki yang ditemukan.</p>
-        ) : (
-        <div className="overflow-x-auto">
-
-          <table className="min-w-full border-collapse table-auto">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Order ID</th>
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Paket</th>
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Fixed Amount</th>
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Sudah Dibayar</th>
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Sisa</th>
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Status</th>
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Bayar Sekarang</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {orders.map(order => {
-                const remaining = order.fixedAmount - order.paymentAmount;
-                return (
-                  <tr key={order._id}>
-                    <td className="py-3 px-4">{order._id.slice(-8).toUpperCase()}</td>
-                    <td className="py-3 px-4">{order.packageName}</td>
-                    <td className="py-3 px-4">
-                      {new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                        minimumFractionDigits: 0,
-                      }).format(order.fixedAmount)}
-                    </td>
-                    <td className="py-3 px-4">
-                      {new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                        minimumFractionDigits: 0,
-                      }).format(order.paymentAmount)}
-                    </td>
-                    <td className="py-3 px-4">
-                      {new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                        minimumFractionDigits: 0,
-                      }).format(remaining)}
-                    </td>
-                    <td className="py-3 px-4 capitalize">{order.paymentStatus}</td>
-                    <td className="py-3 px-4">
-                      {order.paymentStatus !== "lunas" && (
-                        <div className="flex gap-2">
-                          <input
-                            type="number"
-                            inputMode="numeric"
-                            value={paymentInputs[order._id] || ""}
-                            onChange={e => handleInputChange(order._id, e.target.value)}
-                            placeholder="Nominal"
-                            className="w-24 border border-gray-300 rounded px-2 py-1 text-sm"
-                            min="1"
-                            max={remaining}
-                          />
-                          <button
-                            onClick={() =>
-                              handlePaymentUpdate(order._id, order.fixedAmount, order.paymentAmount)
-                            }
-                            className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
-                          >
-                            Update
-                          </button>
-                        </div>
-                      )}
-                      {order.paymentStatus === "lunas" && (
-                        <span className="text-green-600 font-semibold">Terlunaskan</span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-        )}
-        <button
-          onClick={() => navigate(-1)}
-          className="mt-6 px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition-colors"
-        >
-          Kembali
-        </button>
+      <div className="max-w-6xl mx-auto">
+        <PaymentListHeader
+          onRefresh={handleRefresh}
+          refreshing={refreshing}
+          onBack={() => navigate(-1)}
+        />
+        <PaymentListFilters
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          showFilters={showFilters}
+          setShowFilters={setShowFilters}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          resetFilters={resetFilters}
+        />
+        <PaymentListOrders
+          orders={filteredOrders}
+          paymentInputs={paymentInputs}
+          handleInputChange={handleInputChange}
+          handlePaymentUpdate={handlePaymentUpdate}
+          formatCurrency={formatCurrency}
+          getStatusBadge={getStatusBadge}
+          resetFilters={resetFilters}
+        />
+        <PaymentListSummary orders={filteredOrders} formatCurrency={formatCurrency} />
       </div>
     </div>
   );

@@ -130,12 +130,12 @@ Terima kasih telah menggunakan JokiDins!
 const getOrders = async (req, res) => {
   try {
     if (req.user.role === "admin") {
-      const orders = await Order.find({}).populate("user", "name email");
+      const orders = await Order.find({}).populate("user", "name email avatar");
       return res.json(orders);
     } else {
       const orders = await Order.find({ user: req.user._id }).populate(
         "user",
-        "email"
+        "name email avatar"
       );
       return res.json(orders);
     }
@@ -149,7 +149,7 @@ const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate(
       "user",
-      "name email"
+      "name email avatar"
     );
     if (!order)
       return res.status(404).json({ message: "Order tidak ditemukan" });
