@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Mail, MessageSquare, Phone, Key, Camera } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { API_BASE_URL } fron "../config";
+import { API_BASE_URL } from "../../config";
 
 const ProfileHeader = ({
   profile,
