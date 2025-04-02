@@ -2,10 +2,9 @@
 const Order = require("../models/Order");
 const User = require("../models/User");
 const fs = require("fs");
+const sendEmail = require("../utils/sendEmail");
 const { sendTelegramNotification } = require("../services/telegramNotifier");
-const {
-  sendFixedAmountNotification,
-} = require("../messages/fixedAmountMessage");
+const getFixedAmountMessage = require("../messages/fixedAmountMessage");
 const Activity = require("../models/Activity");
 
 // CREATE ORDER
@@ -13,11 +12,9 @@ const createOrder = async (req, res) => {
   try {
     // Cek status akun user
     if (!req.user.is_active) {
-      return res
-        .status(403)
-        .json({
-          message: "Akun kamu dinonaktifkan. Kamu tidak dapat membuat order.",
-        });
+      return res.status(403).json({
+        message: "Akun kamu dinonaktifkan. Kamu tidak dapat membuat order.",
+      });
     }
 
     // Ambil field dari request body
@@ -280,8 +277,40 @@ const fixedAmount = async (req, res) => {
 
     // Kirim notifikasi email ke user
     if (order.user && order.user.email) {
-      sendFixedAmountNotification(order.user.email, order);
+      // Gunakan fungsi sendEmail dengan template dari getFixedAmountMessage
+      const emailContent = getFixedAmountMessage(order);
+
+      // Asumsi struktur function sendEmail adalah: sendEmail(to, subject, htmlContent, textContent)
+      const formattedAmount = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+      }).format(order.fixedAmount);
+
+      const textContent = `Halo,
+      
+Nominal fixed pembayaran untuk order kamu telah di-set menjadi ${formattedAmount}.
+
+Silakan selesaikan pembayaran sesuai nominal tersebut.
+
+Terima kasih.`;
+
+      sendEmail(
+        order.user.email,
+        "Update Nominal Pembayaran Order",
+        emailContent,
+        textContent
+      );
+
+      // Buat log aktivitas jika diperlukan
+      await Activity.create({
+        type: "ORDER_FIXED_AMOUNT",
+        user: req.user._id,
+        order: order._id,
+        description: `Fixed amount set to ${formattedAmount}`,
+      });
     }
+
     res.json(order);
   } catch (error) {
     console.error("Error update fixed amount:", error);
@@ -353,11 +382,9 @@ const deleteOrder = async (req, res) => {
 const deleteAllOrders = async (req, res) => {
   try {
     if (req.user.role !== "admin") {
-      return res
-        .status(401)
-        .json({
-          message: "Tidak diizinkan, hanya admin yang bisa hapus semua order",
-        });
+      return res.status(401).json({
+        message: "Tidak diizinkan, hanya admin yang bisa hapus semua order",
+      });
     }
     await Order.deleteMany({});
     res.json({ message: "Semua order berhasil dihapus" });
