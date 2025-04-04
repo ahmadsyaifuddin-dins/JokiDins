@@ -12,6 +12,7 @@ const { getUnverifiedLoginMessage } = require("../messages/unverifiedLoginMessag
 const { getResetPasswordMessage } = require("../messages/resetPasswordMessage");
 const validator = require("validator");
 const bannedEmails = require("../utils/bannedEmails");
+const bannedDomains = require("../utils/bannedDomains");
 
 const {
   generateVerificationCode,
@@ -25,9 +26,6 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Di dalam controller register
 exports.register = async (req, res) => {
   const { name, email, password, role } = req.body;
-
-  // Misalnya bannedDomains buat domain disposable atau yang sering disalahgunakan
-  const bannedDomains = ["mailinator.com", "tempmail.com", "disposablemail.com"];
 
   // Ubah email jadi lowercase untuk konsistensi
   const normalizedEmail = email.toLowerCase();
