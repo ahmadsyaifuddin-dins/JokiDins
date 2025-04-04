@@ -61,5 +61,26 @@
     "Latitude": "-5,1615828",
     "Longitude": "119,4359281",
     "Keterangan Lokasi": "Cabang JokiDins"
+  },
+  {
+    "No.": 10,
+    "Address": "Banjarbaru, Kalimantan Selatan",
+    "Latitude": "-3,4391458",
+    "Longitude": "114,8313216",
+    "Keterangan Lokasi": "Cabang JokiDins"
+  },
+  {
+    "No.": 11,
+    "Address": "Puruk Cahu, Kalimantan Tengah",
+    "Latitude": "-0,6202002",
+    "Longitude": "114,5895968",
+    "Keterangan Lokasi": "Mitra JokiDins"
+  },
+  {
+    "No.": 12,
+    "Address": "Kota Denpasar, Bali",
+    "Latitude": "-8,6704582",
+    "Longitude": "115,2126293",
+    "Keterangan Lokasi": "Cabang JokiDins"
   }
 ]

@@ -60,7 +60,8 @@ const MapComponent = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    fetch('https://sheetdb.io/api/v1/xliyvy0wgp02j')
+    // fetch('https://sheetdb.io/api/v1/xliyvy0wgp02j')
+    fetch('/data_lokasi_cabang.json')
       .then((res) => res.json())
       .then((data) => {
         console.log('SheetDB response:', data);
