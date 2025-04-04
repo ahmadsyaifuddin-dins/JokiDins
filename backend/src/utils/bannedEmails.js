@@ -23,7 +23,6 @@ const bannedEmails = [
     
     // Temporary or fake emails
     "fake@gmail.com",
-    "fuck@gmail.com",
     "temp@gmail.com",
     "tempuser@gmail.com",
     "tempmail@gmail.com",
@@ -85,6 +84,10 @@ const bannedEmails = [
     "stupid@gmail.com",
     "dick@gmail.com",
     "pussy@gmail.com",
+    "cacat@gmail.com",
+    "sumbing@gmail.com",
+    "bibirsumbing@gmail.com",
+    "oranggila@gmail.com",
     
     // Tech related
     "developer@gmail.com",
@@ -230,6 +233,10 @@ const bannedEmails = [
      "bastard@gmail.com",
      "crap@gmail.com",
      "loser@gmail.com",
+     "fuck@gmail.com",
+     "anjing@gmail.com",
+     "babi@gmail.com",
+     "taikucing@gmail.com",
      
      // Environment-related
      "staging@gmail.com",
