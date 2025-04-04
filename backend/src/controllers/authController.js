@@ -10,6 +10,8 @@ const { getVerificationMessage } = require("../messages/verificationMessage");
 const { getResendVerificationMessage } = require("../messages/resendVerificationMessage");
 const { getUnverifiedLoginMessage } = require("../messages/unverifiedLoginMessage");
 const { getResetPasswordMessage } = require("../messages/resetPasswordMessage");
+const validator = require("validator");
+const bannedEmails = require("../utils/bannedEmails");
 
 const {
   generateVerificationCode,
@@ -20,15 +22,35 @@ const Activity = require("../models/Activity");
 const VERIFICATION_CODE_EXPIRATION = 2; // dalam menit
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+// Di dalam controller register
 exports.register = async (req, res) => {
   const { name, email, password, role } = req.body;
-  const { browser, os, platform, version, ua, isMobile, isTablet } = req.useragent;
-  console.log(
-    `Register: Browser - ${browser}, OS - ${os}, Platform - ${platform}`
-  );
 
+  // Misalnya bannedDomains buat domain disposable atau yang sering disalahgunakan
+  const bannedDomains = ["mailinator.com", "tempmail.com", "disposablemail.com"];
+
+  // Ubah email jadi lowercase untuk konsistensi
+  const normalizedEmail = email.toLowerCase();
+
+  // Cek apakah email sudah ada di bannedEmails
+  if (bannedEmails.includes(normalizedEmail)) {
+    return res.status(400).json({ message: "Email tidak valid. Gunakan email yang berbeda." });
+  }
+
+  // Cek format email dengan validator
+  if (!validator.isEmail(normalizedEmail)) {
+    return res.status(400).json({ message: "Format email tidak valid." });
+  }
+
+  // Ambil domain dari email dan cek apakah termasuk dalam bannedDomains
+  const emailDomain = normalizedEmail.split("@")[1];
+  if (bannedDomains.includes(emailDomain)) {
+    return res.status(400).json({ message: "Domain email tidak diperbolehkan." });
+  }
+
+  // Lanjutkan validasi dan proses registrasi seperti biasa...
   try {
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email: normalizedEmail });
     if (userExists) {
       return res.status(400).json({ message: "User sudah terdaftar." });
     }
@@ -37,37 +59,25 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const verificationCode = generateVerificationCode();
-    const verificationCodeExpires = getVerificationCodeExpires(
-      VERIFICATION_CODE_EXPIRATION
-    );
+    const verificationCodeExpires = getVerificationCodeExpires(VERIFICATION_CODE_EXPIRATION);
 
     const newUser = new User({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
       role: role && role === "admin" ? "admin" : "user",
       isVerified: false,
       verificationCode,
       verificationCodeExpires,
-      // Opsional: simpan info device jika perlu
-      deviceInfo: {
-        browser,
-        os,
-        platform,
-        version,
-        ua,
-        isMobile,
-        isTablet
-      },
+      deviceInfo: req.useragent, // bisa langsung pass object req.useragent jika format sudah sesuai
     });
     await newUser.save();
 
     const verificationEmailMessage = getVerificationMessage(name, verificationCode, VERIFICATION_CODE_EXPIRATION);
-    await sendEmail(email, "Kode Verifikasi Email", verificationEmailMessage);
+    await sendEmail(normalizedEmail, "Kode Verifikasi Email", verificationEmailMessage);
 
     res.status(201).json({
-      message:
-        "Registrasi berhasil! Silakan periksa email Anda untuk kode verifikasi.",
+      message: "Registrasi berhasil! Silakan periksa email Anda untuk kode verifikasi.",
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
