@@ -33,6 +33,7 @@ import MapComponent from "./components/home/MapComponent";
 import PricingPage from "./pages/Pricing";
 import DashboardPayment from "./admin/DashboardPayment";
 import PaymentList from "./pages/PaymentList";
+import TelegramLinkPageProfile from "./components/TelegramLinkPageProfile";
 
 
 const App = () => {
@@ -225,6 +226,15 @@ const App = () => {
                 </PrivateRoute>
               }
             />
+            <Route
+            path="/TelegramLinkPageProfile"
+            element={
+              <PrivateRoute>
+                <TelegramLinkPageProfile />
+              </PrivateRoute>
+            }
+            />
+            
           </Routes>
         </main>
         <Footer />
