@@ -184,8 +184,18 @@ const AdminUserDetail = () => {
       year: "numeric",
       month: "long",
       day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
+
+  const formatBirthday = (dateString) => {
+    return new Date(dateString).toLocaleDateString("id-ID", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -385,7 +395,7 @@ const AdminUserDetail = () => {
                 </div>
                 <p className="text-gray-800 pl-2 border-l-2 border-pink-200">
                   {userDetail.birthday
-                    ? formatDate(userDetail.birthday)
+                    ? formatBirthday(userDetail.birthday)
                     : "Tidak tersedia"}
                 </p>
               </div>
