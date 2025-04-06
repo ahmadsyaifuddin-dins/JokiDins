@@ -237,6 +237,7 @@ const bannedEmails = [
      "anjing@gmail.com",
      "babi@gmail.com",
      "taikucing@gmail.com",
+     "emailpalsu@gmail.com",
      
      // Environment-related
      "staging@gmail.com",
