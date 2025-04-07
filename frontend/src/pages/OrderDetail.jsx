@@ -1,24 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Calendar,
-  Clock,
-  FileText,
-  Package,
-  Download,
-  CheckCircle,
-  AlertCircle,
-  Loader,
-  RefreshCw,
-  ArrowLeft,
-} from "lucide-react";
-import {
-  formatDateDisplay,
-  formatDeadlineDisplay,
-  getTimeDifference,
-  getCompletionTimeDifference,
-} from "../utils/orderUtils";
+import { RefreshCw, ArrowLeft, AlertCircle } from "lucide-react";
+import OrderDetailHeader from "../components/OrderDetail/OrderDetailHeader";
+import OrderDescription from "../components/OrderDetail/OrderDescription";
+import OrderDeadline from "../components/OrderDetail/OrderDeadline";
+import OrderAttachment from "../components/OrderDetail/OrderAttachment";
+import OrderTimeline from "../components/OrderDetail/OrderTimeline";
+import OrderTimestamps from "../components/OrderDetail/OrderTimestamps";
+import OrderPaymentInfo from "../components/OrderDetail/OrderPaymentInfo";
 import { API_BASE_URL } from "../config";
 
 const OrderDetail = () => {
@@ -31,6 +21,7 @@ const OrderDetail = () => {
 
   useEffect(() => {
     fetchOrder();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
 
   const fetchOrder = async () => {
@@ -61,7 +52,6 @@ const OrderDetail = () => {
           responseType: "blob",
         }
       );
-
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -82,7 +72,7 @@ const OrderDetail = () => {
       pending: {
         color: "bg-amber-100 text-amber-800 border-amber-200",
         lightColor: "bg-amber-50",
-        icon: <Clock className="h-5 w-5" />,
+        icon: <AlertCircle className="h-5 w-5" />,
         label: "Menunggu",
       },
       processing: {
@@ -94,7 +84,7 @@ const OrderDetail = () => {
       completed: {
         color: "bg-green-100 text-green-800 border-green-200",
         lightColor: "bg-green-50",
-        icon: <CheckCircle className="h-5 w-5" />,
+        icon: <AlertCircle className="h-5 w-5" />,
         label: "Selesai",
       },
       cancelled: {
@@ -146,7 +136,6 @@ const OrderDetail = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Kembali ke Daftar Pesanan
           </button>
-
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 flex flex-col md:flex-row items-center justify-center md:justify-between shadow-sm">
             <div className="flex items-center mb-4 md:mb-0">
               <AlertCircle className="w-6 h-6 mr-2 flex-shrink-0" />
@@ -169,22 +158,6 @@ const OrderDetail = () => {
 
   const statusConfig = getStatusConfig(order.status);
 
-  const renderTimelineItem = (date, icon, title, description) => (
-    <div className="flex">
-      <div className="flex flex-col items-center mr-4">
-        <div className="rounded-full bg-blue-500 p-2 text-white">{icon}</div>
-        <div className="h-full w-px bg-blue-200 my-1"></div>
-      </div>
-      <div className="pb-6">
-        <p className="text-sm text-gray-500">{date}</p>
-        <p className="font-medium text-gray-900">{title}</p>
-        {description && (
-          <p className="text-gray-600 text-sm mt-1">{description}</p>
-        )}
-      </div>
-    </div>
-  );
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       <div className="max-w-4xl mx-auto p-4 md:p-6">
@@ -197,237 +170,19 @@ const OrderDetail = () => {
         </button>
 
         <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all hover:shadow-lg">
-          {/* Header Section */}
-          <div
-            className={`${statusConfig.lightColor} border-b border-gray-200 p-4 md:p-6`}
-          >
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-lg bg-white shadow-sm">
-                  <Package className="h-6 w-6 text-gray-700" />
-                </div>
-                <h1 className="text-xl md:text-2xl font-bold text-gray-900 break-words">
-                  {order.service || "Detail Pesanan"}
-                </h1>
-              </div>
-              <div
-                className={`px-4 py-2 rounded-lg border flex items-center space-x-2 ${statusConfig.color} self-start md:self-auto`}
-              >
-                <span className="flex-shrink-0">{statusConfig.icon}</span>
-                <span className="font-medium">{statusConfig.label}</span>
-              </div>
-            </div>
+          <OrderDetailHeader order={order} orderId={orderId} statusConfig={statusConfig} />
 
-            <div className="mt-4 text-sm text-gray-500">
-              ID Pesanan:{" "}
-              <span className="font-mono font-medium text-gray-700">
-                {orderId}
-              </span>
-            </div>
-          </div>
-
-          {/* Content Section */}
           <div className="p-4 md:p-6 space-y-6">
-            {/* Deskripsi Pesanan */}
-            <div className="transition-all hover:shadow-md rounded-xl">
-              <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <span className="inline-block w-1 h-4 bg-blue-500 mr-2 rounded"></span>
-                Deskripsi Pesanan
-              </h2>
-              <div className="text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
-                {order.description ? (
-                  <p className="whitespace-pre-line">{order.description}</p>
-                ) : (
-                  <p className="italic text-gray-400">Tidak ada deskripsi</p>
-                )}
-              </div>
-            </div>
-
-            {/* Tenggat Waktu */}
-            <div className="transition-all hover:shadow-md rounded-xl">
-              <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <span className="inline-block w-1 h-4 bg-amber-500 mr-2 rounded"></span>
-                Tenggat Waktu
-              </h2>
-              <div className="flex items-center text-gray-600 bg-amber-50 rounded-xl p-4 border border-amber-100">
-                <Calendar className="h-5 w-5 mr-3 text-amber-500" />
-                <div>
-                  <span className="font-medium">
-                    {formatDeadlineDisplay(order.deadline)}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Section Informasi Pembayaran */}
-            <div className="transition-all hover:shadow-md rounded-xl">
-              <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <span className="inline-block w-1 h-4 bg-green-500 mr-2 rounded"></span>
-                Informasi Pembayaran
-              </h2>
-              <div className="bg-green-50 rounded-xl p-4 border border-green-100">
-                <div className="space-y-2">
-                  <p className="text-xs text-gray-600">
-                    <span className="font-medium">Paket:</span>{" "}
-                    {order.packageName || "-"}
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    <span className="font-medium">Nominal Pembayaran:</span>{" "}
-                    {order.paymentAmount
-                      ? new Intl.NumberFormat("id-ID", {
-                          style: "currency",
-                          currency: "IDR",
-                          minimumFractionDigits: 0,
-                        }).format(order.paymentAmount)
-                      : "Rp0"}
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    <span className="font-medium">Fixed Amount:</span>{" "}
-                    {order.fixedAmount
-                      ? new Intl.NumberFormat("id-ID", {
-                          style: "currency",
-                          currency: "IDR",
-                          minimumFractionDigits: 0,
-                        }).format(order.fixedAmount)
-                      : "Belum di-set"}
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    <span className="font-medium">Status Pembayaran:</span>{" "}
-                    {order.paymentStatus || "belum dibayar"}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Berkas Lampiran */}
-            <div className="transition-all hover:shadow-md rounded-xl">
-              <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <span className="inline-block w-1 h-4 bg-purple-500 mr-2 rounded"></span>
-                Berkas Lampiran
-              </h2>
-              {order.file ? (
-                <div className="bg-purple-50 rounded-xl p-4 border border-purple-100">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex items-center">
-                      <div className="p-2 bg-white rounded-lg shadow-sm mr-3">
-                        <FileText className="h-5 w-5 text-purple-500" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-800 break-words">
-                          {order.file.originalName}
-                        </p>
-                        {order.file.size && (
-                          <p className="text-xs text-gray-500 mt-1">
-                            {Math.round(order.file.size / 1024)} KB
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    <button
-                      onClick={handleDownloadFile}
-                      disabled={isDownloading}
-                      className={`inline-flex items-center px-4 py-2 border border-purple-300 shadow-sm text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors ${
-                        isDownloading ? "opacity-75 cursor-not-allowed" : ""
-                      }`}
-                    >
-                      {isDownloading ? (
-                        <>
-                          <Loader className="h-4 w-4 mr-2 animate-spin" />
-                          Mengunduh...
-                        </>
-                      ) : (
-                        <>
-                          <Download className="h-4 w-4 mr-2" />
-                          Unduh Berkas
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-gray-500 bg-gray-50 rounded-xl p-4 border border-gray-100 flex items-center">
-                  <AlertCircle className="h-5 w-5 mr-2 text-gray-400" />
-                  <p className="italic text-gray-400">
-                    Tidak ada berkas yang dilampirkan
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Riwayat Pesanan */}
-            <div className="transition-all hover:shadow-md rounded-xl">
-              <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <span className="inline-block w-1 h-4 bg-blue-500 mr-2 rounded"></span>
-                Riwayat Pesanan
-              </h2>
-              <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
-                <div className="space-y-0">
-                  {renderTimelineItem(
-                    formatDateDisplay(order.createdAt),
-                    <Package className="h-4 w-4" />,
-                    "Pesanan Dibuat",
-                    "Pesanan telah berhasil dibuat dan menunggu untuk diproses"
-                  )}
-
-                  {order.status === "processing" &&
-                    renderTimelineItem(
-                      formatDateDisplay(order.updatedAt),
-                      <RefreshCw className="h-4 w-4" />,
-                      "Sedang Diproses",
-                      "Pesanan Anda sedang dikerjakan oleh tim kami"
-                    )}
-
-                  {order.status === "completed" && (
-                    <>
-                      {renderTimelineItem(
-                        "Dalam Proses",
-                        <RefreshCw className="h-4 w-4" />,
-                        "Sedang Diproses",
-                        "Pesanan Anda sedang dikerjakan oleh tim kami"
-                      )}
-                      {renderTimelineItem(
-                        formatDateDisplay(order.updatedAt),
-                        <CheckCircle className="h-4 w-4" />,
-                        "Pesanan Selesai",
-                        `Pesanan Anda telah berhasil diselesaikan (${
-                          getCompletionTimeDifference(order).text
-                        })`
-                      )}
-                    </>
-                  )}
-
-                  {order.status === "cancelled" &&
-                    renderTimelineItem(
-                      formatDateDisplay(order.updatedAt),
-                      <AlertCircle className="h-4 w-4" />,
-                      "Pesanan Dibatalkan",
-                      "Pesanan ini telah dibatalkan"
-                    )}
-                </div>
-              </div>
-            </div>
-
-            {/* Timestamps */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 transition-all hover:shadow-md">
-                <div className="flex items-center text-sm text-gray-500 mb-2">
-                  <Clock className="h-4 w-4 mr-2 text-gray-400" />
-                  Dibuat pada
-                </div>
-                <p className="font-medium text-gray-800">
-                  {formatDateDisplay(order.createdAt)}
-                </p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 transition-all hover:shadow-md">
-                <div className="flex items-center text-sm text-gray-500 mb-2">
-                  <Clock className="h-4 w-4 mr-2 text-gray-400" />
-                  Terakhir diperbarui
-                </div>
-                <p className="font-medium text-gray-800">
-                  {formatDateDisplay(order.updatedAt)}
-                </p>
-              </div>
-            </div>
+            <OrderDescription description={order.description} />
+            <OrderDeadline deadline={order.deadline} />
+            <OrderPaymentInfo order={order} />
+            <OrderTimeline order={order} />
+            <OrderAttachment
+              order={order}
+              handleDownloadFile={handleDownloadFile}
+              isDownloading={isDownloading}
+            />
+            <OrderTimestamps order={order} />
           </div>
         </div>
       </div>
