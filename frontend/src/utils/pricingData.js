@@ -1,7 +1,7 @@
 export const pricingPlans = [
     {
       name: "Terra Novice",
-      priceStart: "Rp50",
+      priceStart: "Rp70",
       priceStartSmall: ".000",
       priceEnd: "120",
       priceEndSmall: ".000",
