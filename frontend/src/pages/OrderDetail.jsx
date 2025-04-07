@@ -255,13 +255,6 @@ const OrderDetail = () => {
                   <span className="font-medium">
                     {formatDeadlineDisplay(order.deadline)}
                   </span>
-                  <span
-                    className={`ml-2 font-medium ${
-                      getTimeDifference(order.deadline).color
-                    }`}
-                  >
-                    ({getTimeDifference(order.deadline).text})
-                  </span>
                 </div>
               </div>
             </div>
