@@ -7,6 +7,7 @@ import {
   Download,
   FileText,
   Clock,
+  CreditCard
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { formatDeadlineDisplay } from "../../utils/orderUtils";
@@ -21,18 +22,22 @@ const OrderCard = ({
   const navigate = useNavigate();
   const statusConfig = getStatusConfig(order.status);
 
+  // Simplified payment status helper
+  const getPaymentStatusColor = (status) => {
+    const statusLower = (status || "").toLowerCase();
+    if (statusLower === "lunas") return "text-green-600";
+    if (statusLower === "sebagian") return "text-blue-600";
+    return "text-red-600";
+  };
+
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group">
-      <div
-        className={`${statusConfig.bgColor} px-4 py-3 border-b border-gray-200`}
-      >
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-all">
+      <div className={`${statusConfig.bgColor} px-4 py-3 border-b border-gray-200`}>
         <div className="flex justify-between items-center">
           <div className="line-clamp-1 font-semibold text-gray-900">
             {order.service || "Pesanan Tanpa Judul"}
           </div>
-          <div
-            className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 transition-colors ${statusConfig.color}`}
-          >
+          <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 ${statusConfig.color}`}>
             {statusConfig.icon}
             <span>{statusConfig.label}</span>
           </div>
@@ -45,19 +50,15 @@ const OrderCard = ({
             {order.description || "Tidak ada deskripsi"}
           </p>
 
-          {/* Improved deadline display */}
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-            <div className="flex items-center text-sm mb-1">
-              <Calendar className="h-4 w-4 text-gray-500 mr-2" />
-              <span className="font-medium text-gray-700">Deadline:</span>
-            </div>
-            <div className="ml-6 flex flex-col">
-              <span className="font-semibold text-gray-800">
-                {formatDeadlineDisplay(order.deadline)}
-              </span>
-              <div
-                className={`mt-1 flex items-center text-xs ${timeInfo.color}`}
-              >
+          {/* Simple deadline display */}
+          <div className="flex items-start">
+            <Calendar className="h-4 w-4 text-gray-500 mr-2 mt-0.5" />
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                Deadline:
+                <span className="font-semibold ml-1">{formatDeadlineDisplay(order.deadline)}</span>
+              </div>
+              <div className={`flex items-center text-xs ${timeInfo.color} mt-1`}>
                 <Clock className="h-3 w-3 mr-1" />
                 {timeInfo.text}
               </div>
@@ -65,47 +66,45 @@ const OrderCard = ({
           </div>
         </div>
 
-        <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 my-3">
-          <h3 className="text-sm font-semibold text-gray-700 mb-2">
-            Informasi Pembayaran
-          </h3>
-          <div className="space-y-1">
-            <p className="text-xs text-gray-600">
-              <span className="font-medium">Paket:</span>{" "}
-              {order.packageName || "-"}
-            </p>
-            <p className="text-xs text-gray-600">
-              <span className="font-medium">Nominal Pembayaran:</span>{" "}
+        {/* Minimalist payment information section */}
+        <div className="bg-blue-50 rounded-lg p-3 mb-4">
+          <div className="flex items-center mb-2">
+            <CreditCard className="h-4 w-4 text-blue-600 mr-2" />
+            <h3 className="text-sm font-medium text-gray-700">
+              Informasi Pembayaran
+            </h3>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="text-gray-600">Paket</div>
+            <div className="text-gray-800 font-medium text-right">{order.packageName || "-"}</div>
+            
+            <div className="text-gray-600">Status</div>
+            <div className={`text-right font-medium capitalize ${getPaymentStatusColor(order.paymentStatus)}`}>
+              {order.paymentStatus || "Belum Dibayar"}
+            </div>
+            
+            <div className="text-gray-600">Nominal</div>
+            <div className="text-gray-800 font-medium text-right">
               {order.paymentAmount
-                ? new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                    minimumFractionDigits: 0,
-                  }).format(order.paymentAmount)
-                : "Rp0"}
-            </p>
-            <p className="text-xs text-gray-600">
-              <span className="font-medium">Fixed Amount:</span>{" "}
+                ? `Rp ${order.paymentAmount.toLocaleString('id-ID')}`
+                : "Rp 0"}
+            </div>
+            
+            <div className="text-gray-600">Fixed Amount</div>
+            <div className="text-gray-800 font-medium text-right">
               {order.fixedAmount
-                ? new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                    minimumFractionDigits: 0,
-                  }).format(order.fixedAmount)
-                : "Belum di-set"}
-            </p>
-            <p className="text-xs text-gray-600">
-              <span className="font-medium">Status Pembayaran:</span>{" "}
-              {order.paymentStatus || "belum dibayar"}
-            </p>
+                ? `Rp ${order.fixedAmount.toLocaleString('id-ID')}`
+                : "-"}
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-4 flex justify-between items-center">
+        <div className="border-t border-gray-100 pt-3 flex justify-between items-center">
           <div className="flex items-center space-x-1">
             <button
               onClick={() => navigate(`/edit-order/${order._id}`)}
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg flex items-center transition-colors"
+              className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md flex items-center transition-colors"
               title="Edit Pesanan"
             >
               <Edit className="h-4 w-4" />
@@ -115,10 +114,8 @@ const OrderCard = ({
               <button
                 onClick={() => handleDownloadFile(order._id)}
                 disabled={downloadingId === order._id}
-                className={`p-2 text-purple-600 hover:bg-purple-50 rounded-lg flex items-center transition-colors ${
-                  downloadingId === order._id
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
+                className={`p-1.5 text-purple-600 hover:bg-purple-50 rounded-md flex items-center transition-colors ${
+                  downloadingId === order._id ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 title="Unduh Berkas"
               >
@@ -129,10 +126,7 @@ const OrderCard = ({
                 )}
               </button>
             ) : (
-              <div
-                className="p-2 text-gray-400 flex items-center"
-                title="Tidak ada berkas"
-              >
+              <div className="p-1.5 text-gray-400 flex items-center" title="Tidak ada berkas">
                 <FileText className="h-4 w-4" />
               </div>
             )}
@@ -140,10 +134,10 @@ const OrderCard = ({
 
           <button
             onClick={() => navigate(`/orders/${order._id}`)}
-            className="flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-all group-hover:translate-x-1"
+            className="text-blue-600 font-medium text-sm flex items-center"
           >
             Detail
-            <ExternalLink className="h-3.5 w-3.5 ml-1.5" />
+            <ExternalLink className="h-3.5 w-3.5 ml-1" />
           </button>
         </div>
       </div>
