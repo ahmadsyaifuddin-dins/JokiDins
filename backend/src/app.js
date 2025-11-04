@@ -50,5 +50,8 @@ app.get("/", (req, res) => {
   res.send("API JokiDins Running...");
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT} 🚀`));
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT} 🚀`));
+
+// Export app untuk Vercel (serverless)
+module.exports = app;
