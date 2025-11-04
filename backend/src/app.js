@@ -19,7 +19,6 @@ const app = express();
 
 const corsOptions = {
   origin: [
-    'https://jokidins-backend.vercel.app',
     'https://jokidins.vercel.app',
     'http://localhost:3000',
     'http://localhost:5173',
