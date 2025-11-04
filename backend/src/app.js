@@ -4,7 +4,7 @@ const useragent = require("express-useragent");
 require("dotenv").config();
 const connectDB = require("./config/db");
 
-// Import route autentikasi dan user
+// Import routes
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const orderRoutes = require("./routes/order");
@@ -17,10 +17,26 @@ const uploadRoute = require('./routes/uploadRoutes');
 
 const app = express();
 
+// CORS Configuration - PERBAIKI INI
+const corsOptions = {
+  origin: [
+    'https://jokidins-production.up.railway.app',
+    'https://jokidins.vercel.app', // Tambahkan domain frontend Vercel kamu
+    'http://localhost:3000', // untuk development
+    'http://localhost:5173', // jika pakai Vite
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  maxAge: 86400, // 24 hours
+};
+
+app.use(cors(corsOptions));
+
 // Middleware
-app.use(cors());
 app.use(express.json());
-app.use(useragent.express()); // Posisikan middleware useragent di sini, sebelum routes
+app.use(useragent.express());
 
 // Koneksi ke MongoDB
 connectDB();
@@ -30,8 +46,6 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/orders", orderRoutes);
-// app.use('/uploads/order', express.static('uploads/order'));
-// app.use('/uploads/avatar', express.static('uploads/avatar'));
 
 // Mount kedua endpoint Telegram di base path yang sama:
 app.use("/api/telegram", telegramToken);
@@ -49,9 +63,6 @@ app.use('/avatar', uploadRoute);
 app.get("/", (req, res) => {
   res.send("API JokiDins Running...");
 });
-
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT} 🚀`));
 
 // Export app untuk Vercel (serverless)
 module.exports = app;
