@@ -34,10 +34,10 @@ const orderSchema = mongoose.Schema(
       enum: ['pending', 'processing', 'completed', 'cancelled'],
     },
     file: {
-      filename: String,
-      originalName: String,
-      path: String,
+      type: String, // Simpan URL dari Vercel Blob
+      required: false,
     },
+    
     completedAt: {
       type: Date,
       default: null,

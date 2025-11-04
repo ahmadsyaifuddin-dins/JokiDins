@@ -1,7 +1,7 @@
 // controllers/orderController.js
 const Order = require("../models/Order");
 const User = require("../models/User");
-const fs = require("fs");
+const { put } = require('@vercel/blob'); // TAMBAHKAN INI
 const sendEmail = require("../utils/sendEmail");
 const { sendTelegramNotification } = require("../services/telegramNotifier");
 const getFixedAmountMessage = require("../messages/fixedAmountMessage");
@@ -10,6 +10,29 @@ const Activity = require("../models/Activity");
 // Import the message modules
 const telegramAdminMessages = require("../messagesTelegram/telegramAdminMessages");
 const telegramUserMessages = require("../messagesTelegram/telegramUserMessages");
+
+// Helper function untuk upload file ke Vercel Blob
+const uploadFileToBlob = async (file, orderId) => {
+  if (!file) return null;
+  
+  try {
+    const fileName = `order-${orderId}-${Date.now()}-${file.originalname}`;
+    const blob = await put(fileName, file.buffer, {
+      access: 'public',
+      contentType: file.mimetype,
+      addRandomSuffix: false,
+    });
+    
+    return {
+      url: blob.url,
+      filename: fileName,
+      originalName: file.originalname
+    };
+  } catch (error) {
+    console.error('Error uploading to Vercel Blob:', error);
+    throw new Error('Failed to upload file');
+  }
+};
 
 // CREATE ORDER
 const createOrder = async (req, res) => {
@@ -51,16 +74,19 @@ const createOrder = async (req, res) => {
       paymentStatus: "belum dibayar", // default, admin nantinya bisa mengubahnya
     };
 
-    // Jika ada file upload, sertakan informasi file
+    // Buat order dulu untuk dapat ID
+    const order = new Order(orderData);
+
+    // Upload file ke Vercel Blob jika ada
     if (req.file) {
-      orderData.file = {
-        filename: req.file.filename,
-        originalName: req.file.originalname,
-        path: req.file.path,
+      const fileData = await uploadFileToBlob(req.file, order._id);
+      order.file = {
+        filename: fileData.filename,
+        originalName: fileData.originalName,
+        path: fileData.url, // Simpan URL dari Vercel Blob
       };
     }
 
-    const order = new Order(orderData);
     await order.save();
 
     // Update daftar nomor HP di profil user jika nomor baru
@@ -114,6 +140,7 @@ const createOrder = async (req, res) => {
 
     res.status(201).json(order);
   } catch (error) {
+    console.error("Error creating order:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -159,7 +186,7 @@ const getOrderById = async (req, res) => {
   }
 };
 
-// DOWNLOAD FILE
+// DOWNLOAD FILE - Redirect ke Blob URL
 const downloadFile = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -175,7 +202,8 @@ const downloadFile = async (req, res) => {
       return res.status(401).json({ message: "Tidak diizinkan" });
     }
 
-    res.download(order.file.path, order.file.originalName);
+    // Redirect ke URL Vercel Blob
+    res.redirect(order.file.path);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -222,11 +250,13 @@ const updateOrder = async (req, res) => {
       order.packageName = req.body.packageName;
     }
 
+    // Upload file baru jika ada
     if (req.file) {
+      const fileData = await uploadFileToBlob(req.file, order._id);
       order.file = {
-        filename: req.file.filename,
-        originalName: req.file.originalname,
-        path: req.file.path,
+        filename: fileData.filename,
+        originalName: fileData.originalName,
+        path: fileData.url, // Simpan URL dari Vercel Blob
       };
     }
 
@@ -256,6 +286,7 @@ const updateOrder = async (req, res) => {
 
     res.json(updatedOrder);
   } catch (error) {
+    console.error("Error updating order:", error);
     res.status(500).json({ message: error.message });
   }
 };

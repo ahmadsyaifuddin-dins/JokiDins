@@ -3,7 +3,6 @@ const express = require("express");
 const router = express.Router();
 const { protect } = require("../middleware/authMiddleware");
 const multer = require("multer");
-const fs = require("fs");
 const {
   createOrder,
   getOrders,
@@ -16,25 +15,23 @@ const {
   deleteAllOrders,
 } = require("../controllers/orderController");
 
-const uploadDir = "uploads/order";
-
-// Konfigurasi Multer
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
+// Setup multer untuk in-memory storage (untuk Vercel)
 const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+  storage: multer.memoryStorage(),
+  limits: { 
+    fileSize: 5 * 1024 * 1024 // 5MB (naikkan dari 1MB)
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept common file types
+    const allowedTypes = /jpeg|jpg|png|pdf|doc|docx|zip|rar/;
+    const mimetype = allowedTypes.test(file.mimetype);
+    const extname = allowedTypes.test(file.originalname.toLowerCase().split('.').pop());
+    
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error('File type not allowed. Only images, PDFs, docs, and archives are allowed.'));
+  },
 });
 
 // Routes
