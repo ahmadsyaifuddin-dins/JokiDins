@@ -74,7 +74,7 @@ const formatCurrency = (amount) => {
   *Detail Pesanan:*
   📦 Paket: *${order.packageName}*
   💰 Total Biaya: *${fixedAmount}*
-  💸 Sudah Dibayar: *${formattedAmount}*
+  💸 Nominal Pembayaran: *${formattedAmount}*
   🔄 Status Pembayaran: *${order.paymentStatus.toUpperCase()}*
   
   Santai aja, tim kami sedang bekerja keras untuk kamu. Kami akan memberikan update jika ada perkembangan.
@@ -93,7 +93,7 @@ const formatCurrency = (amount) => {
   *Detail Pesanan:*
   📦 Paket: *${order.packageName}*
   💰 Total Biaya: *${fixedAmount}*
-  💸 Sudah Dibayar: *${formattedAmount}*
+  💸 Nominal Pembayaran: *${formattedAmount}*
   🔄 Status Pembayaran: *${order.paymentStatus.toUpperCase()}*
   
   Silakan cek hasilnya di akun kamu. Jika kamu puas dengan layanan kami, kami akan sangat berterima kasih jika kamu bisa merekomendasikan JokiDins kepada teman-temanmu! 😊
