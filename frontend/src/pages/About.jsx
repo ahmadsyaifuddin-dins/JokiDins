@@ -111,7 +111,7 @@ const About = () => {
             <div className="w-24 h-24 bg-blue-950 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
               TD
             </div>
-            <h3 className="text-xl font-semibold text-blue-950 mb-1">Tiara Desmitha Oliviany</h3>
+            {/* <h3 className="text-xl font-semibold text-blue-950 mb-1">Tiara Desmitha Oliviany</h3> */}
             <p className="text-gray-500 mb-4">Administrator</p>
             <p className="text-gray-600">
               Ahli administrasi berpengalaman dengan keahlian dalam manajemen operasional dan pengembangan sistem informasi
