@@ -5,7 +5,7 @@ const DashboardFilters = ({ searchTerm, setSearchTerm, filterStatus, setFilterSt
   const statusOptions = [
     { value: "all", label: "Semua Status" },
     { value: "pending", label: "Menunggu" },
-    { value: "in-progress", label: "Dikerjakan" },
+    { value: "processing", label: "Dikerjakan" },
     { value: "completed", label: "Selesai" },
     { value: "cancelled", label: "Dibatalkan" },
   ];
